@@ -5,7 +5,9 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.1.0] - 2026-08-16
+
+- Initial release: the destructive-delete guard plus the four-asset detection layer with allow/ask/block interception, audit events, and report surfaces.
 
 ### Added
 
@@ -22,7 +24,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Guard-hook spec type narrowing (`PreToolDecision.reason` behind a `kind === 'deny'` check) and unused listener parameters.
-
-## [0.1.0] - 2026-08-16
-
-- Initial release: the destructive-delete guard plus the four-asset detection layer with allow/ask/block interception, audit events, and report surfaces.
