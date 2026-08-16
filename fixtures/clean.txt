@@ -1,0 +1,13 @@
+The Quick Brown Fox jumps over the lazy dog while refactoring the session-persistence module.
+
+We need to add a write-ahead log to the storage layer, keep the LRU eviction bounded, and
+make sure the token meter reads the assistant/message usage without scanning the whole history.
+
+Today's standup: the plan-mode gate now folds requirement notes into the commit message,
+and the subagent roster lists every background child with its durable session id.
+
+git status shows three modified files; the diff adds a waterfall listener that always calls
+next(), a bounded spool with exponential backoff, and a fixtures directory for regression
+tests. The CHANGELOG documents every user-visible change under [Unreleased].
+
+For lunch: noodles with extra chili oil, then a walk to clear the context window.
