@@ -1,0 +1,34 @@
+# dsh-defend bundle patch: mount the defense gate + detection plugin.
+# 行语义与家族其他仓库一致:insert 进 profile 层栈,config 可被后续层整行覆盖。
+- insert:
+    - id: dsh-defend
+      name: dsh-defend
+      config:
+        # 整体开关;false 时不注册任何监听。
+        enabled: true
+        # 危险递归删除门禁动作:deny 直接拒绝;ask 转审批通道(审批未过同样拒绝)。
+        action: deny
+        # 门禁受检工具名(工具注册名;bash 类命令参数被评审)。
+        # toolNames: [bash, persistent-bash, terminal-bash]
+        # ── 检测层(注入/越狱/密钥)──
+        detection:
+          # 检测层开关;false 时只保留递归删除门禁。
+          enabled: true
+          # 单次扫描的字符上限(只扫头部,超限记为 truncated)。
+          maxScanChars: 10000
+          # 注入载荷默认动作:allow 放行 / ask 转审批 / block 拦截。
+          injectionAction: ask
+          # 越狱模式默认动作。
+          jailbreakAction: ask
+          # 密钥/凭证默认动作。
+          secretAction: ask
+          # critical 级密钥无视 secretAction 一律 block(上游即时中断语义)。
+          secretBlockCritical: true
+          # 拦截与命中是否写 defend/detection 会话审计事件(不含匹配文本)。
+          audit: true
+          # defend_report 内存环形缓冲条数上限。
+          maxReportEntries: 200
+        # 注册 /defend 会话命令。
+        registerCommand: true
+        # 注册 defend_report 工具。
+        registerTool: true

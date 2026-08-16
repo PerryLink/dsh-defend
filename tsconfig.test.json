@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "lib/types-test",
+    "noEmit": true
+  },
+  "include": ["src", "tests", "vitest.config.ts", "tsdown.config.ts"]
+}

@@ -1,0 +1,8 @@
+node_modules/
+lib/
+coverage/
+*.tgz
+.rc6-check/
+.dsh/
+# Read-only upstream reference clones (see AGENTS.md): never shipped, never published.
+upstream/

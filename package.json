@@ -1,0 +1,141 @@
+{
+  "name": "dsh-defend",
+  "version": "0.1.0",
+  "description": "Prompt-injection, jailbreak, and secret-leak detection with allow/ask/block interception for DeepSeek Harness: an Aho-Corasick pattern engine and heuristics ported from the Prompt-Injection-Payloads, Jailbreak-Detector, and Secret-Key-Leaker-Detect assets, gating user messages on agent/pre-step, tool arguments on tools/pre-execute, and tool results on tools/post-execute, with sanitized defend/* session audit events, a defend_report tool, and a /defend command.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PerryLink/dsh-defend.git"
+  },
+  "homepage": "https://github.com/PerryLink/dsh-defend#readme",
+  "bugs": {
+    "url": "https://github.com/PerryLink/dsh-defend/issues"
+  },
+  "author": "PerryLink",
+  "private": false,
+  "type": "module",
+  "main": "./lib/index.js",
+  "types": "./lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "src",
+    "fixtures",
+    "cordis.patch.yml",
+    "CHANGELOG.md",
+    "SECURITY.md",
+    "AGENTS.md",
+    "THIRD_PARTY_NOTICES.md",
+    "README.md",
+    "README.zh.md",
+    "README.es.md",
+    "README.pt.md",
+    "README.hi.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "dshWorkshop": {
+    "schema": "omdsh-workshop-package/v1",
+    "type": "plugin",
+    "integration": {
+      "protocol": "harness-profile",
+      "artifact": "cordis.patch.yml"
+    },
+    "install": {
+      "mode": "transactional",
+      "adapter": "profile-bundle",
+      "failurePolicy": "generation-rollback",
+      "touchesCurrentBeforeActivation": false
+    },
+    "lifecycle": {
+      "activation": "restart-profile",
+      "dispose": "supported"
+    },
+    "permissions": [
+      "session:append",
+      "network:none"
+    ],
+    "compatibility": {
+      "dshVersions": [
+        "0.1.0-rc.5",
+        "0.1.0-rc.6"
+      ]
+    },
+    "capability": {
+      "id": "defend",
+      "kind": "tool",
+      "invocation": "agent/pre-step, tools/pre-execute, tools/post-execute, defend_report, /defend",
+      "expected": "detects prompt injection, jailbreak, and secret-leak patterns in inbound messages, tool arguments, and tool results, decides allow/ask/block per family, and records sanitized defend/detection session audit events"
+    },
+    "evidence": {
+      "install": null,
+      "failureIsolation": null,
+      "hotReload": null,
+      "remove": null
+    }
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "deepseek",
+    "cordis",
+    "security",
+    "prompt-injection",
+    "jailbreak",
+    "secret-scanning",
+    "llm-security"
+  ],
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "packageManager": "pnpm@11.7.0",
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1",
+    "@deepseek-ai/dsh-agent": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-commands": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-llm": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-session": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-tools": "0.1.0-rc.6",
+    "@deepseek-ai/schemastery": "^3.18.0"
+  },
+  "dependencies": {
+    "tsdown": "^0.22.14",
+    "typescript": "^5.9.0"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1",
+    "@deepseek-ai/dsh-agent": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-commands": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-llm": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-session": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-tools": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-user-approval": "0.1.0-rc.6",
+    "@deepseek-ai/schemastery": "^3.18.0",
+    "@types/node": "^22.19.0",
+    "@vitest/coverage-v8": "^3.2.0",
+    "vitest": "^3.2.0"
+  },
+  "scripts": {
+    "build": "node scripts/prepare.mjs",
+    "prepare": "node scripts/prepare.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.test.json --noEmit",
+    "typecheck:ci": "tsc -p tsconfig.ci.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "verify:self-contained": "node scripts/verify-self-contained.mjs",
+    "verify:artifacts": "node scripts/verify-artifacts.mjs"
+  },
+  "license": "Apache-2.0"
+}
