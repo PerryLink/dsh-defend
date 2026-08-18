@@ -143,6 +143,25 @@ describe('scan bounds and sanitization', () => {
     expect(snippet.length).toBeLessThanOrEqual(60)
   })
 
+  it('safeSnippet keeps a non-redactable inner span instead of masking it', () => {
+    // A short or non-printable inner span fails the redaction predicate, so
+    // the raw (already public) slice is kept rather than '[REDACTED]'.
+    const text = 'see the word jailbreak inside'
+    const start = text.indexOf('jailbreak')
+    const snippet = safeSnippet(text, start, start + 'jail'.length, 60)
+    expect(snippet).not.toContain('[REDACTED]')
+    expect(snippet).toContain('jail')
+  })
+
+  it('safeSnippet clamps a zero cap and ellipsizes an over-long snippet', () => {
+    const text = `prefix ${'x'.repeat(200)} suffix`
+    const snippet = safeSnippet(text, 7, 100, 30)
+    expect(snippet.length).toBeLessThanOrEqual(30)
+    expect(snippet.endsWith('…')).toBe(true)
+    // A zero cap is clamped to one character rather than slicing to empty.
+    expect(safeSnippet(text, 7, 100, 0).length).toBeLessThanOrEqual(1)
+  })
+
   it('never reports the matched secret text itself', () => {
     const report = scanOf('value: sk-abcdefghijklmnopqrstuvwx', 'secret')
     for (const match of report.matches) {

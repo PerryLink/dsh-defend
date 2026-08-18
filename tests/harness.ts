@@ -8,7 +8,7 @@
  * @module dsh-defend/test/harness
  */
 
-import { Context } from '@deepseek-ai/cordis'
+import { Context, type Fiber } from '@deepseek-ai/cordis'
 import type { Agent } from '@deepseek-ai/dsh-agent'
 import CommandRuntime from '@deepseek-ai/dsh-commands'
 import SessionStore, { SessionId, type Session } from '@deepseek-ai/dsh-session'
@@ -43,6 +43,8 @@ export interface Harness {
   readonly ctx: Context
   readonly session: Session
   readonly agent: Agent
+  /** The fiber this plugin was mounted under; dispose it to prove HMR safety. */
+  readonly pluginFiber: Fiber
 }
 
 /** Harness assembly options. */
@@ -81,8 +83,8 @@ export async function mountHarness(options: HarnessOptions = {}): Promise<Harnes
   }
 
   const plugin = await import('../src/index.ts')
-  await ctx.plugin(plugin as unknown as import('@deepseek-ai/cordis').Plugin, options.config ?? {})
+  const pluginFiber = await ctx.plugin(plugin as unknown as import('@deepseek-ai/cordis').Plugin, options.config ?? {})
 
   const agent = makeAgent(session)
-  return { ctx, session, agent }
+  return { ctx, session, agent, pluginFiber }
 }
