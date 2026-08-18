@@ -45,8 +45,10 @@ interface Node<T> {
 export interface Automaton<T> {
   /**
    * Find every pattern occurrence in `text`. Overlapping and repeated
-   * occurrences are all reported in scan order (end position ascending,
-   * then length ascending), mirroring upstream `iter()` semantics.
+   * occurrences are all reported in scan order (end position ascending);
+   * matches ending at the same position are emitted in output-list order —
+   * the node's own patterns first, then patterns inherited through its
+   * failure link — mirroring upstream `iter()` semantics.
    * @param text - the text to scan.
    * @returns all matches with their [start, end) spans.
    */
