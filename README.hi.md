@@ -137,6 +137,7 @@ pnpm pack           # प्रकाशित tarball
 ## Contributors
 
 - [@PerryLink](https://github.com/PerryLink) — निर्माता और मेंटेनर: विनाशकारी-डिलीट गार्ड, चार-परिसंपत्ति पहचान पोर्ट, इंटरसेप्शन वायरिंग, ऑडिट सतह और पाँच-भाषा दस्तावेज़।
+- [@cuohua](https://github.com/cuohua) — बिना मार्क के लिखे गए `defend/detection` इवेंट से कड़े बिल्ड पर सत्र अप्राप्य होने की सटीक रिपोर्ट ([#2](https://github.com/PerryLink/dsh-defend/issues/2)); runtime होस्ट-क्षमता पहचान और `ignorable` मार्कर अनुशासन सीधे उसी विश्लेषण से निकले हैं।
 
 ## PerryLink DSH Plugin Family
 
