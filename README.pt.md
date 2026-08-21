@@ -82,6 +82,7 @@ Todos os ajustes são campos `Config` do Schemastery (alteráveis pelo cordis.ym
 | `detection.secretAction` | `ask` | Família segredos: `allow` / `ask` / `block` |
 | `detection.secretBlockCritical` | `true` | Segredos critical sempre bloqueiam, independente de `secretAction` |
 | `detection.audit` | `true` | Gravar eventos de auditoria `defend/detection` |
+| `detection.allowUnmarkedAudit` | `false` | Continuar gravando auditoria de sessão em hosts cujo `Session.append` é anterior ao marcador `ignorable` (rc.1–rc.7), aceitando o risco de sessões irrecuperáveis |
 | `detection.maxReportEntries` | `200` | Limite do buffer circular em memória |
 | `registerCommand` | `true` | Registrar o comando `/defend` |
 | `registerTool` | `true` | Registrar a ferramenta `defend_report` |
@@ -114,7 +115,7 @@ Todos os ajustes são campos `Config` do Schemastery (alteráveis pelo cordis.ym
 - **Lacunas de detecção.** A biblioteca de regras cobre os vocabulários portados e suas variantes tolerantes; frases novas, codificações Unicode lookalike (a normalização NFKC está como trabalho futuro) e ataques multi-passo podem escapar. A referência fixa o piso medido (27/28 no dataset upstream) para que regressões fiquem visíveis.
 - **Sem veredictos no nível do modelo.** O `dsh-defend` é determinístico; nunca chama um modelo e não julga intenção nova.
 - **A rejeição de mensagens é silenciosa.** O reject de `agent/pre-step` não leva razão ao modelo (a costura não tem campo de razão); o evento de auditoria registra os fatos da regra.
-- **Auditoria de sessão em builds mais novos.** Os appends de auditoria usam a forma de dois argumentos de `Session.append` (os peers fixados rc.6 não têm opção de envelope); em builds pós-rc.6 os eventos são required-on-read, o que é correto enquanto o plugin estiver instalado, pois ele declara o tipo de evento.
+- **Auditoria de sessão e o marcador `ignorable`.** Os appends de auditoria solicitam o marcador `ignorable: true` do envelope para que qualquer build do harness consiga carregar o registro. Hosts cujo `Session.append` é anterior ao marcador (as linhas publicadas `0.1.0-rc.1`–`0.1.0-rc.7`) o descartam silenciosamente — o evento fica sem marcação e torna a sessão irrecuperável em builds mais estritos, então o dsh-defend detecta esses hosts no primeiro uso (pré-checagem da versão do peer + sondagem do envelope devolvido) e desativa a auditoria do registro de sessão com um aviso único. Defina `detection.allowUnmarkedAudit: true` para reativar; linhas `defend/detection` existentes sem marcação podem ser reparadas adicionando `"ignorable": true` aos envelopes. Veja [issue #2](https://github.com/PerryLink/dsh-defend/issues/2).
 
 ## Desenvolvimento
 

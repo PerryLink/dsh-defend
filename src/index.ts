@@ -27,10 +27,11 @@ import { defineTool } from '@deepseek-ai/dsh-tools'
 import type { PostToolDecision, PreToolDecision, ToolExecution, ToolExecutionResult } from '@deepseek-ai/dsh-tools'
 import type { ApprovalService } from '@deepseek-ai/dsh-user-approval'
 import type { Session } from '@deepseek-ai/dsh-session'
+import { createRequire } from 'node:module'
 import os from 'node:os'
 import path from 'node:path'
 import { buildScanner, type ScanReport, type Family, type MatchInfo, severityRank } from './detect/index.ts'
-import { DETECTION_EVENT, type DetectionEvent } from './events.ts'
+import { DETECTION_EVENT, type DetectionEvent, type AuditAppend, isMarkedAuditEvent } from './events.ts'
 
 export const name = 'dsh-defend'
 
@@ -72,6 +73,13 @@ export interface DetectionConfig {
   secretBlockCritical?: boolean
   /** 拦截与命中是否写 defend/detection 审计事件。默认 true。 */
   audit?: boolean
+  /**
+   * 宿主不识别 ignorable 标记(rc.1–rc.7 的 Session.append 会静默丢弃第三个
+   * 参数)时是否仍写会话日志审计 —— 未标记事件会让会话在更严格宿主机上无法
+   * 恢复。默认 false:不识别即停用会话日志审计并告警一次。默认告警文案见
+   * {@link DetectionAuditSink}。
+   */
+  allowUnmarkedAudit?: boolean
   /** defend_report 内存环形缓冲条数上限。默认 200。 */
   maxReportEntries?: number
 }
@@ -88,6 +96,7 @@ export const Config: z<Config> = z.object({
     secretAction: z.union(['allow', 'ask', 'block']).default('ask'),
     secretBlockCritical: z.boolean().default(true),
     audit: z.boolean().default(true),
+    allowUnmarkedAudit: z.boolean().default(false),
     maxReportEntries: z.number().default(200),
   }).default({
     enabled: true,
@@ -97,6 +106,7 @@ export const Config: z<Config> = z.object({
     secretAction: 'ask',
     secretBlockCritical: true,
     audit: true,
+    allowUnmarkedAudit: false,
     maxReportEntries: 200,
   }),
   registerCommand: z.boolean().default(true),
@@ -392,6 +402,90 @@ function commandOf(argumentsValue: unknown): string | undefined {
 }
 
 /**
+ * 审计落盘的宿主能力探测:`defend/detection` 事件带 `ignorable: true` 追加
+ * (见 events.ts)。rc.1–rc.7 的 `Session.append` 会静默丢弃第三个参数,事件
+ * 未标记落盘,会话随后在更严格宿主机上拒绝加载(issue #2)。因此在第一次追加
+ * 前先按 peer 版本预判,第一次追加后再探测返回 envelope 是否真的带上标记;
+ * 两者任一判定为未标记宿主即停用会话日志审计并告警一次,除非
+ * `detection.allowUnmarkedAudit: true` 显式选择继续写入。
+ */
+export class DetectionAuditSink {
+  private support: 'unknown' | 'supported' | 'unsupported' = 'unknown'
+  private warned = false
+
+  constructor(
+    private readonly logger: { warn: (message: string) => unknown },
+    private readonly allowUnmarked: boolean,
+    private readonly sessionVersion: () => string | null = peerVersion,
+  ) {}
+
+  /** 追加一条检测审计事件(带 ignorable 标记纪律)。 */
+  append(session: Session, event: DetectionEvent): void {
+    if (this.support === 'unsupported') return
+    if (this.support === 'unknown' && !this.allowUnmarked) {
+      const version = this.sessionVersion()
+      if (version !== null && isUnmarkedHostVersion(version)) {
+        this.support = 'unsupported'
+        this.warnUnmarked()
+        return
+      }
+    }
+    try {
+      const result = (session.append as unknown as AuditAppend)(DETECTION_EVENT, event, { ignorable: true })
+      this.probe(result)
+    } catch {
+      // 审计补充失败不改写拦截结果(与门禁一致的约定)。
+    }
+  }
+
+  /** 首次追加后探测返回 envelope 是否带上 ignorable 标记(宿主能力兜底检测)。 */
+  probe(result: unknown): void {
+    if (this.support === 'unknown' && !this.allowUnmarked) {
+      if (isMarkedAuditEvent(result)) {
+        this.support = 'supported'
+      } else {
+        this.support = 'unsupported'
+        this.warnUnmarked()
+      }
+    }
+  }
+
+  /** 一次性告警:解释降级原因与重新开启的配置键。 */
+  private warnUnmarked(): void {
+    if (this.warned) return
+    this.warned = true
+    this.logger.warn(
+      'dsh-defend: this host drops the ignorable marker on audit events (Session.append predates it), which would make sessions unresumable on stricter harness builds — session-log audit is disabled; set detection.allowUnmarkedAudit: true to opt back in (see https://github.com/PerryLink/dsh-defend/issues/2)',
+    )
+  }
+}
+
+/** 已安装的 `@deepseek-ai/dsh-session` 版本;不可解析时返回 null(交由 append 探测兜底)。 */
+export function peerVersion(): string | null {
+  try {
+    const pkg = createRequire(import.meta.url)('@deepseek-ai/dsh-session/package.json') as { version?: unknown }
+    return typeof pkg.version === 'string' ? pkg.version : null
+  } catch {
+    return null
+  }
+}
+
+/**
+ * 版本线是否早于 `ignorable` envelope 标记面:已发布的 `0.1.0-rc.1`–
+ * `0.1.0-rc.7` 会静默丢弃 `Session.append` 的 options 参数,写出的审计事件
+ * 未标记,更严格宿主机上会拒绝加载会话日志;`0.1.0-rc.8` 起才会盖上标记。
+ * 未来 rc 线若回归,再扩展边界。不匹配(更晚的 rc、stable、无法解析)的版本
+ * 视为可能支持,由 append 探测兜底验证。
+ * @param version - 安装的 peer 版本字符串。
+ * @returns 已知未标记的 rc.1–rc.7 线返回 true。
+ */
+export function isUnmarkedHostVersion(version: string): boolean {
+  const match = /^0\.1\.0-rc\.(\d+)$/.exec(version.trim())
+  if (match === null) return false
+  return Number(match[1]) <= 7
+}
+
+/**
  * 安装门禁监听。enabled:false 时不注册任何东西;监听随插件 fiber 卸载撤销。
  * @param ctx - 插件上下文。
  * @param config - 校验后的 {@link Config}(schemastery .default 保证字段齐全)。
@@ -422,6 +516,8 @@ export function apply(ctx: Context, config: Config): void {
     const maxScanChars = detection.maxScanChars ?? 10_000
     const maxReportEntries = Math.max(1, detection.maxReportEntries ?? 200)
     const records: DetectionEvent[] = []
+    // 告警走父 logger:内容自带 dsh-defend 前缀,且测试可用 ctx.logger 直接观测。
+    const audit = new DetectionAuditSink(ctx.logger, detection.allowUnmarkedAudit ?? false)
 
     const actionOf = (report: ScanReport, family: Family): 'allow' | 'ask' | 'block' => {
       const configured = family === 'injection' ? (detection.injectionAction ?? 'ask')
@@ -435,15 +531,9 @@ export function apply(ctx: Context, config: Config): void {
     const record = (session: Session | undefined, event: DetectionEvent): void => {
       records.push(event)
       if (records.length > maxReportEntries) records.shift()
-      if (detection.audit ?? true) {
-        if (session !== undefined) {
-          try {
-            session.append(DETECTION_EVENT, event)
-          } catch {
-            // 审计补充失败不改写拦截结果(与门禁一致的约定)。
-          }
-        }
-      }
+      if (!(detection.audit ?? true)) return
+      if (session === undefined) return
+      audit.append(session, event)
     }
 
     const ask = async (agent: unknown, toolName: string, reason: string, signal?: AbortSignal): Promise<boolean> => {

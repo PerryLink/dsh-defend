@@ -91,6 +91,7 @@ All tunables are Schemastery `Config` fields (changeable from cordis.yml). An id
 | `detection.secretAction` | `ask` | Secret family: `allow` / `ask` / `block` |
 | `detection.secretBlockCritical` | `true` | Critical secrets always block regardless of `secretAction` |
 | `detection.audit` | `true` | Write `defend/detection` session audit events |
+| `detection.allowUnmarkedAudit` | `false` | Keep writing session audit on hosts whose `Session.append` predates the `ignorable` marker (rc.1–rc.7), accepting the unresumable-session hazard |
 | `detection.maxReportEntries` | `200` | In-memory report ring-buffer cap |
 | `registerCommand` | `true` | Register the `/defend` command |
 | `registerTool` | `true` | Register the `defend_report` tool |
@@ -123,7 +124,7 @@ All tunables are Schemastery `Config` fields (changeable from cordis.yml). An id
 - **Detection gaps.** The rule library catches the ported vocabularies and their tolerant variants; novel phrasing, lookalike-Unicode encodings (NFKC normalization is tracked as future work), and multi-step attacks can evade it. The benchmark pins the measured floor (27/28 on the upstream dataset) so regressions are visible.
 - **No model-level verdicts.** `dsh-defend` is deterministic; it never calls a model and cannot judge novel intent.
 - **Message rejection is silent.** `agent/pre-step` reject carries no reason to the model (the seam has no reason field); the audit event records the rule facts.
-- **Session audit on newer harness builds.** Audit appends use the two-argument `Session.append` form (the pinned rc.6 peers have no append-envelope option); on post-rc.6 builds the events are required-on-read, which is fine while this plugin is installed because it declares the event type.
+- **Session audit and the `ignorable` marker.** Audit appends request the envelope's `ignorable: true` marker so any harness build can load the log. Hosts whose `Session.append` predates the marker (the released `0.1.0-rc.1`–`0.1.0-rc.7` lines) silently drop it — the event lands unmarked and makes the session unresumable on stricter builds, so dsh-defend detects those hosts at first use (peer-version pre-check + a probe of the appended envelope) and disables session-log audit with a one-time warning. Set `detection.allowUnmarkedAudit: true` to opt back in; existing unmarked `defend/detection` rows can be repaired by adding `"ignorable": true` to their envelopes. See [issue #2](https://github.com/PerryLink/dsh-defend/issues/2).
 
 ## Development
 

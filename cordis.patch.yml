@@ -26,6 +26,10 @@
           secretBlockCritical: true
           # 拦截与命中是否写 defend/detection 会话审计事件(不含匹配文本)。
           audit: true
+          # 宿主不识别 ignorable 标记(rc.1–rc.7)时是否仍写会话日志审计。
+          # 默认 false:不识别即停用会话日志审计并告警一次(未标记事件会让
+          # 会话在更严格宿主机上无法恢复,见 issue #2);true 显式选择继续写入。
+          allowUnmarkedAudit: false
           # defend_report 内存环形缓冲条数上限。
           maxReportEntries: 200
         # 注册 /defend 会话命令。

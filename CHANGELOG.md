@@ -5,6 +5,12 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- `defend/detection` audit events now request the envelope's `ignorable: true` marker, and hosts whose `Session.append` predates the marker (the released `0.1.0-rc.1`–`0.1.0-rc.7` lines, which silently drop the options bag) are detected at first use — peer-version pre-check plus a probe of the appended envelope — so session-log audit is disabled there with a one-time warning instead of writing unmarked events that make sessions unresumable on stricter builds ([#2](https://github.com/PerryLink/dsh-defend/issues/2)). `detection.allowUnmarkedAudit: true` opts back in; existing unmarked rows can be repaired by adding `"ignorable": true` to their envelopes.
+
 ## [0.1.0] - 2026-08-16
 
 - Initial release: the destructive-delete guard plus the four-asset detection layer with allow/ask/block interception, audit events, and report surfaces.

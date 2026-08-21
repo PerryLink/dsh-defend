@@ -91,6 +91,7 @@ dsh --profile web --dump-config | grep -A3 'id: dsh-defend'
 | `detection.secretAction` | `ask` | 密钥类：`allow` / `ask` / `block` |
 | `detection.secretBlockCritical` | `true` | critical 密钥无视 secretAction 一律 block |
 | `detection.audit` | `true` | 写 `defend/detection` 会话审计事件 |
+| `detection.allowUnmarkedAudit` | `false` | 宿主不识别 `ignorable` 标记（rc.1–rc.7）时是否仍写会话日志审计（接受会话无法恢复的风险） |
 | `detection.maxReportEntries` | `200` | 内存环形缓冲条数上限 |
 | `registerCommand` | `true` | 注册 `/defend` 命令 |
 | `registerTool` | `true` | 注册 `defend_report` 工具 |
@@ -123,7 +124,7 @@ dsh --profile web --dump-config | grep -A3 'id: dsh-defend'
 - **检测缺口。** 规则库覆盖已移植词汇及其容错变体；新式措辞、形近 Unicode 编码（NFKC 归一化列为后续工作）与多步攻击可能绕过。基准把实测下限（上游数据集 27/28）钉进测试，回归可见。
 - **无模型级判定。** `dsh-defend` 是确定性的，绝不调用模型，无法判断全新意图。
 - **消息拒绝是静默的。** `agent/pre-step` 的 reject 不给模型理由（seam 没有理由字段）；审计事件记录规则事实。
-- **较新 harness 构建上的会话审计。** 审计追加使用两参数 `Session.append`（钉住的 rc.6 peers 没有 append envelope 选项）；post-rc.6 构建上事件为 required-on-read，安装本插件即无碍，因为本插件声明了该事件类型。
+- **会话审计与 `ignorable` 标记。** 审计追加请求 envelope 的 `ignorable: true` 标记，任何 harness 构建都能加载日志。`Session.append` 早于该标记的宿主（已发布的 `0.1.0-rc.1`–`0.1.0-rc.7`）会静默丢弃它——事件未标记落盘，更严格构建上会话将无法恢复；因此 dsh-defend 在首次使用时探测这类宿主（peer 版本预判 + 追加返回 envelope 探测）并以一次性告警停用会话日志审计。设 `detection.allowUnmarkedAudit: true` 可重新开启；已有未标记的 `defend/detection` 行可给其 envelope 补 `"ignorable": true` 修复。见 [issue #2](https://github.com/PerryLink/dsh-defend/issues/2)。
 
 ## 开发
 
