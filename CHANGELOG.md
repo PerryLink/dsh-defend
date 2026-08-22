@@ -5,6 +5,12 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.3] - 2026-08-22
+
+### Changed
+
+- **DeepSeek Harness 0.1.1-rc.2 compatibility release.** `@deepseek-ai/dsh-*` devDependencies pin the exact `0.1.1-rc.2` line and peerDependencies stay `>=0.1.0-rc.8 <0.2.0` (the plugin uses no rc.2-only API). The workshop compatibility manifest, the pnpm minimum-release-age allowlist, the compat workflow's dsh CLI/bundle pins, and the five-language READMEs declare the rc.2 baseline. The pre-marker audit boundary is unchanged (`isUnmarkedHostVersion` still classifies `0.1.1-rc.2` as pre-marker): rc.2's `Session.append` still drops the options bag, so session-log audit stays disabled on the released rc.2 line with the same one-time warning. Full gate passes against rc.2.
+
 ## [0.1.2] - 2026-08-22
 
 ### Changed

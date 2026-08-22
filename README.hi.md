@@ -24,7 +24,7 @@
 
 | सतह | स्थिति |
 |---|---|
-| Harness | DeepSeek Harness `0.1.0-rc.8` (peer रेंज `>=0.1.0-rc.8 <0.2.0`) |
+| Harness | DeepSeek Harness `0.1.1-rc.2` (peer रेंज `>=0.1.0-rc.8 <0.2.0`) |
 | Node | `^22.19.0 \|\| >=24.0.0` |
 | प्लेटफ़ॉर्म | सभी (केवल host; कोई नेटिव कोड नहीं, कोई नेटवर्क नहीं) |
 | मॉडल | कोई भी (पहचान मॉडल तक सामग्री पहुँचने से पहले होती है) |
@@ -122,8 +122,8 @@ dsh --profile web --dump-config | grep -A3 'id: dsh-defend'
 ```sh
 pnpm install        # node ^22.19 || >=24
 pnpm run typecheck  # tsc: src + tests स्थानीय हार्नेस चेकआउट के विरुद्ध
-pnpm run typecheck:ci  # tsc प्रकाशित 0.1.0-rc.8 प्रकारों के विरुद्ध (बिना paths)
-pnpm test           # vitest: 49 टेस्ट, 4 सुइट (पहचान बेंचमार्क सहित)
+pnpm run typecheck:ci  # tsc प्रकाशित 0.1.1-rc.2 प्रकारों के विरुद्ध (बिना paths)
+pnpm test           # vitest: 75 टेस्ट, 8 सुइट (पहचान बेंचमार्क सहित)
 pnpm run build      # tsdown बंडल + tsc घोषणाएँ (lib/)
 pnpm run verify:self-contained  # निर्भरता स्पेक registry से हल होती हैं
 pnpm run verify:artifacts       # निर्मित ESM फ़ेस + प्रकाशित फ़ाइलें मौजूद

@@ -12,7 +12,7 @@ Standalone DeepSeek Harness plugin repository (`dsh-defend`). Development follow
 - `src/detect/scanner.ts` — one automaton over all needles + per-rule regexes; length cap, one match per rule, secret-type annotation, `safeSnippet` (in-place redaction for secret spans).
 - `src/events.ts` — `defend/detection` `SessionEventMap` member (declaration merging) + payload type + `AuditAppend`, the append surface that requests the envelope's `ignorable: true` marker. Pre-marker hosts (every released line so far — rc8 and 0.1.1-rc.x re-verified 2026-08-22) silently drop the options bag, so the runtime detects them BEFORE the first append (peer-version pre-check, then a probe of the appended envelope's return value) and disables session-log audit with a one-time warning — `detection.allowUnmarkedAudit: true` opts back in (see https://github.com/PerryLink/dsh-defend/issues/2).
 - `fixtures/` — `attacks.json` (28 Prompt-Attack-Dataset attacks verbatim) and `clean.txt` (zero-false-positive corpus). The benchmark test pins the measured detection-rate floor; raising the floor needs new rules, lowering it needs a PR explanation.
-- `tests/` — vitest; real Cordis `Context` + real `SessionStore`/`Session`/`ToolRuntime`/`Commands`/`ApprovalService` from the `0.1.0-rc.8` peers; the agent object is a structural fake. `guard-hook.spec.ts` covers the destructive-delete guard, `detect.spec.ts` the pure layer, `defend-detect.spec.ts` the interception wiring through real waterfalls, `audit-support.spec.ts` the ignorable-marker host-capability degradation.
+- `tests/` — vitest; real Cordis `Context` + real `SessionStore`/`Session`/`ToolRuntime`/`Commands`/`ApprovalService` from the `0.1.1-rc.2` peers; the agent object is a structural fake. `guard-hook.spec.ts` covers the destructive-delete guard, `detect.spec.ts` the pure layer, `defend-detect.spec.ts` the interception wiring through real waterfalls, `audit-support.spec.ts` the ignorable-marker host-capability degradation.
 
 ## Hard rules applied here
 
@@ -29,7 +29,7 @@ Standalone DeepSeek Harness plugin repository (`dsh-defend`). Development follow
 
 `pnpm run typecheck && pnpm run typecheck:ci && pnpm test && pnpm run build && pnpm run verify:self-contained && pnpm run verify:artifacts && pnpm pack`
 
-`typecheck` resolves `@deepseek-ai/*` through tsconfig paths to the local harness checkout; `typecheck:ci` checks against the published `0.1.0-rc.8` types. Both stay green — see dsh-click's AGENTS.md for the shared rationale.
+`typecheck` resolves `@deepseek-ai/*` through tsconfig paths to the local harness checkout; `typecheck:ci` checks against the published `0.1.1-rc.2` types. Both stay green — see dsh-click's AGENTS.md for the shared rationale.
 
 ## Release
 

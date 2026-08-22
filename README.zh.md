@@ -24,7 +24,7 @@
 
 | 方面 | 状态 |
 |---|---|
-| Harness | DeepSeek Harness `0.1.0-rc.8`（peer 范围 `>=0.1.0-rc.8 <0.2.0`） |
+| Harness | DeepSeek Harness `0.1.1-rc.2`（peer 范围 `>=0.1.0-rc.8 <0.2.0`） |
 | Node | `^22.19.0 \|\| >=24.0.0` |
 | 平台 | 全部（纯 host；无原生代码、无网络） |
 | 模型 | 任意（检测发生在内容到达模型之前） |
@@ -131,8 +131,8 @@ dsh --profile web --dump-config | grep -A3 'id: dsh-defend'
 ```sh
 pnpm install        # node ^22.19 || >=24
 pnpm run typecheck  # tsc：src + tests，对照本地 harness checkout
-pnpm run typecheck:ci  # tsc：对照已发布的 0.1.0-rc.8 类型（无 paths）
-pnpm test           # vitest：49 个测试、4 个套件（含检测基准）
+pnpm run typecheck:ci  # tsc：对照已发布的 0.1.1-rc.2 类型（无 paths）
+pnpm test           # vitest：75 个测试、8 个套件（含检测基准）
 pnpm run build      # tsdown bundle + tsc 声明（lib/）
 pnpm run verify:self-contained  # 依赖声明全部来自 registry
 pnpm run verify:artifacts       # 构建产物 ESM 面 + 发布文件齐全
