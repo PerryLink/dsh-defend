@@ -1,6 +1,7 @@
 <div align="center">
 
 # 🛡️ dsh-defend
+[![Gitee](https://img.shields.io/badge/Gitee-mirror-c71d23?logo=gitee)](https://gitee.com/perrylink/dsh-defend)
 
 **Prompt-injection, jailbreak, and secret-leak defense for DeepSeek Harness.**
 
