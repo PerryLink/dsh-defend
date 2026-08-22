@@ -178,7 +178,7 @@ describe('audit and report surfaces', () => {
   it('/defend command answers with the summary', async () => {
     const harness = await mountHarness({ config: { detection: { injectionAction: 'block' } } })
     await harness.ctx.waterfall('tools/pre-execute', execOf(harness, 'write', { command: INJECTION }), () => Promise.resolve<PreToolDecision>({ kind: 'allow' }))
-    const execution = await harness.ctx.commands.execute(harness.agent, '/defend', new AbortController().signal)
+    const execution = await harness.ctx.commands.execute(harness.agent, '/defend', [], new AbortController().signal)
     expect(execution?.result.kind).toBe('success')
     expect(execution?.result.text).toContain('dsh-defend')
     expect(execution?.result.text).toContain('injection')

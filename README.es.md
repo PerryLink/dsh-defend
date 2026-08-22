@@ -24,7 +24,7 @@
 
 | Superficie | Estado |
 |---|---|
-| Harness | DeepSeek Harness `0.1.0-rc.6` (compatibilidad declarada para `0.1.0-rc.5`–`0.1.0-rc.6`) |
+| Harness | DeepSeek Harness `0.1.0-rc.8` (rangos de peer `>=0.1.0-rc.8 <0.2.0`) |
 | Node | `^22.19.0 \|\| >=24.0.0` |
 | Plataformas | Todas (solo host; sin código nativo, sin red) |
 | Modelo | Cualquiera (la detección ocurre antes de que el contenido llegue al modelo) |
@@ -82,7 +82,7 @@ Todos los ajustes son campos `Config` de Schemastery (modificables desde cordis.
 | `detection.secretAction` | `ask` | Familia secretos: `allow` / `ask` / `block` |
 | `detection.secretBlockCritical` | `true` | Los secretos critical bloquean siempre, sin importar `secretAction` |
 | `detection.audit` | `true` | Escribir eventos de auditoría `defend/detection` |
-| `detection.allowUnmarkedAudit` | `false` | Seguir escribiendo auditoría de sesión en hosts cuyo `Session.append` es anterior al marcador `ignorable` (rc.1–rc.7), aceptando el riesgo de sesiones irrecuperables |
+| `detection.allowUnmarkedAudit` | `false` | Seguir escribiendo auditoría de sesión en hosts cuyo `Session.append` es anterior al marcador `ignorable` (todas las líneas publicadas hasta ahora), aceptando el riesgo de sesiones irrecuperables |
 | `detection.maxReportEntries` | `200` | Límite del búfer circular en memoria |
 | `registerCommand` | `true` | Registrar el comando `/defend` |
 | `registerTool` | `true` | Registrar la herramienta `defend_report` |
@@ -115,14 +115,14 @@ Todos los ajustes son campos `Config` de Schemastery (modificables desde cordis.
 - **Huecos de detección.** La librería de reglas cubre los vocabularios portados y sus variantes tolerantes; frases nuevas, codificaciones Unicode lookalike (la normalización NFKC está como trabajo futuro) y ataques multi-paso pueden evadirla. La referencia fija el piso medido (27/28 en el dataset upstream) para que las regresiones sean visibles.
 - **Sin veredictos a nivel de modelo.** `dsh-defend` es determinista; nunca llama a un modelo y no puede juzgar intención nueva.
 - **El rechazo de mensajes es silencioso.** El reject de `agent/pre-step` no lleva razón al modelo (la costura no tiene campo de razón); el evento de auditoría registra los hechos de la regla.
-- **Auditoría de sesión y el marcador `ignorable`.** Los appends de auditoría solicitan el marcador `ignorable: true` del envelope para que cualquier build del harness pueda cargar el registro. Los hosts cuyo `Session.append` es anterior al marcador (las líneas publicadas `0.1.0-rc.1`–`0.1.0-rc.7`) lo descartan en silencio — el evento queda sin marcar y hace la sesión irrecuperable en builds más estrictos, por lo que dsh-defend detecta esos hosts en el primer uso (precomprobación de la versión del peer + sondeo del envelope devuelto) y desactiva la auditoría del registro de sesión con una advertencia única. Establece `detection.allowUnmarkedAudit: true` para reactivarla; las filas `defend/detection` existentes sin marcar pueden repararse añadiendo `"ignorable": true` a sus envelopes. Véase [issue #2](https://github.com/PerryLink/dsh-defend/issues/2).
+- **Auditoría de sesión y el marcador `ignorable`.** Los appends de auditoría solicitan el marcador `ignorable: true` del envelope para que cualquier build del harness pueda cargar el registro. Todas las líneas publicadas hasta ahora (`0.1.0-rc.1`–`0.1.0-rc.8`, `0.1.1-rc.1`–`0.1.1-rc.2`) lo descartan en silencio — el evento queda sin marcar y hace la sesión irrecuperable en builds más estrictos, por lo que dsh-defend detecta esos hosts en el primer uso (precomprobación de la versión del peer + sondeo del envelope devuelto) y desactiva la auditoría del registro de sesión con una advertencia única. Establece `detection.allowUnmarkedAudit: true` para reactivarla; las filas `defend/detection` existentes sin marcar pueden repararse añadiendo `"ignorable": true` a sus envelopes. Véase [issue #2](https://github.com/PerryLink/dsh-defend/issues/2).
 
 ## Desarrollo
 
 ```sh
 pnpm install        # node ^22.19 || >=24
 pnpm run typecheck  # tsc: src + tests contra el checkout local del harness
-pnpm run typecheck:ci  # tsc contra los tipos publicados 0.1.0-rc.6 (sin paths)
+pnpm run typecheck:ci  # tsc contra los tipos publicados 0.1.0-rc.8 (sin paths)
 pnpm test           # vitest: 49 tests, 4 suites (incluye la referencia de detección)
 pnpm run build      # bundle tsdown + declaraciones tsc (lib/)
 pnpm run verify:self-contained  # las especificaciones de dependencias resuelven desde el registry

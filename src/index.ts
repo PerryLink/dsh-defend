@@ -74,8 +74,8 @@ export interface DetectionConfig {
   /** 拦截与命中是否写 defend/detection 审计事件。默认 true。 */
   audit?: boolean
   /**
-   * 宿主不识别 ignorable 标记(rc.1–rc.7 的 Session.append 会静默丢弃第三个
-   * 参数)时是否仍写会话日志审计 —— 未标记事件会让会话在更严格宿主机上无法
+   * 宿主不识别 ignorable 标记(截至 rc8/0.1.1-rc.2 的 Session.append 会静默
+   * 丢弃第三个参数)时是否仍写会话日志审计 —— 未标记事件会让会话在更严格宿主机上无法
    * 恢复。默认 false:不识别即停用会话日志审计并告警一次。默认告警文案见
    * {@link DetectionAuditSink}。
    */
@@ -403,11 +403,11 @@ function commandOf(argumentsValue: unknown): string | undefined {
 
 /**
  * 审计落盘的宿主能力探测:`defend/detection` 事件带 `ignorable: true` 追加
- * (见 events.ts)。rc.1–rc.7 的 `Session.append` 会静默丢弃第三个参数,事件
- * 未标记落盘,会话随后在更严格宿主机上拒绝加载(issue #2)。因此在第一次追加
- * 前先按 peer 版本预判,第一次追加后再探测返回 envelope 是否真的带上标记;
- * 两者任一判定为未标记宿主即停用会话日志审计并告警一次,除非
- * `detection.allowUnmarkedAudit: true` 显式选择继续写入。
+ * (见 events.ts)。截至 rc8/0.1.1-rc.2,所有已发布线的 `Session.append` 都会
+ * 静默丢弃第三个参数,事件未标记落盘,会话随后在更严格宿主机上拒绝加载
+ * (issue #2)。因此在第一次追加前先按 peer 版本预判,第一次追加后再探测返回
+ * envelope 是否真的带上标记;两者任一判定为未标记宿主即停用会话日志审计并
+ * 告警一次,除非 `detection.allowUnmarkedAudit: true` 显式选择继续写入。
  */
 export class DetectionAuditSink {
   private support: 'unknown' | 'supported' | 'unsupported' = 'unknown'
@@ -471,18 +471,23 @@ export function peerVersion(): string | null {
 }
 
 /**
- * 版本线是否早于 `ignorable` envelope 标记面:已发布的 `0.1.0-rc.1`–
- * `0.1.0-rc.7` 会静默丢弃 `Session.append` 的 options 参数,写出的审计事件
- * 未标记,更严格宿主机上会拒绝加载会话日志;`0.1.0-rc.8` 起才会盖上标记。
- * 未来 rc 线若回归,再扩展边界。不匹配(更晚的 rc、stable、无法解析)的版本
- * 视为可能支持,由 append 探测兜底验证。
+ * 版本线是否早于 `ignorable` envelope 标记面。已发布的 `0.1.0-rc.1`–
+ * `0.1.0-rc.8` 与 `0.1.1-rc.1`–`0.1.1-rc.2` 的 `Session.append` 都会静默
+ * 丢弃 options 参数,写出的审计事件未标记,更严格宿主机上会拒绝加载会话日志
+ * (rc8 复核 2026-08-22:盖章修复只在 harness master,未随任何已发布 rc 线)。
+ * 不匹配(更晚的 rc、stable、无法解析)的版本视为可能支持,由 append 探测兜底
+ * 验证,标记面随未来发布线落地后自动启用。
  * @param version - 安装的 peer 版本字符串。
- * @returns 已知未标记的 rc.1–rc.7 线返回 true。
+ * @returns 已知未标记的已发布线返回 true。
  */
 export function isUnmarkedHostVersion(version: string): boolean {
-  const match = /^0\.1\.0-rc\.(\d+)$/.exec(version.trim())
+  const match = /^0\.1\.(\d+)-rc\.(\d+)$/.exec(version.trim())
   if (match === null) return false
-  return Number(match[1]) <= 7
+  const minor = Number(match[1])
+  const rc = Number(match[2])
+  if (minor === 0) return rc <= 8
+  if (minor === 1) return rc <= 2
+  return false
 }
 
 /**

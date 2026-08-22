@@ -7,15 +7,15 @@
  * matches are type-only.
  *
  * The event is appended with the envelope's `ignorable: true` marker (see
- * {@link AuditAppend}): harness builds that honor the marker (post-rc.6)
- * stamp it on the envelope and skip unknown ignorable records when loading,
- * so the audit can never refuse a session. Builds whose `Session.append`
- * predates the marker — the released `0.1.0-rc.1`–`0.1.0-rc.7` lines —
- * silently DROP the options bag: the event then lands unmarked and makes
- * the session unresumable on required-on-read hosts. The runtime detects
- * such hosts at first use (peer-version pre-check plus a probe of the
- * appended envelope) and disables session-log audit on them with a
- * one-time warning; `detection.allowUnmarkedAudit: true` opts back in.
+ * {@link AuditAppend}): future harness builds that honor the marker stamp it
+ * on the envelope and skip unknown ignorable records when loading, so the
+ * audit can never refuse a session. Every released line so far —
+ * `0.1.0-rc.1`–`0.1.0-rc.8` and `0.1.1-rc.1`–`0.1.1-rc.2` — silently DROPS
+ * the options bag: the event then lands unmarked and makes the session
+ * unresumable on required-on-read hosts. The runtime detects such hosts at
+ * first use (peer-version pre-check plus a probe of the appended envelope)
+ * and disables session-log audit on them with a one-time warning;
+ * `detection.allowUnmarkedAudit: true` opts back in.
  * See https://github.com/PerryLink/dsh-defend/issues/2.
  * @module dsh-defend/events
  */
@@ -72,10 +72,10 @@ export type DetectionEvent = {
 /**
  * `Session.append` narrowed to this plugin's audit event. The options bag
  * exists only on host builds that expose the `ignorable` envelope-marker
- * surface (post-rc.6 `@deepseek-ai/dsh-session`); a pre-marker host accepts
- * the call but silently drops the third argument — the event is appended
- * WITHOUT the marker, which is exactly what breaks later resume on stricter
- * hosts. The runtime treats the marker as optional-but-probed: see
+ * surface (no released line so far); a pre-marker host accepts the call but
+ * silently drops the third argument — the event is appended WITHOUT the
+ * marker, which is exactly what breaks later resume on stricter hosts. The
+ * runtime treats the marker as optional-but-probed: see
  * {@link isMarkedAuditEvent}.
  */
 export type AuditAppend = (

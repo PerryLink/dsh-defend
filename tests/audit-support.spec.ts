@@ -1,10 +1,11 @@
 /**
  * 审计宿主能力降级:`defend/detection` 事件带 `ignorable: true` 追加,但
- * rc.1–rc.7 的 `Session.append` 会静默丢弃 options,写出的未标记事件让会话
- * 在更严格宿主机上无法恢复(issue #2)。运行时必须在第一次追加前按 peer
- * 版本预判,再探测第一次追加返回的 envelope;判定未标记即停用会话日志审计并
- * 告警一次,除非 `detection.allowUnmarkedAudit: true` 重新开启。
- * 本仓库测试 peer 固定 rc.6(见 tests/harness.ts),因此降级路径用真实 peer
+ * 所有已发布线(rc8 与 0.1.1-rc.x 复核于 2026-08-22)的 `Session.append`
+ * 都会静默丢弃 options,写出的未标记事件让会话在更严格宿主机上无法恢复
+ * (issue #2)。运行时必须在第一次追加前按 peer 版本预判,再探测第一次追加
+ * 返回的 envelope;判定未标记即停用会话日志审计并告警一次,除非
+ * `detection.allowUnmarkedAudit: true` 重新开启。
+ * 本仓库测试 peer 固定 rc.8(见 tests/harness.ts),因此降级路径用真实 peer
  * 直接复现,标记宿主路径经 `DetectionAuditSink` 的 `sessionVersion` 注入面
  * 模拟。
  * @module dsh-defend/test/audit-support.spec
@@ -32,11 +33,11 @@ function execOf(harness: Harness, name: string, args: unknown): ToolExecution {
   } as unknown as ToolExecution
 }
 
-/** 已知未标记的 rc.1–rc.7 版本线分类。 */
+/** 已知未标记的已发布版本线分类(rc8 复核:盖章面仍未随任何发布线落地)。 */
 describe('isUnmarkedHostVersion', () => {
-  it('flags the rc.1–rc.7 lines and nothing else', () => {
-    for (const version of ['0.1.0-rc.1', '0.1.0-rc.6', '0.1.0-rc.7']) expect(isUnmarkedHostVersion(version)).toBe(true)
-    for (const version of ['0.1.0-rc.8', '0.1.0-rc.10', '0.1.0', '0.2.0', '0.1.0-rc.6-pre', 'garbage']) expect(isUnmarkedHostVersion(version)).toBe(false)
+  it('flags every released pre-marker line and lets future lines fall back to the probe', () => {
+    for (const version of ['0.1.0-rc.1', '0.1.0-rc.6', '0.1.0-rc.7', '0.1.0-rc.8', '0.1.1-rc.1', '0.1.1-rc.2']) expect(isUnmarkedHostVersion(version)).toBe(true)
+    for (const version of ['0.1.0-rc.9', '0.1.1-rc.3', '0.1.2-rc.1', '0.1.0', '0.2.0', '0.1.0-rc.6-pre', 'garbage']) expect(isUnmarkedHostVersion(version)).toBe(false)
   })
 })
 
@@ -117,8 +118,8 @@ describe('DetectionAuditSink', () => {
   })
 })
 
-describe('audit host-capability degradation (real rc.6 peers)', () => {
-  it('the rc.6 test host disables session-log audit by default: the block still fires, no event is written', async () => {
+describe('audit host-capability degradation (real rc.8 peers)', () => {
+  it('the rc.8 test host disables session-log audit by default: the block still fires, no event is written', async () => {
     const harness = await mountHarness({ config: { detection: { injectionAction: 'block' } } })
     const warn = vi.spyOn(harness.ctx.logger, 'warn').mockImplementation(() => undefined)
     try {
@@ -132,7 +133,7 @@ describe('audit host-capability degradation (real rc.6 peers)', () => {
     }
   })
 
-  it('allowUnmarkedAudit: true keeps appending on the rc.6 host without the ignorable warning', async () => {
+  it('allowUnmarkedAudit: true keeps appending on the rc.8 host without the ignorable warning', async () => {
     const harness = await mountHarness({ config: { detection: { injectionAction: 'block', allowUnmarkedAudit: true } } })
     const warn = vi.spyOn(harness.ctx.logger, 'warn').mockImplementation(() => undefined)
     try {

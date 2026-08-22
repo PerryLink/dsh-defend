@@ -1,6 +1,6 @@
 {
   "name": "dsh-defend",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Prompt-injection, jailbreak, and secret-leak detection with allow/ask/block interception for DeepSeek Harness: an Aho-Corasick pattern engine and heuristics ported from the Prompt-Injection-Payloads, Jailbreak-Detector, and Secret-Key-Leaker-Detect assets, gating user messages on agent/pre-step, tool arguments on tools/pre-execute, and tool results on tools/post-execute, with sanitized defend/* session audit events, a defend_report tool, and a /defend command.",
   "repository": {
     "type": "git",
@@ -67,8 +67,7 @@
     ],
     "compatibility": {
       "dshVersions": [
-        "0.1.0-rc.5",
-        "0.1.0-rc.6"
+        "0.1.0-rc.8"
       ]
     },
     "capability": {
@@ -102,11 +101,11 @@
   "packageManager": "pnpm@11.7.0",
   "peerDependencies": {
     "@deepseek-ai/cordis": "^4.0.1",
-    "@deepseek-ai/dsh-agent": "0.1.0-rc.6",
-    "@deepseek-ai/dsh-commands": "0.1.0-rc.6",
-    "@deepseek-ai/dsh-llm": "0.1.0-rc.6",
-    "@deepseek-ai/dsh-session": "0.1.0-rc.6",
-    "@deepseek-ai/dsh-tools": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-agent": ">=0.1.0-rc.8 <0.2.0",
+    "@deepseek-ai/dsh-commands": ">=0.1.0-rc.8 <0.2.0",
+    "@deepseek-ai/dsh-llm": ">=0.1.0-rc.8 <0.2.0",
+    "@deepseek-ai/dsh-session": ">=0.1.0-rc.8 <0.2.0",
+    "@deepseek-ai/dsh-tools": ">=0.1.0-rc.8 <0.2.0",
     "@deepseek-ai/schemastery": "^3.18.0"
   },
   "dependencies": {
@@ -117,13 +116,13 @@
     "@deepseek-ai/cordis": "^4.0.1",
     "@deepseek-ai/cordis-plugin-include": "1.0.6",
     "@deepseek-ai/cordis-plugin-loader": "1.0.2",
-    "@deepseek-ai/dsh-agent": "0.1.0-rc.6",
-    "@deepseek-ai/dsh-commands": "0.1.0-rc.6",
-    "@deepseek-ai/dsh-llm": "0.1.0-rc.6",
-    "@deepseek-ai/dsh-session": "0.1.0-rc.6",
-    "@deepseek-ai/dsh-system-prompt": "0.1.0-rc.6",
-    "@deepseek-ai/dsh-tools": "0.1.0-rc.6",
-    "@deepseek-ai/dsh-user-approval": "0.1.0-rc.6",
+    "@deepseek-ai/dsh-agent": "0.1.0-rc.8",
+    "@deepseek-ai/dsh-commands": "0.1.0-rc.8",
+    "@deepseek-ai/dsh-llm": "0.1.0-rc.8",
+    "@deepseek-ai/dsh-session": "0.1.0-rc.8",
+    "@deepseek-ai/dsh-system-prompt": "0.1.0-rc.8",
+    "@deepseek-ai/dsh-tools": "0.1.0-rc.8",
+    "@deepseek-ai/dsh-user-approval": "0.1.0-rc.8",
     "@deepseek-ai/schemastery": "^3.18.0",
     "@types/node": "^22.19.0",
     "@vitest/coverage-v8": "^3.2.0",

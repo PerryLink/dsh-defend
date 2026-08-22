@@ -79,7 +79,7 @@ try {
   }
 
   // Real behavior: the /defend command through the real commands service.
-  const execution = await ctx.commands.execute(agent, '/defend', new AbortController().signal)
+  const execution = await ctx.commands.execute(agent, '/defend', [], new AbortController().signal)
   const text = execution?.result?.text ?? ''
   if (!text.includes('dsh-defend')) {
     throw new Error(`Loader composition: /defend returned ${JSON.stringify(execution?.result)}`)
