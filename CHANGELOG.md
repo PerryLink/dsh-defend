@@ -5,6 +5,13 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **NFKC/Unicode normalization before every scan.** Lookalike/full-width Unicode (`𝕀gnore 𝕒ll previous 𝕚nstructions`) now collapses to its ASCII compatibility equivalent before the automaton and regexes run, closing the lookalike-Unicode bypass. Configurable via `detection.normalizeUnicode` (default `true`).
+- **Secret entropy gate.** A secret regex hit is admitted only when its Shannon entropy per character clears `detection.secretMinEntropy` (default `3.0`; `0` disables), dropping low-diversity false positives such as `api_key: aaaaaaaaaaaaaaaa`. The gate scores the matched text in place and never carries it into the match record or the audit path.
+
 ## [0.1.4] - 2026-08-23
 
 ## [0.1.3] - 2026-08-22

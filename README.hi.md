@@ -77,6 +77,8 @@ dsh --profile web --dump-config | grep -A3 'id: dsh-defend'
 | `toolNames` | `['bash','persistent-bash','terminal-bash']` | वे टूल नाम जिनके तर्क गार्ड समीक्षा करता है |
 | `detection.enabled` | `true` | पहचान परत स्विच |
 | `detection.maxScanChars` | `10000` | प्रति इंटरसेप्शन स्कैन सीमा (केवल शीर्ष) |
+| `detection.normalizeUnicode` | `true` | स्कैन से पहले टेक्स्ट को NFKC-सामान्यीकृत करें (lookalike-Unicode बायपास रोकता है) |
+| `detection.secretMinEntropy` | `3.0` | सीक्रेट हिट स्वीकारने हेतु न्यूनतम Shannon एंट्रॉपी (bits/char); `0` अक्षम करता है |
 | `detection.injectionAction` | `ask` | इंजेक्शन परिवार: `allow` / `ask` / `block` |
 | `detection.jailbreakAction` | `ask` | जेलब्रेक परिवार: `allow` / `ask` / `block` |
 | `detection.secretAction` | `ask` | सीक्रेट परिवार: `allow` / `ask` / `block` |

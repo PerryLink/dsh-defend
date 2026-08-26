@@ -86,6 +86,8 @@ dsh --profile web --dump-config | grep -A3 'id: dsh-defend'
 | `toolNames` | `['bash','persistent-bash','terminal-bash']` | 门禁评审命令参数的工具注册名 |
 | `detection.enabled` | `true` | 检测层开关 |
 | `detection.maxScanChars` | `10000` | 每次拦截的扫描字符上限（只扫头部） |
+| `detection.normalizeUnicode` | `true` | 扫描前 NFKC/Unicode 归一化（堵 lookalike-Unicode 绕过） |
+| `detection.secretMinEntropy` | `3.0` | 密钥命中后的最小 Shannon 熵（bits/字符），低于阈值视为误报丢弃；`0` 关闭 |
 | `detection.injectionAction` | `ask` | 注入类：`allow` / `ask` / `block` |
 | `detection.jailbreakAction` | `ask` | 越狱类：`allow` / `ask` / `block` |
 | `detection.secretAction` | `ask` | 密钥类：`allow` / `ask` / `block` |

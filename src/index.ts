@@ -63,6 +63,10 @@ export interface DetectionConfig {
   enabled?: boolean
   /** 单次扫描的字符上限(只扫头部)。默认 10000。 */
   maxScanChars?: number
+  /** 扫描前 NFKC/Unicode 归一化(堵 lookalike-Unicode 绕过)。默认 true。 */
+  normalizeUnicode?: boolean
+  /** 密钥命中后的最小 Shannon 熵(bits/字符),低于阈值视为误报丢弃。默认 3.0;0 关闭。 */
+  secretMinEntropy?: number
   /** 注入载荷的默认动作 allow/ask/block。默认 ask。 */
   injectionAction?: 'allow' | 'ask' | 'block'
   /** 越狱模式的默认动作。默认 ask。 */
@@ -91,6 +95,8 @@ export const Config: z<Config> = z.object({
   detection: z.object({
     enabled: z.boolean().default(true),
     maxScanChars: z.number().default(10_000),
+    normalizeUnicode: z.boolean().default(true),
+    secretMinEntropy: z.number().default(3.0),
     injectionAction: z.union(['allow', 'ask', 'block']).default('ask'),
     jailbreakAction: z.union(['allow', 'ask', 'block']).default('ask'),
     secretAction: z.union(['allow', 'ask', 'block']).default('ask'),
@@ -101,6 +107,8 @@ export const Config: z<Config> = z.object({
   }).default({
     enabled: true,
     maxScanChars: 10_000,
+    normalizeUnicode: true,
+    secretMinEntropy: 3.0,
     injectionAction: 'ask',
     jailbreakAction: 'ask',
     secretAction: 'ask',
@@ -519,6 +527,8 @@ export function apply(ctx: Context, config: Config): void {
   if (detection.enabled ?? true) {
     const scanner = buildScanner()
     const maxScanChars = detection.maxScanChars ?? 10_000
+    const normalizeUnicode = detection.normalizeUnicode ?? true
+    const minSecretEntropy = detection.secretMinEntropy ?? 3.0
     const maxReportEntries = Math.max(1, detection.maxReportEntries ?? 200)
     const records: DetectionEvent[] = []
     // 告警走父 logger:内容自带 dsh-defend 前缀,且测试可用 ctx.logger 直接观测。
@@ -557,7 +567,7 @@ export function apply(ctx: Context, config: Config): void {
     ctx.on('tools/pre-execute', (exec: ToolExecution, next: () => Promise<PreToolDecision>): Promise<PreToolDecision> => {
       const text = argumentsText(exec.arguments)
       if (text === undefined) return next()
-      const report = scanner.scan(text, { maxChars: maxScanChars })
+      const report = scanner.scan(text, { maxChars: maxScanChars, normalize: normalizeUnicode, minSecretEntropy })
       if (report.matches.length === 0) return next()
       const session = exec.agent?.session as Session | undefined
       const family = topFamily(report)
@@ -581,7 +591,7 @@ export function apply(ctx: Context, config: Config): void {
     ctx.on('tools/post-execute', (exec: ToolExecution, result: Readonly<ToolExecutionResult>, next: () => Promise<PostToolDecision>): Promise<PostToolDecision> => {
       const text = resultText(result)
       if (text === undefined) return next()
-      const report = scanner.scan(text, { maxChars: maxScanChars })
+      const report = scanner.scan(text, { maxChars: maxScanChars, normalize: normalizeUnicode, minSecretEntropy })
       if (report.matches.length === 0) return next()
       const session = exec.agent?.session as Session | undefined
       const family = topFamily(report)
@@ -605,7 +615,7 @@ export function apply(ctx: Context, config: Config): void {
     ctx.on('agent/pre-step', (payload: { agent: unknown; messages: UserMessage[]; turn: number; step: number; signal: AbortSignal }, next: () => Promise<PreStepDecision>): Promise<PreStepDecision> => {
       const text = messagesText(payload.messages)
       if (text === undefined) return next()
-      const report = scanner.scan(text, { maxChars: maxScanChars })
+      const report = scanner.scan(text, { maxChars: maxScanChars, normalize: normalizeUnicode, minSecretEntropy })
       if (report.matches.length === 0) return next()
       const session = (payload.agent as { session?: unknown }).session as Session | undefined
       const family = topFamily(report)

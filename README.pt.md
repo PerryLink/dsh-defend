@@ -77,6 +77,8 @@ Todos os ajustes são campos `Config` do Schemastery (alteráveis pelo cordis.ym
 | `toolNames` | `['bash','persistent-bash','terminal-bash']` | Ferramentas cujos argumentos a guarda revisa |
 | `detection.enabled` | `true` | Interruptor da camada de detecção |
 | `detection.maxScanChars` | `10000` | Limite de escaneamento por interceptação (somente a cabeça) |
+| `detection.normalizeUnicode` | `true` | Normalizar NFKC o texto antes de escanear (bloqueia o bypass de Unicode lookalike) |
+| `detection.secretMinEntropy` | `3.0` | Entropia de Shannon mínima (bits/caractere) para admitir um acerto de segredo; `0` desativa |
 | `detection.injectionAction` | `ask` | Família injeção: `allow` / `ask` / `block` |
 | `detection.jailbreakAction` | `ask` | Família jailbreak: `allow` / `ask` / `block` |
 | `detection.secretAction` | `ask` | Família segredos: `allow` / `ask` / `block` |

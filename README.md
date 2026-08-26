@@ -87,6 +87,8 @@ All tunables are Schemastery `Config` fields (changeable from cordis.yml). An id
 | `toolNames` | `['bash','persistent-bash','terminal-bash']` | Tool names whose command arguments the guard reviews |
 | `detection.enabled` | `true` | Detection-layer switch |
 | `detection.maxScanChars` | `10000` | Scan cap per interception (head only) |
+| `detection.normalizeUnicode` | `true` | NFKC-normalize text before scanning (blocks lookalike-Unicode bypass) |
+| `detection.secretMinEntropy` | `3.0` | Minimum Shannon entropy (bits/char) to admit a secret regex hit; `0` disables |
 | `detection.injectionAction` | `ask` | Injection family: `allow` / `ask` / `block` |
 | `detection.jailbreakAction` | `ask` | Jailbreak family: `allow` / `ask` / `block` |
 | `detection.secretAction` | `ask` | Secret family: `allow` / `ask` / `block` |

@@ -16,6 +16,10 @@
           enabled: true
           # 单次扫描的字符上限(只扫头部,超限记为 truncated)。
           maxScanChars: 10000
+          # 扫描前 NFKC/Unicode 归一化(堵 lookalike-Unicode 绕过)。
+          normalizeUnicode: true
+          # 密钥命中后的最小 Shannon 熵(bits/字符),低于阈值视为误报丢弃;0 关闭。
+          secretMinEntropy: 3.0
           # 注入载荷默认动作:allow 放行 / ask 转审批 / block 拦截。
           injectionAction: ask
           # 越狱模式默认动作。

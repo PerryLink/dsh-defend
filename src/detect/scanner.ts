@@ -8,6 +8,7 @@
  */
 
 import { buildAutomaton, type Automaton } from './ac.ts'
+import { DEFAULT_MIN_SECRET_ENTROPY, shannonEntropy } from './entropy.ts'
 import { INJECTION_JAILBREAK_RULES } from './rules.ts'
 import { SECRET_RULES, SECRET_TYPE_BY_RULE_ID } from './secrets.ts'
 import type { Family, MatchInfo, Rule, ScanReport, Severity } from './types.ts'
@@ -18,6 +19,19 @@ export const DEFAULT_MAX_SCAN_CHARS = 10_000
 
 /** Default cap on reported matches per scan (bounded memory on hostile input). */
 export const DEFAULT_MAX_MATCHES = 100
+
+/**
+ * Normalize text to NFKC so lookalike/full-width Unicode collapses to its
+ * ASCII compatibility equivalent before any matcher runs. This closes the
+ * lookalike-Unicode bypass: `ℍow to ḥack a ѕystem` scans as
+ * `How to hack a system`, so an obfuscated needle still matches. Applied to
+ * the scanned head only; match offsets are relative to the normalized text.
+ * @param text - raw text to normalize.
+ * @returns the NFKC-normalized text.
+ */
+export function normalizeNfkc(text: string): string {
+  return text.normalize('NFKC')
+}
 
 /** Every rule the scanner consults, in build order. */
 const ALL_RULES: readonly Rule[] = Object.freeze([...INJECTION_JAILBREAK_RULES, ...SECRET_RULES])
@@ -49,6 +63,13 @@ export interface ScanOptions {
   readonly maxChars?: number
   /** Cap on reported matches (default {@link DEFAULT_MAX_MATCHES}). */
   readonly maxMatches?: number
+  /** NFKC-normalize the scanned head first (default true). */
+  readonly normalize?: boolean
+  /**
+   * Minimum Shannon entropy (bits/char) for an admitted secret match
+   * (default {@link DEFAULT_MIN_SECRET_ENTROPY}); `0` disables the gate.
+   */
+  readonly minSecretEntropy?: number
 }
 
 /**
@@ -64,8 +85,10 @@ export function buildScanner(): Scanner {
   const scan = (text: string, options: ScanOptions = {}): ScanReport => {
     const maxChars = Math.max(1, options.maxChars ?? DEFAULT_MAX_SCAN_CHARS)
     const maxMatches = Math.max(1, options.maxMatches ?? DEFAULT_MAX_MATCHES)
+    const minSecretEntropy = Math.max(0, options.minSecretEntropy ?? DEFAULT_MIN_SECRET_ENTROPY)
     const families = new Set(options.families ?? FAMILIES)
     const head = text.length > maxChars ? text.slice(0, maxChars) : text
+    const scanned = options.normalize === false ? head : normalizeNfkc(head)
 
     const seen = new Set<string>()
     const matches: MatchInfo[] = []
@@ -78,7 +101,7 @@ export function buildScanner(): Scanner {
     }
 
     // 1. Exact needles through the automaton (payloads + Jailbreak-Detector).
-    for (const hit of automaton.search(head)) {
+    for (const hit of automaton.search(scanned)) {
       const rule = RULE_BY_ID.get(hit.payload.ruleId)
       if (rule === undefined || !families.has(rule.family)) continue
       admit({
@@ -99,11 +122,17 @@ export function buildScanner(): Scanner {
         regex.lastIndex = 0
         let found: RegExpExecArray | null
         try {
-          found = regex.exec(head)
+          found = regex.exec(scanned)
         } catch {
           continue // A hostile regex could never get here (rules are trusted); fail per-rule.
         }
         if (found === null) continue
+        // Secret regexes over-match on low-diversity text; require enough
+        // entropy before admitting the hit (the matched text is scored here
+        // and never carried into the match record).
+        if (rule.family === 'secret' && minSecretEntropy > 0 && shannonEntropy(found[0]) < minSecretEntropy) {
+          continue
+        }
         const secretType = rule.family === 'secret' ? SECRET_TYPE_BY_RULE_ID.get(rule.id) : undefined
         admit({
           ruleId: rule.id,
@@ -126,7 +155,7 @@ export function buildScanner(): Scanner {
     const familySet = new Set(matches.map(match => match.family))
     const confidence = computeConfidence(matches)
     return {
-      scannedLength: head.length,
+      scannedLength: scanned.length,
       truncated: text.length > maxChars,
       matches,
       severity,
