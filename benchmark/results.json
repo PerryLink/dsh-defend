@@ -1,0 +1,609 @@
+{
+  "name": "dsh-defend red-team benchmark",
+  "version": "1.0.0",
+  "detector": "src/detect/scanner.ts buildScanner (run from source): NFKC normalization + Aho-Corasick needles + tolerant regexes + secret entropy gate",
+  "generatedBy": "benchmark/run.mjs",
+  "perCategory": [
+    {
+      "id": "injection",
+      "family": "injection",
+      "tp": 25,
+      "fp": 0,
+      "fn": 0,
+      "tn": 10,
+      "total": 35,
+      "positives": 25,
+      "negatives": 10,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "fpr": 0,
+      "samples": [
+        {
+          "id": "inj-pos-01",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "inj-pos-02",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "inj-pos-03",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "inj-pos-04",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "inj-pos-05",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "inj-pos-06",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "inj-pos-07",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "inj-pos-08",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "inj-pos-09",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "inj-pos-10",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "inj-pos-11",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "inj-pos-12",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "inj-pos-13",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "inj-pos-14",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "inj-pos-15",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "inj-pos-16",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "inj-pos-17",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "inj-pos-18",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "inj-pos-19",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "inj-pos-20",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "inj-pos-21",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "inj-pos-22",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "inj-pos-23",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "inj-pos-24",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "inj-pos-25",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "inj-neg-01",
+          "label": false,
+          "predicted": false
+        },
+        {
+          "id": "inj-neg-02",
+          "label": false,
+          "predicted": false
+        },
+        {
+          "id": "inj-neg-03",
+          "label": false,
+          "predicted": false
+        },
+        {
+          "id": "inj-neg-04",
+          "label": false,
+          "predicted": false
+        },
+        {
+          "id": "inj-neg-05",
+          "label": false,
+          "predicted": false
+        },
+        {
+          "id": "inj-neg-06",
+          "label": false,
+          "predicted": false
+        },
+        {
+          "id": "inj-neg-07",
+          "label": false,
+          "predicted": false
+        },
+        {
+          "id": "inj-neg-08",
+          "label": false,
+          "predicted": false
+        },
+        {
+          "id": "inj-neg-09",
+          "label": false,
+          "predicted": false
+        },
+        {
+          "id": "inj-neg-10",
+          "label": false,
+          "predicted": false
+        }
+      ]
+    },
+    {
+      "id": "jailbreak",
+      "family": "jailbreak",
+      "tp": 25,
+      "fp": 0,
+      "fn": 0,
+      "tn": 10,
+      "total": 35,
+      "positives": 25,
+      "negatives": 10,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "fpr": 0,
+      "samples": [
+        {
+          "id": "jb-pos-01",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "jb-pos-02",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "jb-pos-03",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "jb-pos-04",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "jb-pos-05",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "jb-pos-06",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "jb-pos-07",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "jb-pos-08",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "jb-pos-09",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "jb-pos-10",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "jb-pos-11",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "jb-pos-12",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "jb-pos-13",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "jb-pos-14",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "jb-pos-15",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "jb-pos-16",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "jb-pos-17",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "jb-pos-18",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "jb-pos-19",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "jb-pos-20",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "jb-pos-21",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "jb-pos-22",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "jb-pos-23",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "jb-pos-24",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "jb-pos-25",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "jb-neg-01",
+          "label": false,
+          "predicted": false
+        },
+        {
+          "id": "jb-neg-02",
+          "label": false,
+          "predicted": false
+        },
+        {
+          "id": "jb-neg-03",
+          "label": false,
+          "predicted": false
+        },
+        {
+          "id": "jb-neg-04",
+          "label": false,
+          "predicted": false
+        },
+        {
+          "id": "jb-neg-05",
+          "label": false,
+          "predicted": false
+        },
+        {
+          "id": "jb-neg-06",
+          "label": false,
+          "predicted": false
+        },
+        {
+          "id": "jb-neg-07",
+          "label": false,
+          "predicted": false
+        },
+        {
+          "id": "jb-neg-08",
+          "label": false,
+          "predicted": false
+        },
+        {
+          "id": "jb-neg-09",
+          "label": false,
+          "predicted": false
+        },
+        {
+          "id": "jb-neg-10",
+          "label": false,
+          "predicted": false
+        }
+      ]
+    },
+    {
+      "id": "secret",
+      "family": "secret",
+      "tp": 22,
+      "fp": 1,
+      "fn": 3,
+      "tn": 9,
+      "total": 35,
+      "positives": 25,
+      "negatives": 10,
+      "precision": 0.957,
+      "recall": 0.88,
+      "f1": 0.917,
+      "fpr": 0.1,
+      "samples": [
+        {
+          "id": "sec-pos-01",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "sec-pos-02",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "sec-pos-03",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "sec-pos-04",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "sec-pos-05",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "sec-pos-06",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "sec-pos-07",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "sec-pos-08",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "sec-pos-09",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "sec-pos-10",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "sec-pos-11",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "sec-pos-12",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "sec-pos-13",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "sec-pos-14",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "sec-pos-15",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "sec-pos-16",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "sec-pos-17",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "sec-pos-18",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "sec-pos-19",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "sec-pos-20",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "sec-pos-21",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "sec-pos-22",
+          "label": true,
+          "predicted": true
+        },
+        {
+          "id": "sec-pos-23",
+          "label": true,
+          "predicted": false
+        },
+        {
+          "id": "sec-pos-24",
+          "label": true,
+          "predicted": false
+        },
+        {
+          "id": "sec-pos-25",
+          "label": true,
+          "predicted": false
+        },
+        {
+          "id": "sec-neg-01",
+          "label": false,
+          "predicted": false
+        },
+        {
+          "id": "sec-neg-02",
+          "label": false,
+          "predicted": false
+        },
+        {
+          "id": "sec-neg-03",
+          "label": false,
+          "predicted": false
+        },
+        {
+          "id": "sec-neg-04",
+          "label": false,
+          "predicted": true
+        },
+        {
+          "id": "sec-neg-05",
+          "label": false,
+          "predicted": false
+        },
+        {
+          "id": "sec-neg-06",
+          "label": false,
+          "predicted": false
+        },
+        {
+          "id": "sec-neg-07",
+          "label": false,
+          "predicted": false
+        },
+        {
+          "id": "sec-neg-08",
+          "label": false,
+          "predicted": false
+        },
+        {
+          "id": "sec-neg-09",
+          "label": false,
+          "predicted": false
+        },
+        {
+          "id": "sec-neg-10",
+          "label": false,
+          "predicted": false
+        }
+      ]
+    }
+  ],
+  "overall": {
+    "macro": {
+      "classes": 3,
+      "precision": 0.986,
+      "recall": 0.96,
+      "f1": 0.972
+    },
+    "micro": {
+      "tp": 72,
+      "fp": 1,
+      "fn": 3,
+      "tn": 29,
+      "precision": 0.986,
+      "recall": 0.96,
+      "f1": 0.973,
+      "fpr": 0.033
+    }
+  },
+  "fixtureFloor": {
+    "total": 28,
+    "detected": 27,
+    "misses": [
+      "en_004"
+    ]
+  }
+}

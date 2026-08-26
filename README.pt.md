@@ -132,6 +132,10 @@ pnpm run verify:artifacts       # face ESM construída + arquivos publicados pre
 pnpm pack           # o tarball publicado
 ```
 
+### Benchmark
+
+O benchmark red-team (P/R/F1 por categoria em 105 amostras, mais o piso 27/28 do fixture) está em [`benchmark/RESULTS.md`](benchmark/RESULTS.md); regenere-o com `node --experimental-strip-types benchmark/run.mjs` (zero dependências novas, sem build).
+
 ## Topics
 
 `dsh`, `dsh-plugin`, `deepseek-harness`, `deepseek`, `cordis`, `security`, `prompt-injection`, `jailbreak`, `secret-scanning`, `ai-safety`

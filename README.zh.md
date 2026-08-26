@@ -141,6 +141,10 @@ pnpm run verify:artifacts       # 构建产物 ESM 面 + 发布文件齐全
 pnpm pack           # 发布用 tarball
 ```
 
+### Benchmark
+
+红队基准（105 个样本的逐类 P/R/F1 + 27/28 fixture 下限）见 [`benchmark/RESULTS.md`](benchmark/RESULTS.md)；用 `node --experimental-strip-types benchmark/run.mjs` 复现（零新依赖、无需构建）。
+
 ## Topics
 
 `dsh`, `dsh-plugin`, `deepseek-harness`, `deepseek`, `cordis`, `security`, `prompt-injection`, `jailbreak`, `secret-scanning`, `ai-safety`

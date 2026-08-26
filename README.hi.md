@@ -132,6 +132,10 @@ pnpm run verify:artifacts       # निर्मित ESM फ़ेस + प�
 pnpm pack           # प्रकाशित tarball
 ```
 
+### Benchmark
+
+रेड-टीम बेंचमार्क (105 नमूनों पर प्रति-श्रेणी P/R/F1 + 27/28 fixture फ़्लोर) [`benchmark/RESULTS.md`](benchmark/RESULTS.md) में है; `node --experimental-strip-types benchmark/run.mjs` से दोबारा बनाएँ (कोई नई निर्भरता नहीं, कोई build नहीं)।
+
 ## Topics
 
 `dsh`, `dsh-plugin`, `deepseek-harness`, `deepseek`, `cordis`, `security`, `prompt-injection`, `jailbreak`, `secret-scanning`, `ai-safety`
