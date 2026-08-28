@@ -23,7 +23,7 @@ describe('reviewDestructiveDelete — deny(两次事故的命令形态)', () => 
   it('rejects the 8·14 wiper: Remove-Item $home -Recurse -Force', () => {
     const verdict = REVIEW('Remove-Item $home -Recurse -Force', WORKSPACE)
     expect(verdict?.kind).toBe('deny')
-    expect(verdict?.reason).toContain('受保护')
+    expect(verdict?.reason).toContain('protected')
   })
 
   it('rejects the 8·14 wiper even wrapped in a conditional', () => {
@@ -39,13 +39,13 @@ describe('reviewDestructiveDelete — deny(两次事故的命令形态)', () => 
   it('rejects rd /s /q on %USERPROFILE%\\.claude', () => {
     const verdict = REVIEW('rd /s /q %USERPROFILE%\\.claude', WORKSPACE)
     expect(verdict?.kind).toBe('deny')
-    expect(verdict?.reason).toContain('受保护')
+    expect(verdict?.reason).toContain('protected')
   })
 
   it('rejects recursive deletes under the dsh-subprocess temp dir (8·16 indirect culprit)', () => {
     const verdict = REVIEW('rm -rf $env:tmp/dsh-subprocess-CEThJl', WORKSPACE)
     expect(verdict?.kind).toBe('deny')
-    expect(verdict?.reason).toContain('受保护')
+    expect(verdict?.reason).toContain('protected')
   })
 
   it('rejects POSIX-root targets that cannot be resolved to a drive', () => {
@@ -56,11 +56,11 @@ describe('reviewDestructiveDelete — deny(两次事故的命令形态)', () => 
   it('rejects absolute targets outside the workspace', () => {
     const verdict = REVIEW('rm -rf $env:tmp/../outside-thing', WORKSPACE)
     expect(verdict?.kind).toBe('deny')
-    expect(verdict?.reason).toContain('工作区')
+    expect(verdict?.reason).toContain('workspace')
   })
 
   it('rejects relative and glob targets (explicit absolute paths required)', () => {
-    expect(REVIEW('rm -rf build', WORKSPACE)?.reason).toContain('绝对路径')
+    expect(REVIEW('rm -rf build', WORKSPACE)?.reason).toContain('absolute path')
     expect(REVIEW('rm -rf ./build', WORKSPACE)?.kind).toBe('deny')
     expect(REVIEW('Remove-Item *.log -Recurse', WORKSPACE)?.kind).toBe('deny')
   })
@@ -73,7 +73,7 @@ describe('reviewDestructiveDelete — deny(两次事故的命令形态)', () => 
   it('rejects deleting the workspace root itself', () => {
     const verdict = REVIEW(`rm -rf ${WS}`, WORKSPACE)
     expect(verdict?.kind).toBe('deny')
-    expect(verdict?.reason).toContain('工作区根')
+    expect(verdict?.reason).toContain('workspace root')
   })
 
   it('rejects piped recursion with unverifiable targets', () => {
@@ -83,7 +83,7 @@ describe('reviewDestructiveDelete — deny(两次事故的命令形态)', () => 
   it('fails closed when no workspace boundary is available', () => {
     const verdict = REVIEW(`rm -rf ${WORKSPACE}/anything`)
     expect(verdict?.kind).toBe('deny')
-    expect(verdict?.reason).toContain('工作区')
+    expect(verdict?.reason).toContain('workspace')
   })
 })
 
@@ -120,23 +120,23 @@ describe.skipIf(process.platform !== 'win32')('reviewDestructiveDelete — raw a
   it('rejects the literal home directory as exact protected', () => {
     const verdict = REVIEW(`Remove-Item ${os.homedir()} -Recurse -Force`, WORKSPACE)
     expect(verdict?.kind).toBe('deny')
-    expect(verdict?.reason).toContain('受保护')
+    expect(verdict?.reason).toContain('protected')
   })
 
   it('rejects the literal dsh-subprocess temp dir', () => {
     const verdict = REVIEW(`rm -rf ${path.join(os.tmpdir(), 'dsh-subprocess-CEThJl')}`, WORKSPACE)
     expect(verdict?.kind).toBe('deny')
-    expect(verdict?.reason).toContain('受保护')
+    expect(verdict?.reason).toContain('protected')
   })
 
   it('rejects a raw absolute target outside the workspace', () => {
     const verdict = REVIEW(`rm -rf ${path.resolve(WORKSPACE, '..', 'outside-thing')}`, WORKSPACE)
     expect(verdict?.kind).toBe('deny')
-    expect(verdict?.reason).toContain('工作区')
+    expect(verdict?.reason).toContain('workspace')
   })
 
   it('rejects deleting the raw workspace root', () => {
-    expect(REVIEW(`rm -rf ${WORKSPACE}`, WORKSPACE)?.reason).toContain('工作区根')
+    expect(REVIEW(`rm -rf ${WORKSPACE}`, WORKSPACE)?.reason).toContain('workspace root')
   })
 
   it('allows raw drive paths inside the workspace', () => {

@@ -272,14 +272,14 @@ type TargetResolution =
  */
 function resolveTarget(raw: string): TargetResolution {
   const token = raw.trim()
-  if (token === '') return { kind: 'denied', reason: '空目标词元' }
+  if (token === '') return { kind: 'denied', reason: 'empty target token' }
   if (/[*?[\]]/.test(token)) {
-    return { kind: 'denied', reason: `glob 目标 ${JSON.stringify(token)} 无法逐个核实,请先列出展开后的绝对路径` }
+    return { kind: 'denied', reason: `glob target ${JSON.stringify(token)} cannot be verified individually; list the expanded absolute paths first` }
   }
   if (token.startsWith('~') || token.includes('$') || token.includes('%')) {
     const resolved = resolveEnvToken(token)
     if (resolved === undefined) {
-      return { kind: 'denied', reason: `变量目标 ${JSON.stringify(token)} 无法静态核实,请用其绝对路径代替` }
+      return { kind: 'denied', reason: `variable target ${JSON.stringify(token)} cannot be statically verified; use its absolute path instead` }
     }
     return { kind: 'resolved', absolute: resolved }
   }
@@ -289,9 +289,9 @@ function resolveTarget(raw: string): TargetResolution {
     return { kind: 'resolved', absolute: path.resolve(`${bashMount[1]}:\\${token.slice(2)}`) }
   }
   if (token.startsWith('/') || token.startsWith('\\')) {
-    return { kind: 'denied', reason: `POSIX 根/UNC 目标 ${JSON.stringify(token)} 无法按本机挂载语义解析,请用盘符绝对路径` }
+    return { kind: 'denied', reason: `POSIX-root/UNC target ${JSON.stringify(token)} cannot be resolved under this machine's mount semantics; use a drive-letter absolute path` }
   }
-  return { kind: 'denied', reason: `目标 ${JSON.stringify(token)} 不是显式绝对路径;请先 dry-run 打印每个目标路径并核对` }
+  return { kind: 'denied', reason: `target ${JSON.stringify(token)} is not an explicit absolute path; dry-run and print every target path first, then verify` }
 }
 
 /** 门禁评审结果:undefined = 放行;{ kind: 'deny' } = 拒绝。 */
@@ -324,7 +324,7 @@ export function reviewDestructiveDelete(command: string, options: ReviewOptions 
 
   const workspace = options.workspace
   if (workspace === undefined || workspace === '') {
-    return { kind: 'deny', reason: '危险递归删除命令缺少会话工作区边界(fail-closed):请先确认会话 cwd 可用' }
+    return { kind: 'deny', reason: 'dangerous recursive delete command has no session workspace boundary (fail-closed): confirm the session cwd is available first' }
   }
   const workspaceRoot = path.resolve(workspace)
   const protected_ = options.protectedPrefixes ?? protectedPrefixes()
@@ -338,8 +338,8 @@ export function reviewDestructiveDelete(command: string, options: ReviewOptions 
   if (targets.length === 0) {
     return {
       kind: 'deny',
-      reason: `拦截危险递归删除命令(${command.slice(0, 160)}):未打印任何显式目标路径。`
-        + '删除前请先 dry-run(Remove-Item -WhatIf / git clean -n / 先列目录)逐个核对目标,再用显式绝对路径重试',
+      reason: `blocked dangerous recursive delete command (${command.slice(0, 160)}): no explicit target path was printed.`
+        + ' Dry-run first (Remove-Item -WhatIf / git clean -n / list the directory), verify each target one by one, then retry with an explicit absolute path',
     }
   }
   for (const target of targets) {
@@ -347,17 +347,17 @@ export function reviewDestructiveDelete(command: string, options: ReviewOptions 
     if (resolution.kind === 'denied') {
       return {
         kind: 'deny',
-        reason: `拦截危险递归删除命令(${command.slice(0, 160)}):${resolution.reason}。`
-          + `工作区为 ${workspaceRoot};删除前请用 dry-run(Remove-Item -WhatIf / git clean -n / 先列目录)`
-          + '逐个核对目标路径,再改用显式绝对路径重试',
+        reason: `blocked dangerous recursive delete command (${command.slice(0, 160)}): ${resolution.reason}.`
+          + ` Workspace is ${workspaceRoot}; dry-run first (Remove-Item -WhatIf / git clean -n / list the directory)`
+          + ' and verify each target path one by one, then retry with an explicit absolute path',
       }
     }
     for (const exact of exactProtected()) {
       if (path.resolve(resolution.absolute).toLowerCase() === path.resolve(exact).toLowerCase()) {
         return {
           kind: 'deny',
-          reason: `拦截危险递归删除命令:目标 ${JSON.stringify(target)} 命中受保护路径(家目录/盘符根本身:${exact})。`
-            + '8·14 事故即由此递归删除整个家目录造成,一律拒绝。请核对路径变量解析结果后再试',
+          reason: `blocked dangerous recursive delete command: target ${JSON.stringify(target)} hits a protected path (the home directory/drive root itself: ${exact}).`
+            + ' This is exactly how incident 8·14 recursively deleted the entire home directory — always refused. Verify the path-variable resolution and retry',
         }
       }
     }
@@ -365,23 +365,23 @@ export function reviewDestructiveDelete(command: string, options: ReviewOptions 
       if (isWithin(resolution.absolute, prefix)) {
         return {
           kind: 'deny',
-          reason: `拦截危险递归删除命令:目标 ${JSON.stringify(target)} 命中受保护路径 ${JSON.stringify(prefix)}`
-            + '(个人配置/DSH 数据/系统目录),一律拒绝。请核对路径变量解析结果后再试',
+          reason: `blocked dangerous recursive delete command: target ${JSON.stringify(target)} hits protected path ${JSON.stringify(prefix)}`
+            + ' (personal config/DSH data/system directory) — always refused. Verify the path-variable resolution and retry',
         }
       }
     }
     if (isWithin(resolution.absolute, workspaceRoot) === false) {
       return {
         kind: 'deny',
-        reason: `拦截危险递归删除命令:目标 ${JSON.stringify(target)} 不在会话工作区 ${workspaceRoot} 内。`
-          + '如需清理工作区之外的内容,请缩小到工作区内路径或人工在终端确认',
+        reason: `blocked dangerous recursive delete command: target ${JSON.stringify(target)} is outside the session workspace ${workspaceRoot}.`
+          + ' To clean up something outside the workspace, narrow it to a path inside the workspace or confirm it manually in a terminal',
       }
     }
     if (isWithin(workspaceRoot, resolution.absolute)) {
       return {
         kind: 'deny',
-        reason: `拦截危险递归删除命令:目标 ${JSON.stringify(target)} 覆盖会话工作区根本身(${workspaceRoot})。`
-          + '删除整个工作区请人工在终端确认',
+        reason: `blocked dangerous recursive delete command: target ${JSON.stringify(target)} covers the session workspace root itself (${workspaceRoot}).`
+          + ' To delete the entire workspace, confirm it manually in a terminal',
       }
     }
   }
