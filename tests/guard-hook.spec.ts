@@ -36,7 +36,7 @@ describe('apply — tools/pre-execute gate wiring', () => {
     })
     const decision = await gate(root, 'rm -rf ~/.dsh')
     expect(decision.kind).toBe('deny')
-    if (decision.kind === 'deny') expect(decision.reason).toContain('受保护')
+    if (decision.kind === 'deny') expect(decision.reason).toContain('protected')
     expect(downstreamRan).toBe(false)
   })
 
