@@ -1,6 +1,7 @@
 <div align="center">
 
 # 🛡️ dsh-defend
+- **Canal 1024 store**: `npm i -g dsh1024` uma vez, depois `dsh1024 plugin --profile web add dsh-defend` (conta para o ranking de instalações do [deepseek1024.com](https://deepseek1024.com)).
 
 **Defesa contra injeção de prompts, jailbreak e vazamento de segredos para o DeepSeek Harness.**
 
