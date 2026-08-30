@@ -5,6 +5,17 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Host `0.1.2-alpha.1` compatibility: master removed the `ignorable` envelope (42dc2a46c2) and fail-closes on unknown session event types, so `isUnmarkedHostVersion` now also classifies `0.1.2-alpha.1`+ lines as unmarked, and the audit sink fails closed (disables session-log audit BEFORE the first append) when the peer version is unresolvable — appending an unregistered `defend/detection` event would make sessions unloadable. `detection.allowUnmarkedAudit: true` still opts back in.
+
+### Fixed
+
+- Approval calls are wrapped in try/catch: hosts that throw when no approval turn is open now fail closed instead of surfacing an unhandled rejection on the guard seam.
+- Test harness derives synthetic tool-call ids from `tools.execute`'s input type (the host renamed the `CallId` brand to `ToolCallId`), keeping `typecheck` (checkout) and `typecheck:ci` (published `0.1.1-rc.2`) both green.
+
 ## [0.2.0] - 2026-08-26
 
 ### Added
