@@ -1,15 +1,15 @@
-# Changelog
+﻿# Changelog
 
 All notable changes to this project are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.3.0] - 2026-08-30
 
 ### Changed
 
-- Host `0.1.2-alpha.1` compatibility: master removed the `ignorable` envelope (42dc2a46c2) and fail-closes on unknown session event types, so `isUnmarkedHostVersion` now also classifies `0.1.2-alpha.1`+ lines as unmarked, and the audit sink fails closed (disables session-log audit BEFORE the first append) when the peer version is unresolvable — appending an unregistered `defend/detection` event would make sessions unloadable. `detection.allowUnmarkedAudit: true` still opts back in.
+- Host `0.1.2-alpha.1` compatibility: master removed the `ignorable` envelope (42dc2a46c2) and fail-closes on unknown session event types, so `isUnmarkedHostVersion` now also classifies `0.1.2-alpha.1`+ lines as unmarked, and the audit sink fails closed (disables session-log audit BEFORE the first append) when the peer version is unresolvable 鈥?appending an unregistered `defend/detection` event would make sessions unloadable. `detection.allowUnmarkedAudit: true` still opts back in.
 
 ### Fixed
 
@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **NFKC/Unicode normalization before every scan.** Lookalike/full-width Unicode (`𝕀gnore 𝕒ll previous 𝕚nstructions`) now collapses to its ASCII compatibility equivalent before the automaton and regexes run, closing the lookalike-Unicode bypass. Configurable via `detection.normalizeUnicode` (default `true`).
+- **NFKC/Unicode normalization before every scan.** Lookalike/full-width Unicode (`饾晙gnore 饾晵ll previous 饾暁nstructions`) now collapses to its ASCII compatibility equivalent before the automaton and regexes run, closing the lookalike-Unicode bypass. Configurable via `detection.normalizeUnicode` (default `true`).
 - **Secret entropy gate.** A secret regex hit is admitted only when its Shannon entropy per character clears `detection.secretMinEntropy` (default `3.0`; `0` disables), dropping low-diversity false positives such as `api_key: aaaaaaaaaaaaaaaa`. The gate scores the matched text in place and never carries it into the match record or the audit path.
 
 ## [0.1.4] - 2026-08-23
@@ -39,14 +39,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- **Pre-marker host boundary corrected for rc.8 (re-verified 2026-08-22).** Every released harness line so far — `0.1.0-rc.1`–`0.1.0-rc.8` and `0.1.1-rc.1`–`0.1.1-rc.2` — silently drops the `Session.append` options bag, so the previous boundary (which treated rc.8+ as marker-capable) let one unmarked audit event land before the probe disabled audit. `isUnmarkedHostVersion` now classifies all released lines as pre-marker (audit disabled before the first append, one-time warning); future unknown lines still fall back to the append-envelope probe, so the marker surface auto-enables when a harness line actually ships it.
+- **Pre-marker host boundary corrected for rc.8 (re-verified 2026-08-22).** Every released harness line so far 鈥?`0.1.0-rc.1`鈥揱0.1.0-rc.8` and `0.1.1-rc.1`鈥揱0.1.1-rc.2` 鈥?silently drops the `Session.append` options bag, so the previous boundary (which treated rc.8+ as marker-capable) let one unmarked audit event land before the probe disabled audit. `isUnmarkedHostVersion` now classifies all released lines as pre-marker (audit disabled before the first append, one-time warning); future unknown lines still fall back to the append-envelope probe, so the marker surface auto-enables when a harness line actually ships it.
 - `/defend` exercise surfaces (`scripts/loader-runner.mjs`, `tests/defend-detect.spec.ts`) pass the rc.8 `commands.execute` four-argument signature (agent, line, images, signal).
 
 ## [0.1.1] - 2026-08-21
 
 ### Fixed
 
-- `defend/detection` audit events now request the envelope's `ignorable: true` marker, and hosts whose `Session.append` predates the marker (the released `0.1.0-rc.1`–`0.1.0-rc.7` lines, which silently drop the options bag) are detected at first use — peer-version pre-check plus a probe of the appended envelope — so session-log audit is disabled there with a one-time warning instead of writing unmarked events that make sessions unresumable on stricter builds ([#2](https://github.com/PerryLink/dsh-defend/issues/2)). `detection.allowUnmarkedAudit: true` opts back in; existing unmarked rows can be repaired by adding `"ignorable": true` to their envelopes.
+- `defend/detection` audit events now request the envelope's `ignorable: true` marker, and hosts whose `Session.append` predates the marker (the released `0.1.0-rc.1`鈥揱0.1.0-rc.7` lines, which silently drop the options bag) are detected at first use 鈥?peer-version pre-check plus a probe of the appended envelope 鈥?so session-log audit is disabled there with a one-time warning instead of writing unmarked events that make sessions unresumable on stricter builds ([#2](https://github.com/PerryLink/dsh-defend/issues/2)). `detection.allowUnmarkedAudit: true` opts back in; existing unmarked rows can be repaired by adding `"ignorable": true` to their envelopes.
 
 ## [0.1.0] - 2026-08-16
 
@@ -54,16 +54,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Destructive-delete guard on `tools/pre-execute`: recursively deleting commands are refused unless every target is an explicit absolute path inside the session workspace and outside protected prefixes (home/config/system directories) — the executable form of the 8·14/8·16 postmortem lesson (deny by default, `ask` configurable, dry-run markers pass).
+- Destructive-delete guard on `tools/pre-execute`: recursively deleting commands are refused unless every target is an explicit absolute path inside the session workspace and outside protected prefixes (home/config/system directories) 鈥?the executable form of the 8路14/8路16 postmortem lesson (deny by default, `ask` configurable, dry-run markers pass).
 - Detection layer ported from four upstream assets (Apache-2.0, see THIRD_PARTY_NOTICES.md):
   - Prompt-Injection-Payloads: 25 payload rules (`rh-*`/`ii-*`/`jb-*`/`il-*`/`pl-*`) with signature needles and tolerant paraphrase regexes.
   - Jailbreak-Detector: 25 patterns in 3 categories (`jd-*`) through a pure TypeScript Aho-Corasick automaton, plus tolerant category regexes.
-  - Secret-Key-Leaker-Detect: the upstream `sk-…` pattern plus 11 extended credential grammars (OpenAI project, Anthropic, GitHub PAT/OAuth/fine-grained, AWS, Bearer, private-key blocks, Slack, generic assignments).
+  - Secret-Key-Leaker-Detect: the upstream `sk-鈥 pattern plus 11 extended credential grammars (OpenAI project, Anthropic, GitHub PAT/OAuth/fine-grained, AWS, Bearer, private-key blocks, Slack, generic assignments).
   - Prompt-Attack-Dataset: 28 attacks kept verbatim as `fixtures/attacks.json` with a measured detection-rate floor and a clean-corpus zero-false-positive regression.
 - Three-tier interception (allow/ask/block, defaults ask; critical secrets always block): inbound messages on `agent/pre-step`, tool arguments on `tools/pre-execute`, tool results on `tools/post-execute`; ask rides the official approval seam and fails closed without an answerer; pass-throughs always call `next()`.
-- Sanitized `defend/detection` session audit events (rule id/family/severity/action only — never matched text; secret matches are type-only).
+- Sanitized `defend/detection` session audit events (rule id/family/severity/action only 鈥?never matched text; secret matches are type-only).
 - `defend_report` tool and `/defend` command over a bounded in-memory ring buffer.
 
 ### Fixed
 
 - Guard-hook spec type narrowing (`PreToolDecision.reason` behind a `kind === 'deny'` check) and unused listener parameters.
+
