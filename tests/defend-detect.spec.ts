@@ -9,13 +9,21 @@
 
 import type { ContentBlock } from '@deepseek-ai/dsh-llm'
 import type { PostToolDecision, PreToolDecision, ToolExecution, ToolExecutionResult } from '@deepseek-ai/dsh-tools'
-import { CallId } from '@deepseek-ai/dsh-llm'
 import { describe, expect, it } from 'vitest'
 import { mountHarness, type Harness } from './harness.ts'
 
+/**
+ * Brand a synthetic tool-call id without naming the host line's brand: the
+ * published `0.1.1-rc.2` line exports `CallId` while host HEAD renamed it to
+ * `ToolCallId` — deriving the type from `tools.execute` keeps both typecheck
+ * rulers green.
+ */
+type ToolExecInput = Parameters<Harness['ctx']['tools']['execute']>[0]
+const makeCallId = (id: string): ToolExecInput['callId'] => id as ToolExecInput['callId']
+
 function execOf(harness: Harness, name: string, args: unknown, signal = new AbortController().signal): ToolExecution {
   return {
-    callId: CallId(`detect-${name}-${Math.random().toString(36).slice(2, 8)}`),
+    callId: `detect-${name}-${Math.random().toString(36).slice(2, 8)}`,
     name,
     arguments: args,
     agent: harness.agent,
@@ -160,7 +168,7 @@ describe('audit and report surfaces', () => {
     const harness = await mountHarness({ config: { detection: { injectionAction: 'block' } } })
     await harness.ctx.waterfall('tools/pre-execute', execOf(harness, 'write', { command: INJECTION }), () => Promise.resolve<PreToolDecision>({ kind: 'allow' }))
     const result = await harness.ctx.tools.execute({
-      callId: CallId('report-1'),
+      callId: makeCallId('report-1'),
       name: 'defend_report',
       arguments: {},
       agent: harness.agent,

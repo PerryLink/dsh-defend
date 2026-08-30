@@ -1,7 +1,7 @@
 /**
  * Shared test harness for the detection layer: REAL Cordis `Context`,
  * REAL `SessionStore`/`Session`, REAL `ToolRuntime`, REAL `Commands`, and
- * REAL `ApprovalService` from the 0.1.0-rc.6 peers — plus a structurally
+ * REAL `ApprovalService` from the 0.1.1-rc.2 peers — plus a structurally
  * complete fake agent. Interceptions run the real waterfalls; only the
  * agent object is a driver-shaped fake (like dsh-click's harness).
  *
