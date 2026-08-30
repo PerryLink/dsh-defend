@@ -413,9 +413,12 @@ function commandOf(argumentsValue: unknown): string | undefined {
  * 审计落盘的宿主能力探测:`defend/detection` 事件带 `ignorable: true` 追加
  * (见 events.ts)。截至 rc8/0.1.1-rc.2,所有已发布线的 `Session.append` 都会
  * 静默丢弃第三个参数,事件未标记落盘,会话随后在更严格宿主机上拒绝加载
- * (issue #2)。因此在第一次追加前先按 peer 版本预判,第一次追加后再探测返回
- * envelope 是否真的带上标记;两者任一判定为未标记宿主即停用会话日志审计并
- * 告警一次,除非 `detection.allowUnmarkedAudit: true` 显式选择继续写入。
+ * (issue #2);harness master(0.1.2-alpha.1 起,42dc2a46c2)移除 ignorable 信封
+ * 并改为 KNOWN_SESSION_EVENT_TYPES 读路径 fail-closed,`defend/detection`
+ * 不在集合内,写盘即令会话拒读。因此先判后写:peer 版本已知未标记、或版本
+ * 不可解析(宿主能力未知)时,第一次追加前即停用会话日志审计并告警一次,
+ * 除非 `detection.allowUnmarkedAudit: true` 显式选择继续写入;仅当版本是
+ * 已知带标记面的未来线时才走首次追加探测。
  */
 export class DetectionAuditSink {
   private support: 'unknown' | 'supported' | 'unsupported' = 'unknown'
@@ -427,12 +430,13 @@ export class DetectionAuditSink {
     private readonly sessionVersion: () => string | null = peerVersion,
   ) {}
 
-  /** 追加一条检测审计事件(带 ignorable 标记纪律)。 */
+  /** 追加一条检测审计事件(带 ignorable 标记纪律);宿主能力未知/未标记时先判后写,fail closed。 */
   append(session: Session, event: DetectionEvent): void {
     if (this.support === 'unsupported') return
     if (this.support === 'unknown' && !this.allowUnmarked) {
       const version = this.sessionVersion()
-      if (version !== null && isUnmarkedHostVersion(version)) {
+      if (version === null || isUnmarkedHostVersion(version)) {
+        // 先判后写:未知/未标记宿主不落盘(0.1.2-alpha.1 起写盘即会话拒读)。
         this.support = 'unsupported'
         this.warnUnmarked()
         return
@@ -463,7 +467,7 @@ export class DetectionAuditSink {
     if (this.warned) return
     this.warned = true
     this.logger.warn(
-      'dsh-defend: this host drops the ignorable marker on audit events (Session.append predates it), which would make sessions unresumable on stricter harness builds — session-log audit is disabled; set detection.allowUnmarkedAudit: true to opt back in (see https://github.com/PerryLink/dsh-defend/issues/2)',
+      'dsh-defend: this host drops the ignorable marker on audit events or rejects unknown event types on read (Session.append predates the marker / fail-closed event vocabulary), which would make sessions unresumable — session-log audit is disabled; set detection.allowUnmarkedAudit: true to opt back in (see https://github.com/PerryLink/dsh-defend/issues/2)',
     )
   }
 }
@@ -479,22 +483,29 @@ export function peerVersion(): string | null {
 }
 
 /**
- * 版本线是否早于 `ignorable` envelope 标记面。已发布的 `0.1.0-rc.1`–
+ * 版本线是否未实现可安全落盘的审计标记面。已发布的 `0.1.0-rc.1`–
  * `0.1.0-rc.8` 与 `0.1.1-rc.1`–`0.1.1-rc.2` 的 `Session.append` 都会静默
  * 丢弃 options 参数,写出的审计事件未标记,更严格宿主机上会拒绝加载会话日志
- * (rc8 复核 2026-08-22:盖章修复只在 harness master,未随任何已发布 rc 线)。
- * 不匹配(更晚的 rc、stable、无法解析)的版本视为可能支持,由 append 探测兜底
- * 验证,标记面随未来发布线落地后自动启用。
+ * (rc8 复核 2026-08-22:盖章修复只在 harness master,未随任何已发布 rc 线);
+ * harness master(`0.1.2-alpha.1` 起,42dc2a46c2)移除 ignorable 信封并改为
+ * KNOWN_SESSION_EVENT_TYPES 读路径 fail-closed,`defend/detection` 不在集合
+ * 内,写盘即令会话拒读——故 0.1.2-alpha.1 及之后的 0.1.x 线同样视为未标记。
+ * 更晚的 rc 与 0.2+ 无法预判,由 append 探测兜底验证。
  * @param version - 安装的 peer 版本字符串。
- * @returns 已知未标记的已发布线返回 true。
+ * @returns 已知未标记的发布线返回 true。
  */
 export function isUnmarkedHostVersion(version: string): boolean {
-  const match = /^0\.1\.(\d+)-rc\.(\d+)$/.exec(version.trim())
-  if (match === null) return false
-  const minor = Number(match[1])
-  const rc = Number(match[2])
-  if (minor === 0) return rc <= 8
-  if (minor === 1) return rc <= 2
+  const v = version.trim()
+  const rc = /^0\.1\.(\d+)-rc\.(\d+)$/.exec(v)
+  if (rc !== null) {
+    const minor = Number(rc[1])
+    const patch = Number(rc[2])
+    if (minor === 0) return patch <= 8
+    if (minor === 1) return patch <= 2
+    return false
+  }
+  const line = /^0\.1\.(\d+)(?:-.*)?$/.exec(v)
+  if (line !== null) return Number(line[1]) >= 2
   return false
 }
 
@@ -554,13 +565,17 @@ export function apply(ctx: Context, config: Config): void {
     const ask = async (agent: unknown, toolName: string, reason: string, signal?: AbortSignal): Promise<boolean> => {
       const approval = ctx.get('approval') as ApprovalService | undefined
       if (approval === undefined || agent === undefined) return false // fail closed
-      const outcome = await approval.request({
-        agent: agent as never,
-        toolName,
-        reason,
-        ...(signal === undefined ? {} : { signal }),
-      })
-      return outcome === 'allowed-once'
+      try {
+        const outcome = await approval.request({
+          agent: agent as never,
+          toolName,
+          reason,
+          ...(signal === undefined ? {} : { signal }),
+        })
+        return outcome === 'allowed-once'
+      } catch {
+        return false // 宿主在无审批回合时可能抛错(fail closed,拦截面不受影响)。
+      }
     }
 
     // 1. 工具参数(进入执行体的模型生成参数)——deny/ask 走 pre-execute 决策。
