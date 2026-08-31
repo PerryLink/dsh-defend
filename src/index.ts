@@ -415,10 +415,13 @@ function commandOf(argumentsValue: unknown): string | undefined {
  * 静默丢弃第三个参数,事件未标记落盘,会话随后在更严格宿主机上拒绝加载
  * (issue #2);harness master(0.1.2-alpha.1 起,42dc2a46c2)移除 ignorable 信封
  * 并改为 KNOWN_SESSION_EVENT_TYPES 读路径 fail-closed,`defend/detection`
- * 不在集合内,写盘即令会话拒读。因此先判后写:peer 版本已知未标记、或版本
- * 不可解析(宿主能力未知)时,第一次追加前即停用会话日志审计并告警一次,
- * 除非 `detection.allowUnmarkedAudit: true` 显式选择继续写入;仅当版本是
- * 已知带标记面的未来线时才走首次追加探测。
+ * 不在集合内,写盘即令会话拒读。0.1.2-alpha.2 恢复信封字段但仅用于存量日志
+ * 读取兼容(宿主 note 2026-08-30-retain-ignorable-external-session-events):
+ * 其 `Session.append` 第三参为仅 surface 事件的 `SurfaceIntent`,仍无法盖章
+ * `ignorable`,故停写分类对 alpha.2 同样成立。因此先判后写:peer 版本已知未
+ * 标记、或版本不可解析(宿主能力未知)时,第一次追加前即停用会话日志审计并
+ * 告警一次,除非 `detection.allowUnmarkedAudit: true` 显式选择继续写入;仅当
+ * 版本是已知带标记面的未来线时才走首次追加探测。
  */
 export class DetectionAuditSink {
   private support: 'unknown' | 'supported' | 'unsupported' = 'unknown'
