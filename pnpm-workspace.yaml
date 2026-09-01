@@ -37,3 +37,4 @@ minimumReleaseAgeExclude:
   - '@deepseek-ai/dsh-code-runtime@0.1.2-alpha.3'
   - '@deepseek-ai/dsh-invariants@0.1.2-alpha.3'
   - '@deepseek-ai/dsh-scope@0.1.2-alpha.3'
+verifyDepsBeforeRun: false
