@@ -136,7 +136,7 @@ describe('audit host-capability degradation (real rc.8 peers)', () => {
     const warn = vi.spyOn(harness.ctx.logger, 'warn').mockImplementation(() => undefined)
     try {
       await harness.ctx.waterfall('tools/pre-execute', execOf(harness, 'write', { command: INJECTION }), () => Promise.resolve<PreToolDecision>({ kind: 'allow' }))
-      expect(harness.session.events.filter(event => event.type === 'defend/detection')).toHaveLength(0)
+      expect(harness.session.snapshotEvents().filter(event => event.type === 'defend/detection')).toHaveLength(0)
       const unmarkedWarnings = warn.mock.calls.filter(([message]) => String(message).includes('ignorable'))
       expect(unmarkedWarnings).toHaveLength(1)
       expect(String(unmarkedWarnings[0]?.[0])).toContain('allowUnmarkedAudit')
@@ -150,7 +150,7 @@ describe('audit host-capability degradation (real rc.8 peers)', () => {
     const warn = vi.spyOn(harness.ctx.logger, 'warn').mockImplementation(() => undefined)
     try {
       await harness.ctx.waterfall('tools/pre-execute', execOf(harness, 'write', { command: INJECTION }), () => Promise.resolve<PreToolDecision>({ kind: 'allow' }))
-      expect(harness.session.events.filter(event => event.type === 'defend/detection')).toHaveLength(1)
+      expect(harness.session.snapshotEvents().filter(event => event.type === 'defend/detection')).toHaveLength(1)
       expect(warn.mock.calls.some(([message]) => String(message).includes('ignorable'))).toBe(false)
     } finally {
       warn.mockRestore()

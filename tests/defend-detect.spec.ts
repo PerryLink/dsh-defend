@@ -150,7 +150,7 @@ describe('audit and report surfaces', () => {
     // rc.6 test peers drop the ignorable marker, so the audit assert opts back in (degrade paths are covered in audit-support.spec.ts).
     const harness = await mountHarness({ config: { detection: { injectionAction: 'block', allowUnmarkedAudit: true } } })
     await harness.ctx.waterfall('tools/pre-execute', execOf(harness, 'write', { command: INJECTION }), () => Promise.resolve<PreToolDecision>({ kind: 'allow' }))
-    const events = harness.session.events.filter(event => event.type === 'defend/detection')
+    const events = harness.session.snapshotEvents().filter(event => event.type === 'defend/detection')
     expect(events.length).toBe(1)
     expect(events[0]?.data).toMatchObject({ surface: 'tool-arguments', family: 'injection', action: 'block' })
     expect(JSON.stringify(events[0]?.data)).not.toContain('sk-')
@@ -159,7 +159,7 @@ describe('audit and report surfaces', () => {
   it('secret audits never carry the secret text', async () => {
     const harness = await mountHarness({ config: { detection: { secretAction: 'block', allowUnmarkedAudit: true } } })
     await harness.ctx.waterfall('tools/post-execute', execOf(harness, 'read', {}), resultOf([{ type: 'text', text: SECRET }]), () => Promise.resolve<PostToolDecision>({ kind: 'accept' }))
-    const event = harness.session.events.filter(event => event.type === 'defend/detection').at(-1)
+    const event = harness.session.snapshotEvents().filter(event => event.type === 'defend/detection').at(-1)
     expect(event?.data).toMatchObject({ family: 'secret', action: 'block', secretType: 'openai-api-key' })
     expect(JSON.stringify(event?.data)).not.toContain('abcdefghijklmnopqrstuvwx')
   })
