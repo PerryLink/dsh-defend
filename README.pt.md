@@ -25,7 +25,7 @@
 
 | Superfície | Status |
 |---|---|
-| Harness | DeepSeek Harness `0.1.1-rc.2` (intervalos de peer `>=0.1.0-rc.8 <0.2.0`) 0.1.2-alpha.3 (adaptado em 2026-09-01): o envelope de sessão mantém seu campo ignorable apenas para compatibilidade de leitura de logs armazenados - o Session.append ainda não consegue estampá-lo, então o comportamento da porta não muda. |
+| Harness | DeepSeek Harness `0.1.1-rc.2` (intervalos de peer `>=0.1.0-rc.8 <0.2.0`) 0.1.2-alpha.5 (adaptado em 2026-09-02): o envelope de sessão mantém seu campo ignorable apenas para compatibilidade de leitura de logs armazenados - o Session.append ainda não consegue estampá-lo, então o comportamento da porta não muda. |
 | Node | `^22.19.0 \|\| >=24.0.0` |
 | Plataformas | Todas (somente host; sem código nativo, sem rede) |
 | Modelo | Qualquer (a detecção ocorre antes de o conteúdo chegar ao modelo) |
