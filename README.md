@@ -26,7 +26,7 @@
 
 | Surface | Status |
 |---|---|
-| Harness | DeepSeek Harness `0.1.1-rc.2` (peer ranges `>=0.1.0-rc.8 <0.2.0`; verified against checkout `0.1.2-alpha.5` on 2026-09-01) |
+| Harness | DeepSeek Harness `0.1.2-alpha.5` (peer ranges `>=0.1.0-rc.8 <0.2.0`; adapted 2026-09-02) |
 | Node | `^22.19.0 \|\| >=24.0.0` |
 | Platforms | All (pure host; no native code, no network) |
 | Model | Any (detection runs before content reaches the model) |
@@ -135,7 +135,7 @@ All tunables are Schemastery `Config` fields (changeable from cordis.yml). An id
 ```sh
 pnpm install        # node ^22.19 || >=24
 pnpm run typecheck  # tsc: src + tests against the local harness checkout
-pnpm run typecheck:ci  # tsc against the published 0.1.1-rc.2 types (no paths)
+pnpm run typecheck:ci  # tsc against the published 0.1.2-alpha.5 types (no paths)
 pnpm test           # vitest: 75 tests, 8 suites (detection benchmark incl.)
 pnpm run build      # tsdown bundle + tsc declarations (lib/)
 pnpm run verify:self-contained  # dependency specs resolve from the registry
