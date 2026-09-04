@@ -26,7 +26,7 @@
 
 | Surface | Status |
 |---|---|
-| Harness | DeepSeek Harness `0.1.2-alpha.5` (peer ranges `>=0.1.0-rc.8 <0.2.0`; adapted 2026-09-02) |
+| Harness | DeepSeek Harness `0.1.2-rc.1` (peer ranges `>=0.1.0-rc.8 <0.2.0`; adapted 2026-09-02) |
 | Node | `^22.19.0 \|\| >=24.0.0` |
 | Platforms | All (pure host; no native code, no network) |
 | Model | Any (detection runs before content reaches the model) |
@@ -95,7 +95,7 @@ All tunables are Schemastery `Config` fields (changeable from cordis.yml). An id
 | `detection.secretAction` | `ask` | Secret family: `allow` / `ask` / `block` |
 | `detection.secretBlockCritical` | `true` | Critical secrets always block regardless of `secretAction` |
 | `detection.audit` | `true` | Write `defend/detection` session audit events |
-| `detection.allowUnmarkedAudit` | `false` | Keep writing session audit on hosts whose `Session.append` predates the `ignorable` marker (every released line so far) or that fail-closed on unknown event types (host `0.1.2-alpha.5`+), accepting the unresumable-session hazard |
+| `detection.allowUnmarkedAudit` | `false` | Keep writing session audit on hosts whose `Session.append` predates the `ignorable` marker (every released line so far) or that fail-closed on unknown event types (host `0.1.2-rc.1`+), accepting the unresumable-session hazard |
 | `detection.maxReportEntries` | `200` | In-memory report ring-buffer cap |
 | `registerCommand` | `true` | Register the `/defend` command |
 | `registerTool` | `true` | Register the `defend_report` tool |
@@ -128,14 +128,14 @@ All tunables are Schemastery `Config` fields (changeable from cordis.yml). An id
 - **Detection gaps.** The rule library catches the ported vocabularies and their tolerant variants; novel phrasing, lookalike-Unicode encodings (NFKC normalization is tracked as future work), and multi-step attacks can evade it. The benchmark pins the measured floor (27/28 on the upstream dataset) so regressions are visible.
 - **No model-level verdicts.** `dsh-defend` is deterministic; it never calls a model and cannot judge novel intent.
 - **Message rejection is silent.** `agent/pre-step` reject carries no reason to the model (the seam has no reason field); the audit event records the rule facts.
-- **Session audit and the `ignorable` marker.** Audit appends request the envelope's `ignorable: true` marker so any harness build can load the log. Every released harness line so far (`0.1.0-rc.1`–`0.1.0-rc.8`, `0.1.1-rc.1`–`0.1.1-rc.2`) silently drops it — the event lands unmarked and makes the session unresumable on stricter builds; host `0.1.2-alpha.5` retains the envelope field for stored-log read compatibility only, but `Session.append` still cannot stamp it and the read path rejects unmarked unknown event types (`defend/detection` is not registered), so writing there also makes the session unloadable. dsh-defend therefore decides BEFORE the first append (peer-version pre-check; unresolvable versions fail closed) and disables session-log audit with a one-time warning. Set `detection.allowUnmarkedAudit: true` to opt back in. See [issue #2](https://github.com/PerryLink/dsh-defend/issues/2).
+- **Session audit and the `ignorable` marker.** Audit appends request the envelope's `ignorable: true` marker so any harness build can load the log. Every released harness line so far (`0.1.0-rc.1`–`0.1.0-rc.8`, `0.1.1-rc.1`–`0.1.1-rc.2`) silently drops it — the event lands unmarked and makes the session unresumable on stricter builds; host `0.1.2-rc.1` retains the envelope field for stored-log read compatibility only, but `Session.append` still cannot stamp it and the read path rejects unmarked unknown event types (`defend/detection` is not registered), so writing there also makes the session unloadable. dsh-defend therefore decides BEFORE the first append (peer-version pre-check; unresolvable versions fail closed) and disables session-log audit with a one-time warning. Set `detection.allowUnmarkedAudit: true` to opt back in. See [issue #2](https://github.com/PerryLink/dsh-defend/issues/2).
 
 ## Development
 
 ```sh
 pnpm install        # node ^22.19 || >=24
 pnpm run typecheck  # tsc: src + tests against the local harness checkout
-pnpm run typecheck:ci  # tsc against the published 0.1.2-alpha.5 types (no paths)
+pnpm run typecheck:ci  # tsc against the published 0.1.2-rc.1 types (no paths)
 pnpm test           # vitest: 75 tests, 8 suites (detection benchmark incl.)
 pnpm run build      # tsdown bundle + tsc declarations (lib/)
 pnpm run verify:self-contained  # dependency specs resolve from the registry

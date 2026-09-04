@@ -25,7 +25,7 @@
 
 | Superficie | Estado |
 |---|---|
-| Harness | DeepSeek Harness `0.1.2-alpha.5` (rangos de peer `>=0.1.0-rc.8 <0.2.0`; adaptado el 2026-09-02): el sobre de sesión conserva su campo ignorable solo para compatibilidad de lectura de logs almacenados - Session.append aún no puede estamparlo, por lo que el comportamiento de la puerta no cambia. |
+| Harness | DeepSeek Harness `0.1.2-rc.1` (rangos de peer `>=0.1.0-rc.8 <0.2.0`; adaptado el 2026-09-02): el sobre de sesión conserva su campo ignorable solo para compatibilidad de lectura de logs almacenados - Session.append aún no puede estamparlo, por lo que el comportamiento de la puerta no cambia. |
 | Node | `^22.19.0 \|\| >=24.0.0` |
 | Plataformas | Todas (solo host; sin código nativo, sin red) |
 | Modelo | Cualquiera (la detección ocurre antes de que el contenido llegue al modelo) |
@@ -125,7 +125,7 @@ Todos los ajustes son campos `Config` de Schemastery (modificables desde cordis.
 ```sh
 pnpm install        # node ^22.19 || >=24
 pnpm run typecheck  # tsc: src + tests contra el checkout local del harness
-pnpm run typecheck:ci  # tsc contra los tipos publicados 0.1.2-alpha.5 (sin paths)
+pnpm run typecheck:ci  # tsc contra los tipos publicados 0.1.2-rc.1 (sin paths)
 pnpm test           # vitest: 75 tests, 8 suites (incluye la referencia de detección)
 pnpm run build      # bundle tsdown + declaraciones tsc (lib/)
 pnpm run verify:self-contained  # las especificaciones de dependencias resuelven desde el registry
