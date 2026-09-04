@@ -492,7 +492,8 @@ export function peerVersion(): string | null {
  * (rc8 复核 2026-08-22:盖章修复只在 harness master,未随任何已发布 rc 线);
  * harness master(`0.1.2-alpha.1` 起,42dc2a46c2)移除 ignorable 信封并改为
  * KNOWN_SESSION_EVENT_TYPES 读路径 fail-closed,`defend/detection` 不在集合
- * 内,写盘即令会话拒读——故 0.1.2-alpha.1 及之后的 0.1.x 线同样视为未标记。
+ * 内,写盘即令会话拒读——故 0.1.2-alpha.1 及之后的 0.1.x 线同样视为未标记
+ * (0.1.2-rc.1 的 `Session.append` 第三参仍为 surface 意图,同样无法盖章)。
  * 更晚的 rc 与 0.2+ 无法预判,由 append 探测兜底验证。
  * @param version - 安装的 peer 版本字符串。
  * @returns 已知未标记的发布线返回 true。
@@ -505,7 +506,10 @@ export function isUnmarkedHostVersion(version: string): boolean {
     const patch = Number(rc[2])
     if (minor === 0) return patch <= 8
     if (minor === 1) return patch <= 2
-    return false
+    // `0.1.2-rc.1` ships the alpha.5 surface: the third append parameter is
+    // `SurfaceIntent` for surface event types only, so no 0.1.2 rc line can
+    // stamp the marker either.
+    return minor >= 2
   }
   const line = /^0\.1\.(\d+)(?:-.*)?$/.exec(v)
   if (line !== null) return Number(line[1]) >= 2

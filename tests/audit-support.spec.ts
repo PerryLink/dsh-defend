@@ -6,9 +6,9 @@
  * 信封并 fail-closed 拒读未知事件类型。运行时在第一次追加前按 peer 版本
  * 预判(版本不可解析时同样 fail closed),判定未标记即停用会话日志审计并
  * 告警一次,除非 `detection.allowUnmarkedAudit: true` 重新开启。
- * 本仓库测试 peer 固定 rc.8(见 tests/harness.ts),因此降级路径用真实 peer
- * 直接复现,标记宿主路径经 `DetectionAuditSink` 的 `sessionVersion` 注入面
- * 模拟。
+ * 本仓库测试 peer 即已安装 devDeps 线(现为 0.1.2-rc.1,同样无法盖章),
+ * 因此降级路径用真实 peer 直接复现,标记宿主路径经 `DetectionAuditSink` 的
+ * `sessionVersion` 注入面模拟。
  * @module dsh-defend/test/audit-support.spec
  */
 
@@ -36,8 +36,8 @@ function execOf(harness: Harness, name: string, args: unknown): ToolExecution {
 /** 已知未标记的已发布版本线分类(rc8 复核 + master 0.1.2-alpha.1 fail-closed)。 */
 describe('isUnmarkedHostVersion', () => {
   it('flags every released pre-marker line and the fail-closed master line, letting future lines fall back to the probe', () => {
-    for (const version of ['0.1.0-rc.1', '0.1.0-rc.6', '0.1.0-rc.7', '0.1.0-rc.8', '0.1.1-rc.1', '0.1.1-rc.2', '0.1.2-alpha.1', '0.1.2', '0.1.3-beta.1']) expect(isUnmarkedHostVersion(version)).toBe(true)
-    for (const version of ['0.1.0-rc.9', '0.1.1-rc.3', '0.1.2-rc.1', '0.1.0', '0.2.0', '0.1.0-rc.6-pre', 'garbage']) expect(isUnmarkedHostVersion(version)).toBe(false)
+    for (const version of ['0.1.0-rc.1', '0.1.0-rc.6', '0.1.0-rc.7', '0.1.0-rc.8', '0.1.1-rc.1', '0.1.1-rc.2', '0.1.2-alpha.1', '0.1.2', '0.1.3-beta.1', '0.1.2-rc.1']) expect(isUnmarkedHostVersion(version)).toBe(true)
+    for (const version of ['0.1.0-rc.9', '0.1.1-rc.3', '0.1.0', '0.2.0', '0.1.0-rc.6-pre', 'garbage']) expect(isUnmarkedHostVersion(version)).toBe(false)
   })
 })
 
@@ -130,8 +130,8 @@ describe('DetectionAuditSink', () => {
   })
 })
 
-describe('audit host-capability degradation (real rc.8 peers)', () => {
-  it('the rc.8 test host disables session-log audit by default: the block still fires, no event is written', async () => {
+describe('audit host-capability degradation (real installed peers)', () => {
+  it('the unmarked test host disables session-log audit by default: the block still fires, no event is written', async () => {
     const harness = await mountHarness({ config: { detection: { injectionAction: 'block' } } })
     const warn = vi.spyOn(harness.ctx.logger, 'warn').mockImplementation(() => undefined)
     try {

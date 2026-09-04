@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Align the devDependency pins to the published dsh `0.1.2-rc.1` line (8 packages), move the compat CI probes and the `typecheck:ci` step label to `0.1.2-rc.1`, and re-verify the adaptation claims; no behavior change.
+- Align the devDependency pins to the published dsh `0.1.2-rc.1` line (8 packages), move the compat CI probes and the `typecheck:ci` step label to `0.1.2-rc.1`, and re-verify the adaptation claims.
+
+### Fixed
+
+- `isUnmarkedHostVersion` now classifies the `0.1.2-rc.x` line as non-stamping (it ships the alpha.5 surface: the third append parameter is `SurfaceIntent` for surface event types only). Previously `0.1.2-rc.1` fell through the rc bound and was probed as marker-aware, which re-enabled session-log audit on the rc.1 line.
 
 ## [0.3.3] - 2026-09-02
 
