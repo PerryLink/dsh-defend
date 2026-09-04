@@ -1,6 +1,6 @@
 {
   "name": "dsh-defend",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Prompt-injection, jailbreak, and secret-leak detection with allow/ask/block interception for DeepSeek Harness: an Aho-Corasick pattern engine and heuristics ported from the Prompt-Injection-Payloads, Jailbreak-Detector, and Secret-Key-Leaker-Detect assets, gating user messages on agent/pre-step, tool arguments on tools/pre-execute, and tool results on tools/post-execute, with sanitized defend/* session audit events, a defend_report tool, and a /defend command.",
   "repository": {
     "type": "git",
@@ -112,7 +112,8 @@
     "tsdown": "^0.22.14",
     "typescript": "^5.9.0"
   },
-  "devDependencies": {"@deepseek-ai/dsh-attachment": "0.1.2-rc.1", 
+  "devDependencies": {
+    "@deepseek-ai/dsh-attachment": "0.1.2-rc.1",
     "@deepseek-ai/cordis": "^4.0.2",
     "@deepseek-ai/cordis-plugin-include": "^1.0.7",
     "@deepseek-ai/cordis-plugin-loader": "^1.0.3",
@@ -148,4 +149,3 @@
     "url": "https://github.com/sponsors/PerryLink"
   }
 }
-
