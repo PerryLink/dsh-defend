@@ -88,6 +88,7 @@ export interface DetectionConfig {
   maxReportEntries?: number
 }
 
+// Service Definition: the gate's public contract — the Schemastery Config schema below plus the pure review surface (ReviewVerdict/ReviewOptions) exported for tests and embedders.
 export const Config: z<Config> = z.object({
   enabled: z.boolean().default(true),
   action: z.union(['deny', 'ask']).default('deny'),
@@ -528,6 +529,7 @@ export function apply(ctx: Context, config: Config): void {
   const toolNames = new Set(config.toolNames ?? [...DEFAULT_TOOL_NAMES])
   const logger = ctx.logger(name)
 
+  // Consumer: the guard consumes the tools/agent waterfalls (pre/post-execute, pre-step) and the optional approval service to render its deny/ask decisions.
   // 放行路径永远透传(绝不占据决策槽);拦截路径不调用 next(),瀑布止于本门禁。
   ctx.on('tools/pre-execute', (exec: ToolExecution, next: () => Promise<PreToolDecision>): Promise<PreToolDecision> => {
     if (!toolNames.has(exec.name)) return next()
@@ -659,6 +661,7 @@ export function apply(ctx: Context, config: Config): void {
 
     // 4. defend_report 工具与 /defend 命令(服务缺席时优雅降级,不阻断门禁)。
     const tools = ctx.get('tools') as import('@deepseek-ai/dsh-tools').ToolRuntime | undefined
+    // Service Provider: registers the defend_report tool and the /defend command through the optional tools/commands registries (each wrapped in a ctx.effect disposer).
     if ((config.registerTool ?? true) && tools !== undefined) {
       const tool = defineTool({
         name: 'defend_report',
