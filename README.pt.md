@@ -26,7 +26,7 @@
 
 | Superfície | Status |
 |---|---|
-| Harness | DeepSeek Harness `dsh-v0.1.5-alpha.1` (tag do GitHub, verificado em 2026-09-09; intervalos de peer `>=0.1.2-rc.1 <0.2.0 || >=0.1.5-alpha.1 <0.2.0`; adaptado em 2026-09-09): o envelope de sessão mantém seu campo ignorable apenas para compatibilidade de leitura de logs armazenados - o Session.append ainda não consegue estampá-lo, então o comportamento da porta não muda. Verificado em 2026-09-09 contra o checkout master dsh-v0.1.5-alpha.1 (cadeia completa de portas + smoke de instalação de perfil). |
+| Harness | DeepSeek Harness `dsh-v0.1.5-rc.1` (tag do GitHub, verificado em 2026-09-10; intervalos de peer `>=0.1.2-rc.1 <0.2.0 || >=0.1.5-alpha.1 <0.2.0`; adaptado em 2026-09-10): o envelope de sessão mantém seu campo ignorable apenas para compatibilidade de leitura de logs armazenados - o Session.append ainda não consegue estampá-lo, então o comportamento da porta não muda. Verificado em 2026-09-10 contra o checkout master dsh-v0.1.5-rc.1 (cadeia completa de portas + smoke de instalação de perfil). |
 | Node | `^22.19.0 \|\| >=24.0.0` |
 | Plataformas | Todas (somente host; sem código nativo, sem rede) |
 | Modelo | Qualquer (a detecção ocorre antes de o conteúdo chegar ao modelo) |
@@ -126,7 +126,7 @@ Todos os ajustes são campos `Config` do Schemastery (alteráveis pelo cordis.ym
 ```sh
 pnpm install        # node ^22.19 || >=24
 pnpm run typecheck  # tsc: src + tests contra o checkout local do harness
-pnpm run typecheck:ci  # tsc contra os tipos publicados 0.1.2-rc.1 (sem paths)
+pnpm run typecheck:ci  # tsc contra os tipos publicados 0.1.5-rc.1 (sem paths)
 pnpm test           # vitest: 75 testes, 8 suítes (inclui a referência de detecção)
 pnpm run build      # bundle tsdown + declarações tsc (lib/)
 pnpm run verify:self-contained  # especificações de dependências resolvem pelo registry

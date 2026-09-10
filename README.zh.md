@@ -26,7 +26,7 @@
 
 | 方面 | 状态 |
 |---|---|
-| Harness | DeepSeek Harness `dsh-v0.1.5-alpha.1`（GitHub tag，2026-09-09 已核验；peer 范围 `>=0.1.2-rc.1 <0.2.0 || >=0.1.5-alpha.1 <0.2.0`；2026-09-09 已适配）：会话信封保留 ignorable 字段但仅用于存量日志读取兼容——Session.append 仍无法盖章，门控行为不变。已于 2026-09-09 对照 dsh-v0.1.5-alpha.1 master checkout 核验（完整门禁链 + profile 安装冒烟）。 |
+| Harness | DeepSeek Harness `dsh-v0.1.5-rc.1`（GitHub tag，2026-09-10 已核验；peer 范围 `>=0.1.2-rc.1 <0.2.0 || >=0.1.5-alpha.1 <0.2.0`；2026-09-10 已适配）：会话信封保留 ignorable 字段但仅用于存量日志读取兼容——Session.append 仍无法盖章，门控行为不变。已于 2026-09-10 对照 dsh-v0.1.5-rc.1 master checkout 核验（完整门禁链 + profile 安装冒烟）。 |
 | Node | `^22.19.0 \|\| >=24.0.0` |
 | 平台 | 全部（纯 host；无原生代码、无网络） |
 | 模型 | 任意（检测发生在内容到达模型之前） |
@@ -135,7 +135,7 @@ dsh --profile web --dump-config | grep -A3 'id: dsh-defend'
 ```sh
 pnpm install        # node ^22.19 || >=24
 pnpm run typecheck  # tsc：src + tests，对照本地 harness checkout
-pnpm run typecheck:ci  # tsc：对照已发布的 0.1.2-rc.1 类型（无 paths）
+pnpm run typecheck:ci  # tsc：对照已发布的 0.1.5-rc.1 类型（无 paths）
 pnpm test           # vitest：75 个测试、8 个套件（含检测基准）
 pnpm run build      # tsdown bundle + tsc 声明（lib/）
 pnpm run verify:self-contained  # 依赖声明全部来自 registry
