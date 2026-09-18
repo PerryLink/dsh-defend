@@ -5,6 +5,16 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- `/defend` now renders the session-log audit state explicitly. On the `0.1.6-alpha.2` line `Session.append`'s third argument exists only for surface-eligible event types and is a `SurfaceIntent`, never an `ignorable` envelope, so the audit for the non-surface `defend/detection` type is deterministically disabled on this host line (issue #2) — the report now says so in one line instead of leaving the degradation to a single startup warning (`DetectionAuditSink.describe`).
+
+### Changed
+
+- Raise the `@deepseek-ai/dsh-*` dev/test pins from `0.1.5-rc.2` to `0.1.6-alpha.2`, add `dsh.manifestVersion: 1` and the canonical three-clause `engines.dsh`, and clear the baseline drift in `AGENTS.md`, the CI step name and the append-class comment in `src/events.ts`. No runtime behavior change for supported hosts.
+
 ## [0.3.10] - 2026-09-12
 
 ### Changed

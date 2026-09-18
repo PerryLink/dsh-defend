@@ -27,7 +27,7 @@
 
 | Surface | Status |
 |---|---|
-| Harness | DeepSeek Harness `dsh-v0.1.5-rc.2` (GitHub tag, verified 2026-09-11; peer ranges `>=0.1.2-rc.1 <0.2.0 || >=0.1.5-alpha.1 <0.2.0`; adapted 2026-09-10). Verified 2026-09-11 against the dsh-v0.1.5-rc.2 master checkout (full gate chain + profile install smoke). |
+| Harness | DeepSeek Harness `dsh-v0.1.6-alpha.2` (verified 2026-09-18; peer ranges `>=0.1.2-rc.1 <0.2.0 \|\| >=0.1.5-alpha.1 <0.2.0 \|\| >=0.1.6-0 <0.2.0`). On this line `Session.append`'s third argument exists only for surface-eligible event types and is a `SurfaceIntent`, so the non-surface `defend/detection` type still cannot stamp the `ignorable` marker: session-log audit stays fail-closed-disabled and `/defend` now renders that state explicitly. Verified 2026-09-18 (dual typecheck rulers + full test suite + self-contained/artifacts gates). |
 | Node | `^22.19.0 \|\| >=24.0.0` |
 | Platforms | All (pure host; no native code, no network) |
 | Model | Any (detection runs before content reaches the model) |

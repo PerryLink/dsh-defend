@@ -27,7 +27,7 @@
 
 | Superficie | Estado |
 |---|---|
-| Harness | DeepSeek Harness `dsh-v0.1.5-rc.2` (tag de GitHub, verificado el 2026-09-11; rangos de peer `>=0.1.2-rc.1 <0.2.0 || >=0.1.5-alpha.1 <0.2.0`; adaptado el 2026-09-10): el sobre de sesión conserva su campo ignorable solo para compatibilidad de lectura de logs almacenados - Session.append aún no puede estamparlo, por lo que el comportamiento de la puerta no cambia. Verificado el 2026-09-11 contra el checkout master dsh-v0.1.5-rc.2 (cadena completa de puertas + smoke de instalación de perfil). |
+| Harness | DeepSeek Harness `dsh-v0.1.6-alpha.2` (verificado el 2026-09-18; rangos de peer `>=0.1.2-rc.1 <0.2.0 \|\| >=0.1.5-alpha.1 <0.2.0 \|\| >=0.1.6-0 <0.2.0`). En esta línea el tercer argumento de `Session.append` existe solo para tipos de superficie y es un `SurfaceIntent`, así que el tipo no-superficie `defend/detection` sigue sin poder estampar el marcador `ignorable`: la auditoría del log de sesión permanece deshabilitada fail-closed y `/defend` ahora muestra ese estado explícitamente. Verificado el 2026-09-18 (doble typecheck + suite completa + puertas self-contained/artifacts). |
 | Node | `^22.19.0 \|\| >=24.0.0` |
 | Plataformas | Todas (solo host; sin código nativo, sin red) |
 | Modelo | Cualquiera (la detección ocurre antes de que el contenido llegue al modelo) |
