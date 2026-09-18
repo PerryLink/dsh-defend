@@ -27,7 +27,7 @@
 
 | Superfície | Status |
 |---|---|
-| Harness | DeepSeek Harness `dsh-v0.1.5-rc.2` (tag do GitHub, verificado em 2026-09-11; intervalos de peer `>=0.1.2-rc.1 <0.2.0 || >=0.1.5-alpha.1 <0.2.0`; adaptado em 2026-09-10): o envelope de sessão mantém seu campo ignorable apenas para compatibilidade de leitura de logs armazenados - o Session.append ainda não consegue estampá-lo, então o comportamento da porta não muda. Verificado em 2026-09-11 contra o checkout master dsh-v0.1.5-rc.2 (cadeia completa de portas + smoke de instalação de perfil). |
+| Harness | DeepSeek Harness `dsh-v0.1.6-alpha.2` (verificado em 2026-09-18; intervalos de peer `>=0.1.2-rc.1 <0.2.0 \|\| >=0.1.5-alpha.1 <0.2.0 \|\| >=0.1.6-0 <0.2.0`). Nesta linha o terceiro argumento de `Session.append` existe apenas para tipos de superfície e é um `SurfaceIntent`, então o tipo não-superfície `defend/detection` continua sem poder estampar o marcador `ignorable`: a auditoria do log de sessão permanece desabilitada fail-closed e o `/defend` agora mostra esse estado explicitamente. Verificado em 2026-09-18 (typecheck duplo + suíte completa + portas self-contained/artifacts). |
 | Node | `^22.19.0 \|\| >=24.0.0` |
 | Plataformas | Todas (somente host; sem código nativo, sem rede) |
 | Modelo | Qualquer (a detecção ocorre antes de o conteúdo chegar ao modelo) |

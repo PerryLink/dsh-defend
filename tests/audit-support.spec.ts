@@ -156,4 +156,41 @@ describe('audit host-capability degradation (real installed peers)', () => {
       warn.mockRestore()
     }
   })
+
+  describe('DetectionAuditSink.describe (the /defend audit-status line, G-8)', () => {
+    const event: DetectionEvent = {
+      family: 'injection', category: 'injection', ruleId: 'pi-test', severity: 'high',
+      surface: 'tool-arguments', action: 'block', scannedLength: 4, truncated: false,
+    }
+
+    it('reports the configured-off state', () => {
+      const sink = new DetectionAuditSink({ warn: () => undefined }, false, () => '0.1.1-rc.2')
+      expect(sink.describe(false)).toBe('session-log audit: off (detection.audit: false)')
+    })
+
+    it('reports the opt-in state', () => {
+      const sink = new DetectionAuditSink({ warn: () => undefined }, true, () => '0.1.1-rc.2')
+      expect(sink.describe(true)).toContain('unmarked events allowed')
+    })
+
+    it('reports pending before any append', () => {
+      const sink = new DetectionAuditSink({ warn: () => undefined }, false, () => '0.1.6-alpha.2')
+      expect(sink.describe(true)).toContain('pending')
+    })
+
+    it('reports the fail-closed degradation on a host that cannot stamp the marker', () => {
+      const sink = new DetectionAuditSink({ warn: () => undefined }, false, () => '0.1.1-rc.2')
+      sink.append({ append: () => ({}) } as unknown as Session, event)
+      const line = sink.describe(true)
+      expect(line).toContain('disabled')
+      expect(line).toContain('allowUnmarkedAudit: true to opt back in')
+    })
+
+    it('reports the marked-marker path once a probe sees the envelope stamp', () => {
+      const sink = new DetectionAuditSink({ warn: () => undefined }, false, () => '0.1.6-alpha.2')
+      // The host stamps `ignorable: true` on the logged event when it honors the marker.
+      sink.probe({ ignorable: true })
+      expect(sink.describe(true)).toContain('on (host stamps the ignorable marker)')
+    })
+  })
 })

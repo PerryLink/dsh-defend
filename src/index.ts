@@ -474,6 +474,22 @@ export class DetectionAuditSink {
       'dsh-defend: this host drops the ignorable marker on audit events or rejects unknown event types on read (Session.append predates the marker / fail-closed event vocabulary), which would make sessions unresumable — session-log audit is disabled; set detection.allowUnmarkedAudit: true to opt back in (see https://github.com/PerryLink/dsh-defend/issues/2)',
     )
   }
+
+  /**
+   * 渲染会话日志审计的当前状态,供 `/defend` 显式展示(卡 G-8:alpha.2 线上
+   * 审计已确定停用,用户必须看得见这个降级)。
+   * @param configured - `detection.audit` 的配置值(false = 用户显式关闭)。
+   * @returns 一行可直接展示的状态文案。
+   */
+  describe(configured: boolean): string {
+    if (!configured) return 'session-log audit: off (detection.audit: false)'
+    if (this.allowUnmarked) return 'session-log audit: on, unmarked events allowed (detection.allowUnmarkedAudit: true)'
+    if (this.support === 'unsupported') {
+      return 'session-log audit: disabled — this host cannot stamp the ignorable marker (Session.append predates the marker or fails closed on unknown event types); the storage-domain report and this ring buffer remain the durable record (set detection.allowUnmarkedAudit: true to opt back in)'
+    }
+    if (this.support === 'supported') return 'session-log audit: on (host stamps the ignorable marker)'
+    return 'session-log audit: pending — no audit append observed yet on this host'
+  }
 }
 
 /** 已安装的 `@deepseek-ai/dsh-session` 版本;不可解析时返回 null(交由 append 探测兜底)。 */
@@ -724,6 +740,7 @@ export function apply(ctx: Context, config: Config): void {
           const text = [
             `dsh-defend: ${counts.total} recorded detection(s) — ${counts.blocked} blocked, ${counts.asked} asked.`,
             `by family: injection ${counts.byFamily.injection}, jailbreak ${counts.byFamily.jailbreak}, secret ${counts.byFamily.secret}.`,
+            audit.describe(detection.audit ?? true),
             ...counts.recent.map(entry => `- [${entry.family}/${entry.ruleId}] ${entry.surface} (${entry.action}, ${entry.severity})`),
           ].join('\n')
           return { kind: 'success' as const, text }

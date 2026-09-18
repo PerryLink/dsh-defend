@@ -27,7 +27,7 @@
 
 | 方面 | 状态 |
 |---|---|
-| Harness | DeepSeek Harness `dsh-v0.1.5-rc.2`（GitHub tag，2026-09-11 已核验；peer 范围 `>=0.1.2-rc.1 <0.2.0 || >=0.1.5-alpha.1 <0.2.0`；2026-09-10 已适配）：会话信封保留 ignorable 字段但仅用于存量日志读取兼容——Session.append 仍无法盖章，门控行为不变。已于 2026-09-11 对照 dsh-v0.1.5-rc.2 master checkout 核验（完整门禁链 + profile 安装冒烟）。 |
+| Harness | DeepSeek Harness `dsh-v0.1.6-alpha.2`（2026-09-18 核验；peer 范围 `>=0.1.2-rc.1 <0.2.0 \|\| >=0.1.5-alpha.1 <0.2.0 \|\| >=0.1.6-0 <0.2.0`）。该线上 `Session.append` 的第三参仅对表面事件类型存在且为 `SurfaceIntent`，因此非表面的 `defend/detection` 仍无法盖章 `ignorable`：会话日志审计保持失败关闭式停用，`/defend` 现显式渲染该状态。已于 2026-09-18 核验（双 typecheck 尺子 + 全量测试 + self-contained/artifacts 门）。 |
 | Node | `^22.19.0 \|\| >=24.0.0` |
 | 平台 | 全部（纯 host；无原生代码、无网络） |
 | 模型 | 任意（检测发生在内容到达模型之前） |
