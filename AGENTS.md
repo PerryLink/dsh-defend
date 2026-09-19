@@ -27,7 +27,7 @@ Standalone DeepSeek Harness plugin repository (`dsh-defend`). Development follow
 
 ## Checks
 
-`pnpm run typecheck && pnpm run typecheck:ci && pnpm test && pnpm run build && pnpm run verify:self-contained && pnpm run verify:artifacts && pnpm pack`
+`pnpm run typecheck && pnpm run typecheck:ci && pnpm test && pnpm run build && pnpm run verify:self-contained && pnpm run check:lockfile && pnpm run verify:artifacts && pnpm run check:lockfile && pnpm pack`
 
 `typecheck` resolves `@deepseek-ai/*` from the installed `0.1.6-alpha.2` devDependencies (this repo has no tsconfig paths); `typecheck:ci` checks against the published `0.1.6-alpha.2` types (explicit empty paths). Both stay green — see dsh-click's AGENTS.md for the shared rationale.
 
