@@ -3,6 +3,11 @@ packages:
 allowBuilds:
   esbuild: true
 minimumReleaseAgeExclude:
+  # The whole pinned host family is published inside the registry's
+  # minimum-release-age window by design (every batch pins the newest published
+  # line); this scope-wide row is the primary mechanism, and the per-version
+  # rows below stay as the auditable record of which lines each batch pinned.
+  - '@deepseek-ai/*'
   - '@deepseek-ai/cordis@4.0.1'
   - '@deepseek-ai/cosmokit@1.8.2'
   - '@deepseek-ai/schemastery@3.18.1'
@@ -50,6 +55,18 @@ minimumReleaseAgeExclude:
   - '@deepseek-ai/dsh-user-approval@0.1.2-alpha.5'
   - '@deepseek-ai/dsh-util-crypto@0.1.2-alpha.5'
   - '@deepseek-ai/dsh-util-values@0.1.2-alpha.5'
+# The `0.1.7-alpha.1` devDeps and the host packages they pull in must resolve to
+# ONE copy of the host type graph. pnpm matches a prerelease range only against
+# its own [major, minor, patch] tuple, so a transitive peer asking for
+# `^0.1.7-alpha.1` resolves SEPARATELY from this package's own exact
+# `0.1.7-alpha.1` devDep and installs a second copy — the plugin's
+# `UserMessage`/`ContentBlock` then disagree with the host's `Agent` and TS
+# reports `X incorrectly extends Y`. These two rows are self-referential
+# (override key range -> the very version the devDeps already name) and keep one
+# copy of each. Same recipe as dsh-github/dsh-doublecheck.
+overrides:
+  '@deepseek-ai/dsh-agent@^0.1.7-alpha.1': 0.1.7-alpha.1
+  '@deepseek-ai/dsh-llm@^0.1.7-alpha.1': 0.1.7-alpha.1
 verifyDepsBeforeRun: false
 # The exact alpha pins are published inside the 24h minimum-release-age
 # window by design (every batch pins the newest published line); the
