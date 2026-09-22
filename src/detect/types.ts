@@ -21,6 +21,13 @@ export const FAMILIES: readonly Family[] = ['injection', 'jailbreak', 'secret']
 /**
  * Where scanned content entered the pipeline. Decides which interception
  * point acts on the match and how the audit event is attributed.
+ *
+ * This is dsh-defend's OWN pipeline-point vocabulary, not the harness's
+ * content-block tag set: the `'tool-result'` member names the
+ * `tools/post-execute` interception point and is unrelated to the retired
+ * session-format-V3 `tool-result` wrapper block (absent from
+ * `ContentBlockMap` since V4). The literal is deliberately kept as-is so
+ * existing audit events stay readable.
  */
 export type Surface = 'message' | 'tool-arguments' | 'tool-result' | 'model-output'
 

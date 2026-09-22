@@ -776,15 +776,36 @@ function argumentsText(argumentsValue: unknown): string | undefined {
   }
 }
 
-/** 从工具结果内容块提取可扫描文本。 */
+/**
+ * 退役的 session-format-V3 工具结果包裹块判定 —— **只读兼容,本插件绝不写入**。
+ *
+ * V3 年代(`0.1.2-rc.1` 一类 peer,本检测层落地时的宿主)工具结果以
+ * `{ type: 'tool-result', toolCallId, content }` 包裹块嵌在消息内容里,所以下面
+ * 两个 walker 都要下钻它才能取到结果文本。V4 起工具结果改为 `role: 'tool'` 的
+ * 一等消息(顶层 `toolCallId` + `content` + 可选 `isError`),`tool-result` 不再是
+ * `ContentBlockMap` 的成员,宿主更在**物理行准入**层拒收内容里的包裹块 ——
+ * `assertV4ToolResultMessage`:「content must not contain a released tool-result
+ * wrapper」(`packages/session/session-format-v3-to-v4/src/tool-role.ts`)。
+ *
+ * 因此该分支在 0.1.7 宿主上不可达,保留它只为**升级前写下**的会话日志与 fixture
+ * 仍可被扫描(读取兼容 ≠ 写入旧形状)。本仓库没有任何构造工具结果块的路径:工具
+ * 结果一律由宿主生产,本插件只消费,故此处无需迁移到 V4 形状。
+ * @param record - 已判定为对象的候选内容块。
+ * @returns 是否为退役的 V3 工具结果包裹块。
+ */
+function isRetiredToolResultWrapper(record: Record<string, unknown>): boolean {
+  return record.type === 'tool-result' && Array.isArray(record.content)
+}
+
+/** 从工具结果内容块提取可扫描文本(含退役 V3 包裹块的只读兼容下钻)。 */
 function resultText(result: Readonly<ToolExecutionResult>): string | undefined {
   const parts: string[] = []
   const walk = (block: unknown): void => {
     if (block === null || typeof block !== 'object') return
     const record = block as Record<string, unknown>
     if (record.type === 'text' && typeof record.text === 'string') parts.push(record.text)
-    else if (record.type === 'tool-result' && Array.isArray(record.content)) {
-      for (const inner of record.content) walk(inner)
+    else if (isRetiredToolResultWrapper(record)) {
+      for (const inner of record.content as unknown[]) walk(inner)
     }
   }
   for (const block of result.content) walk(block)
@@ -792,15 +813,15 @@ function resultText(result: Readonly<ToolExecutionResult>): string | undefined {
   return parts.length === 0 ? undefined : parts.join('\n')
 }
 
-/** 从 pre-step 消息提取可扫描文本(text 块 + 嵌套 tool-result 文本)。 */
+/** 从 pre-step 消息提取可扫描文本(text 块 + 退役 V3 包裹块的只读兼容下钻)。 */
 function messagesText(messages: readonly UserMessage[]): string | undefined {
   const parts: string[] = []
   const walk = (block: unknown): void => {
     if (block === null || typeof block !== 'object') return
     const record = block as Record<string, unknown>
     if (record.type === 'text' && typeof record.text === 'string') parts.push(record.text)
-    else if (record.type === 'tool-result' && Array.isArray(record.content)) {
-      for (const inner of record.content) walk(inner)
+    else if (isRetiredToolResultWrapper(record)) {
+      for (const inner of record.content as unknown[]) walk(inner)
     }
   }
   for (const message of messages) {
