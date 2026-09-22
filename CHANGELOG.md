@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.13] - 2026-09-22
+
 ### Changed
 
 - Adapt to DeepSeek Harness `dsh-v0.1.7-alpha.1`: raise the `@deepseek-ai/dsh-*` dev/test pins from `0.1.6-alpha.2` to `0.1.7-alpha.1`, `@deepseek-ai/cordis` to `^4.0.3` (4.0.2 does not export `Volatile`) and `@deepseek-ai/schemastery` to `^3.18.3`; record `0.1.7-alpha.1` in `dshWorkshop.compatibility.dshVersions`. The pack now resolves `cordis@4.0.3`, `schemastery@3.18.3` and exactly one copy of the host type graph. Peer ranges are deliberately left loose (no supported host line is dropped), so `engines.dsh` and the `peerDependencies` bands are unchanged. **Deviation from the batch brief:** the brief also floated `0.1.5-rc.3`, but that is the *old-contract* next line (`kind: 'plugin'` and friends are still present there), so a fix verified against it would not typecheck against the host; `0.1.7-alpha.1` is pinned instead.
