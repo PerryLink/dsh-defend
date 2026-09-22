@@ -28,7 +28,7 @@
 
 | Superfície | Status |
 |---|---|
-| Harness | DeepSeek Harness `dsh-v0.1.6-alpha.2` (verificado em 2026-09-18; intervalos de peer `>=0.1.2-rc.1 <0.2.0 \|\| >=0.1.5-alpha.1 <0.2.0 \|\| >=0.1.6-0 <0.2.0`). Nesta linha o terceiro argumento de `Session.append` existe apenas para tipos de superfície e é um `SurfaceIntent`, então o tipo não-superfície `defend/detection` continua sem poder estampar o marcador `ignorable`: a auditoria do log de sessão permanece desabilitada fail-closed e o `/defend` agora mostra esse estado explicitamente. Verificado em 2026-09-18 (typecheck duplo + suíte completa + portas self-contained/artifacts). |
+| Harness | DeepSeek Harness `dsh-v0.1.7-alpha.1` (verificado em 2026-09-22; intervalos de peer `>=0.1.2-rc.1 <0.2.0 \|\| >=0.1.5-alpha.1 <0.2.0 \|\| >=0.1.6-0 <0.2.0`). Nesta linha o terceiro argumento de `Session.append` existe apenas para tipos de superfície e é um `SurfaceIntent`, então o tipo não-superfície `defend/detection` continua sem poder estampar o marcador `ignorable`: a auditoria do log de sessão permanece desabilitada fail-closed e o `/defend` mostra esse estado explicitamente. O formato de sessão V4 não tem mais bloco de conteúdo `tool-result` — este plugin nunca o produziu, e seus dois walkers de conteúdo mantêm um fallback **somente leitura** para o wrapper V3 aposentado, de modo que sessões gravadas antes da atualização continuam sendo analisadas. Verificado em 2026-09-22 (typecheck duplo + suíte completa + build + portas self-contained/artifacts + pack; uma única cópia do grafo de tipos do host). |
 | Node | `^22.19.0 \|\| >=24.0.0` |
 | Plataformas | Todas (somente host; sem código nativo, sem rede) |
 | Modelo | Qualquer (a detecção ocorre antes de o conteúdo chegar ao modelo) |
@@ -128,8 +128,8 @@ Todos os ajustes são campos `Config` do Schemastery (alteráveis pelo cordis.ym
 ```sh
 pnpm install        # node ^22.19 || >=24
 pnpm run typecheck  # tsc: src + tests contra o checkout local do harness
-pnpm run typecheck:ci  # tsc contra os tipos publicados 0.1.5-rc.2 (sem paths)
-pnpm test           # vitest: 75 testes, 8 suítes (inclui a referência de detecção)
+pnpm run typecheck:ci  # tsc contra os tipos publicados 0.1.7-alpha.1 (sem paths)
+pnpm test           # vitest: 96 testes, 9 suítes (inclui a referência de detecção)
 pnpm run build      # bundle tsdown + declarações tsc (lib/)
 pnpm run verify:self-contained  # especificações de dependências resolvem pelo registry
 pnpm run verify:artifacts       # face ESM construída + arquivos publicados presentes

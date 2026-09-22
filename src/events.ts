@@ -11,16 +11,22 @@
  * on the envelope and skip unknown ignorable records when loading, so the
  * audit can never refuse a session. Every released line so far —
  * `0.1.0-rc.1`–`0.1.0-rc.8`, `0.1.1-rc.1`–`0.1.1-rc.2`, and the
- * `0.1.2-rc.1`/`0.1.5-rc.2` lines — silently DROPS the options bag: the event
- * then lands unmarked and makes the session unresumable on required-on-read
- * hosts. On the `0.1.6-alpha.2` line `Session.append<T>(type, data, ...opts)`
- * takes a third argument only for surface-eligible event types, and that
- * argument is a `SurfaceIntent`, never an `ignorable` envelope — a non-surface
- * `defend/detection` type has no third parameter at all, so the marker still
- * cannot be stamped and the fail-closed classification holds unchanged. The
- * runtime detects such hosts at first use (peer-version pre-check plus a probe
- * of the appended envelope) and disables session-log audit on them with a
- * one-time warning; `detection.allowUnmarkedAudit: true` opts back in.
+ * `0.1.2-rc.1`–`0.1.7-alpha.1` lines — silently DROPS the options bag: the
+ * event then lands unmarked and makes the session unresumable on
+ * required-on-read hosts. On the `0.1.6-alpha.2` and `0.1.7-alpha.1` lines
+ * `Session.append<T>(type, data, ...opts)` takes a third argument only for
+ * surface-eligible event types, and that argument is a `SurfaceIntent`, never
+ * an `ignorable` envelope — a non-surface `defend/detection` type has no third
+ * parameter at all, so the marker still cannot be stamped and the fail-closed
+ * classification holds unchanged. `0.1.7-alpha.1` re-verified 2026-09-18: the
+ * read path still refuses an event type it does not know unless the envelope
+ * marks it `ignorable` (`session-persistence/src/storage-contract.ts`), and
+ * `defend/detection` is an out-of-repo plugin event, so it is absent from
+ * `KNOWN_SESSION_EVENT_TYPES` by construction — writing it unmarked therefore
+ * still poisons the log. The runtime detects such hosts at first use
+ * (peer-version pre-check plus a probe of the appended envelope) and disables
+ * session-log audit on them with a one-time warning;
+ * `detection.allowUnmarkedAudit: true` opts back in.
  * See https://github.com/PerryLink/dsh-defend/issues/2.
  * @module dsh-defend/events
  */

@@ -91,6 +91,23 @@ describe('Loader composition (built entry)', () => {
       expect(evidence.status, `invalid config unexpectedly mounted:\n${entry.lines.join('\n')}`).not.toBe(0)
       expect(evidence.stderr, `failed for the wrong reason:\n${evidence.stderr}`).toMatch(entry.reason)
     }
+    // Why the reason assertion (not just the exit code) is the load-bearing
+    // half: on `cordis-plugin-loader` 1.0.4 a row whose config fails to parse
+    // is reported through `ctx.logger.error(...)` and the entry stops there,
+    // and cordis's `LoggerService` registers no exporter by default (buffer
+    // only — see `cordis@4.0.3` lib/index.js, `exporters = new Map()`), so in
+    // this sink-less runner that report goes nowhere. A non-zero exit alone
+    // would then still be satisfied by this suite's own "row did not mount"
+    // throws, i.e. a silently unmounted plugin would look like a loud config
+    // rejection. Asserting the LOADER's reason keeps the regression loud.
+    //
+    // This repo resolves `cordis-plugin-loader@1.0.3` (verified 2026-09-22),
+    // where `Entry._init()` throws instead of returning and `Tree.await()`
+    // rethrows a settled fiber failure, so the negative case is genuinely
+    // loud today: exit 1 with
+    // `failed to apply loader entry ... invalid config: - $.enabled expected
+    // boolean but got yes (at enabled)`. The devDependency range is `^1.0.3`,
+    // which admits the published 1.0.4 — re-run this suite before widening it.
   })
 
   it('rejects a default export through the Loader with the missing-inject reason', () => {

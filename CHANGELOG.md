@@ -5,6 +5,22 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Adapt to DeepSeek Harness `dsh-v0.1.7-alpha.1`: raise the `@deepseek-ai/dsh-*` dev/test pins from `0.1.6-alpha.2` to `0.1.7-alpha.1`, `@deepseek-ai/cordis` to `^4.0.3` (4.0.2 does not export `Volatile`) and `@deepseek-ai/schemastery` to `^3.18.3`; record `0.1.7-alpha.1` in `dshWorkshop.compatibility.dshVersions`. The pack now resolves `cordis@4.0.3`, `schemastery@3.18.3` and exactly one copy of the host type graph. Peer ranges are deliberately left loose (no supported host line is dropped), so `engines.dsh` and the `peerDependencies` bands are unchanged. **Deviation from the batch brief:** the brief also floated `0.1.5-rc.3`, but that is the *old-contract* next line (`kind: 'plugin'` and friends are still present there), so a fix verified against it would not typecheck against the host; `0.1.7-alpha.1` is pinned instead.
+- `pnpm-workspace.yaml` gains self-referential `overrides` rows (`'@deepseek-ai/dsh-agent@^0.1.7-alpha.1'`, `'@deepseek-ai/dsh-llm@^0.1.7-alpha.1'` → `0.1.7-alpha.1`): pnpm matches a prerelease range only against its own `[major, minor, patch]` tuple, so without them a transitive peer resolves separately and installs a second copy of the host type graph (`X incorrectly extends Y`). `minimumReleaseAgeExclude` gains the scope-wide `'@deepseek-ai/*'` row alongside the existing per-version record.
+
+### Added
+
+- Regression guards for the retired session-format-V3 tool-result wrapper (two read-compatibility tests plus a V4 control) and for the `0.1.6-alpha.2`/`0.1.7-alpha.1` lines in the `isUnmarkedHostVersion` table.
+
+### Fixed
+
+- Documented (no behavior change) the two content walkers on the retired V3 tool-result wrapper. `tool-result` stopped being a `ContentBlockMap` member in session format V4, and the host's physical-row admission now rejects a nested wrapper (`assertV4ToolResultMessage`: "content must not contain a released tool-result wrapper"), so the branch is unreachable on `0.1.7-alpha.1`; it is kept **read-only** so sessions and fixtures written before the upgrade still scan. `isRetiredToolResultWrapper` now carries the rationale in one place. dsh-defend has **no** tool-result producer — tool results are host-produced and only consumed — so no V4 producer migration was needed, and the repo constructs no message sources (the `kind: 'plugin'` catch-all removed from `MessageSourceMap` in this window is not reachable from here).
+- Recorded that `0.1.7-alpha.1`'s `Session.append<T>` still types its third argument as a `SurfaceIntent` only for `T extends SurfaceEventType`, and that the read path still refuses an unknown event type unless its envelope carries `ignorable` — `defend/detection` is an out-of-repo plugin event and therefore outside `KNOWN_SESSION_EVENT_TYPES` by construction. The fail-closed session-log-audit classification is therefore unchanged on this line (issue #2).
+
 ## [0.3.12] - 2026-09-19
 
 ### Added

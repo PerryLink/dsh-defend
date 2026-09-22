@@ -29,7 +29,7 @@
 
 | Surface | Status |
 |---|---|
-| Harness | DeepSeek Harness `dsh-v0.1.6-alpha.2` (verified 2026-09-18; peer ranges `>=0.1.2-rc.1 <0.2.0 \|\| >=0.1.5-alpha.1 <0.2.0 \|\| >=0.1.6-0 <0.2.0`). On this line `Session.append`'s third argument exists only for surface-eligible event types and is a `SurfaceIntent`, so the non-surface `defend/detection` type still cannot stamp the `ignorable` marker: session-log audit stays fail-closed-disabled and `/defend` now renders that state explicitly. Verified 2026-09-18 (dual typecheck rulers + full test suite + self-contained/artifacts gates). |
+| Harness | DeepSeek Harness `dsh-v0.1.7-alpha.1` (verified 2026-09-22; peer ranges `>=0.1.2-rc.1 <0.2.0 \|\| >=0.1.5-alpha.1 <0.2.0 \|\| >=0.1.6-0 <0.2.0`). On this line `Session.append`'s third argument exists only for surface-eligible event types and is a `SurfaceIntent`, so the non-surface `defend/detection` type still cannot stamp the `ignorable` marker: session-log audit stays fail-closed-disabled and `/defend` renders that state explicitly. Session format V4 has no `tool-result` content block — this plugin never produced one, and its two content walkers keep a **read-only** fallback for the retired V3 wrapper so sessions written before the upgrade still scan. Verified 2026-09-22 (dual typecheck rulers + full test suite + build + self-contained/artifacts gates + pack; exactly one copy of the host type graph). |
 | Node | `^22.19.0 \|\| >=24.0.0` |
 | Platforms | All (pure host; no native code, no network) |
 | Model | Any (detection runs before content reaches the model) |
@@ -138,8 +138,8 @@ All tunables are Schemastery `Config` fields (changeable from cordis.yml). An id
 ```sh
 pnpm install        # node ^22.19 || >=24
 pnpm run typecheck  # tsc: src + tests against the local harness checkout
-pnpm run typecheck:ci  # tsc against the published 0.1.5-rc.2 types (no paths)
-pnpm test           # vitest: 75 tests, 8 suites (detection benchmark incl.)
+pnpm run typecheck:ci  # tsc against the published 0.1.7-alpha.1 types (no paths)
+pnpm test           # vitest: 96 tests, 9 suites (detection benchmark incl.)
 pnpm run build      # tsdown bundle + tsc declarations (lib/)
 pnpm run verify:self-contained  # dependency specs resolve from the registry
 pnpm run verify:artifacts       # built ESM face + shipped files present
