@@ -5,7 +5,14 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.3.14] - 2026-09-23
+
+### Changed
+
+- Move the eight `@deepseek-ai/dsh-*` dev/test pins from `0.1.7-alpha.1` to `0.1.7-alpha.2`, so the suite executes the alpha.2 host packages instead of the alpha.1 ones it was still testing against.
+- The declared host range gains `|| >=0.1.7-0 <0.2.0` on all six sites (`engines.dsh` plus the five `peerDependencies` bands), which now read `>=0.1.2-rc.1 <0.2.0 || >=0.1.5-alpha.1 <0.2.0 || >=0.1.6-0 <0.2.0 || >=0.1.7-0 <0.2.0`. This is a correctness fix, not a tightening: under npm semver's prerelease rule a comparator set whose only prerelease comparators sit on earlier `[major, minor, patch]` tuples cannot admit a later alpha, so the three-clause range could not match the very host line this release targets. The three existing segments are kept in place and order and nothing was narrowed; the five READMEs quote the range verbatim.
+- `dshWorkshop.compatibility.dshVersions` records `0.1.7-alpha.2`; the five-language README compatibility rows state the verified `dsh-v0.1.7-alpha.2` line; `compat.yml` installs the `0.1.7-alpha.2` CLI and bundle. `pnpm-workspace.yaml`'s self-referential `dsh-agent` / `dsh-llm` `overrides` rows — which keep a transitive peer from resolving separately and installing a second copy of the host type graph — move to `^0.1.7-alpha.2`.
+- `AGENTS.md` states the alpha.2 line in its checks and layout notes, and `tests/audit-support.spec.ts` names the same line.
 
 ## [0.3.13] - 2026-09-22
 
