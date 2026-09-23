@@ -29,7 +29,7 @@
 
 | 方面 | 状态 |
 |---|---|
-| Harness | DeepSeek Harness `dsh-v0.1.7-alpha.1`（2026-09-22 核验；peer 范围 `>=0.1.2-rc.1 <0.2.0 \|\| >=0.1.5-alpha.1 <0.2.0 \|\| >=0.1.6-0 <0.2.0`）。该线上 `Session.append` 的第三参仅对表面事件类型存在且为 `SurfaceIntent`，因此非表面的 `defend/detection` 仍无法盖章 `ignorable`：会话日志审计保持失败关闭式停用，`/defend` 显式渲染该状态。会话格式 V4 已无 `tool-result` 内容块——本插件从不生产它，两个内容 walker 只为退役的 V3 包裹块保留**只读**回退，使升级前写下的会话仍可被扫描。已于 2026-09-22 核验（双 typecheck 尺子 + 全量测试 + build + self-contained/artifacts 门 + pack；宿主类型图仅一份）。 |
+| Harness | DeepSeek Harness `dsh-v0.1.7-alpha.1`（2026-09-22 核验；peer 范围 `>=0.1.2-rc.1 <0.2.0 \|\| >=0.1.5-alpha.1 <0.2.0 \|\| >=0.1.6-0 <0.2.0 \|\| >=0.1.7-0 <0.2.0`）。该线上 `Session.append` 的第三参仅对表面事件类型存在且为 `SurfaceIntent`，因此非表面的 `defend/detection` 仍无法盖章 `ignorable`：会话日志审计保持失败关闭式停用，`/defend` 显式渲染该状态。会话格式 V4 已无 `tool-result` 内容块——本插件从不生产它，两个内容 walker 只为退役的 V3 包裹块保留**只读**回退，使升级前写下的会话仍可被扫描。已于 2026-09-22 核验（双 typecheck 尺子 + 全量测试 + build + self-contained/artifacts 门 + pack；宿主类型图仅一份）。 |
 | Node | `^22.19.0 \|\| >=24.0.0` |
 | 平台 | 全部（纯 host；无原生代码、无网络） |
 | 模型 | 任意（检测发生在内容到达模型之前） |
