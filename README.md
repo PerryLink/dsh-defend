@@ -139,7 +139,7 @@ All tunables are Schemastery `Config` fields (changeable from cordis.yml). An id
 ```sh
 pnpm install        # node ^22.19 || >=24
 pnpm run typecheck  # tsc: src + tests against the local harness checkout
-pnpm run typecheck:ci  # tsc against the published 0.1.7-alpha.1 types (no paths)
+pnpm run typecheck:ci  # tsc against the published 0.1.7-alpha.2 types (no paths)
 pnpm test           # vitest: 96 tests, 9 suites (detection benchmark incl.)
 pnpm run build      # tsdown bundle + tsc declarations (lib/)
 pnpm run verify:self-contained  # dependency specs resolve from the registry

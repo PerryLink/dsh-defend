@@ -138,7 +138,7 @@ dsh --profile web --dump-config | grep -A3 'id: dsh-defend'
 ```sh
 pnpm install        # node ^22.19 || >=24
 pnpm run typecheck  # tsc：src + tests，对照本地 harness checkout
-pnpm run typecheck:ci  # tsc：对照已发布的 0.1.7-alpha.1 类型（无 paths）
+pnpm run typecheck:ci  # tsc：对照已发布的 0.1.7-alpha.2 类型（无 paths）
 pnpm test           # vitest：96 个测试、9 个套件（含检测基准）
 pnpm run build      # tsdown bundle + tsc 声明（lib/）
 pnpm run verify:self-contained  # 依赖声明全部来自 registry

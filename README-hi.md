@@ -129,7 +129,7 @@ dsh --profile web --dump-config | grep -A3 'id: dsh-defend'
 ```sh
 pnpm install        # node ^22.19 || >=24
 pnpm run typecheck  # tsc: src + tests स्थानीय हार्नेस चेकआउट के विरुद्ध
-pnpm run typecheck:ci  # tsc प्रकाशित 0.1.7-alpha.1 प्रकारों के विरुद्ध (बिना paths)
+pnpm run typecheck:ci  # tsc प्रकाशित 0.1.7-alpha.2 प्रकारों के विरुद्ध (बिना paths)
 pnpm test           # vitest: 96 टेस्ट, 9 सुइट (पहचान बेंचमार्क सहित)
 pnpm run build      # tsdown बंडल + tsc घोषणाएँ (lib/)
 pnpm run verify:self-contained  # निर्भरता स्पेक registry से हल होती हैं

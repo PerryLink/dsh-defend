@@ -6,7 +6,7 @@
  * 信封并 fail-closed 拒读未知事件类型。运行时在第一次追加前按 peer 版本
  * 预判(版本不可解析时同样 fail closed),判定未标记即停用会话日志审计并
  * 告警一次,除非 `detection.allowUnmarkedAudit: true` 重新开启。
- * 本仓库测试 peer 即已安装 devDeps 线(现为 0.1.7-alpha.1,同样无法盖章:
+ * 本仓库测试 peer 即已安装 devDeps 线(现为 0.1.7-alpha.2,同样无法盖章:
  * 其 `Session.append<T>` 的第三参只在 `T extends SurfaceEventType` 时存在且为
  * `SurfaceIntent`,而非表面的 `defend/detection` 根本没有第三参),
  * 因此降级路径用真实 peer 直接复现,标记宿主路径经 `DetectionAuditSink` 的
@@ -38,7 +38,7 @@ function execOf(harness: Harness, name: string, args: unknown): ToolExecution {
 /** 已知未标记的已发布版本线分类(rc8 复核 + master 0.1.2-alpha.1 fail-closed)。 */
 describe('isUnmarkedHostVersion', () => {
   it('flags every released pre-marker line and the fail-closed master line, letting future lines fall back to the probe', () => {
-    for (const version of ['0.1.0-rc.1', '0.1.0-rc.6', '0.1.0-rc.7', '0.1.0-rc.8', '0.1.1-rc.1', '0.1.1-rc.2', '0.1.2-alpha.1', '0.1.2', '0.1.3-beta.1', '0.1.2-rc.1', '0.1.6-alpha.2', '0.1.7-alpha.1']) expect(isUnmarkedHostVersion(version)).toBe(true)
+    for (const version of ['0.1.0-rc.1', '0.1.0-rc.6', '0.1.0-rc.7', '0.1.0-rc.8', '0.1.1-rc.1', '0.1.1-rc.2', '0.1.2-alpha.1', '0.1.2', '0.1.3-beta.1', '0.1.2-rc.1', '0.1.6-alpha.2', '0.1.7-alpha.1', '0.1.7-alpha.2']) expect(isUnmarkedHostVersion(version)).toBe(true)
     for (const version of ['0.1.0-rc.9', '0.1.1-rc.3', '0.1.0', '0.2.0', '0.1.0-rc.6-pre', 'garbage']) expect(isUnmarkedHostVersion(version)).toBe(false)
   })
 })
