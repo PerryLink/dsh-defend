@@ -55,19 +55,19 @@ minimumReleaseAgeExclude:
   - '@deepseek-ai/dsh-user-approval@0.1.2-alpha.5'
   - '@deepseek-ai/dsh-util-crypto@0.1.2-alpha.5'
   - '@deepseek-ai/dsh-util-values@0.1.2-alpha.5'
-# The `0.1.7-alpha.2` devDeps and the host packages they pull in must resolve to
+# The `0.1.7-rc.1` devDeps and the host packages they pull in must resolve to
 # ONE copy of the host type graph. pnpm matches a prerelease range only against
 # its own [major, minor, patch] tuple, so a transitive peer asking for
-# `^0.1.7-alpha.2` resolves SEPARATELY from this package's own exact
-# `0.1.7-alpha.2` devDep and installs a second copy — the plugin's
+# `^0.1.7-rc.1` resolves SEPARATELY from this package's own exact
+# `0.1.7-rc.1` devDep and installs a second copy — the plugin's
 # `UserMessage`/`ContentBlock` then disagree with the host's `Agent` and TS
 # reports `X incorrectly extends Y`. These two rows are self-referential
 # (override key range -> the very version the devDeps already name) and keep one
 # copy of each. Same recipe as dsh-github/dsh-doublecheck. On the alpha.2 line
 # the host packages pin their peers exactly, so no edge spells a caret today.
 overrides:
-  '@deepseek-ai/dsh-agent@^0.1.7-alpha.2': 0.1.7-alpha.2
-  '@deepseek-ai/dsh-llm@^0.1.7-alpha.2': 0.1.7-alpha.2
+  '@deepseek-ai/dsh-agent@^0.1.7-rc.1': 0.1.7-rc.1
+  '@deepseek-ai/dsh-llm@^0.1.7-rc.1': 0.1.7-rc.1
 verifyDepsBeforeRun: false
 # The exact alpha pins are published inside the 24h minimum-release-age
 # window by design (every batch pins the newest published line); the
