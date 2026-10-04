@@ -511,7 +511,12 @@ export function peerVersion(): string | null {
  * KNOWN_SESSION_EVENT_TYPES 读路径 fail-closed,`defend/detection` 不在集合
  * 内,写盘即令会话拒读——故 0.1.2-alpha.1 及之后的 0.1.x 线同样视为未标记
  * (0.1.2-rc.1 的 `Session.append` 第三参仍为 surface 意图,同样无法盖章)。
- * 更晚的 rc 与 0.2+ 无法预判,由 append 探测兜底验证。
+ * 更晚的 0.1.x rc 无法预判,由 append 探测兜底验证;0.2 线已复核
+ * (2026-10-04,发布版 `0.2.1-alpha.1`):`append(type, data, ...opts)` 只从
+ * options 取 `sourceEventSeqs`/`surfaceOp`,信封固定为 `{ type, seq, time,
+ * data }`,`{ ignorable: true }` 被丢弃 ⇒ 0.2 预发布线与 0.1 线同属未标记,
+ * 必须走版本预判而不是探测(探测会先污染一条日志再降级);稳定的 0.2.x 仍留待
+ * 探测,留出"未来线补上 append 选项"的口子。
  * @param version - 安装的 peer 版本字符串。
  * @returns 已知未标记的发布线返回 true。
  */
@@ -530,6 +535,18 @@ export function isUnmarkedHostVersion(version: string): boolean {
   }
   const line = /^0\.1\.(\d+)(?:-.*)?$/.exec(v)
   if (line !== null) return Number(line[1]) >= 2
+  // The 0.2 corridor is non-stamping too, verified 2026-10-04 against the
+  // published `0.2.1-alpha.1` `dsh-session`: `append(type, data, ...opts)`
+  // reads only `sourceEventSeqs`/`surfaceOp` out of the options bag and builds
+  // the envelope as `{ type, seq, time, data }` plus that surface metadata, so
+  // `{ ignorable: true }` is dropped and the event lands unmarked. Without this
+  // clause the line falls through to the "possibly marker-aware" path, whose
+  // append probe writes one unmarked event into the log BEFORE discovering the
+  // host cannot stamp — the exact pollution this guard exists to prevent.
+  // Only PRERELEASES are classified here: a stable `0.2.x` may yet add the
+  // append option, and that must fail open into the probe instead.
+  const prerelease02 = /^0\.2\.(\d+)-/.exec(v)
+  if (prerelease02 !== null) return Number(prerelease02[1]) >= 0
   return false
 }
 

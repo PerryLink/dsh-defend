@@ -6,9 +6,10 @@
  * 信封并 fail-closed 拒读未知事件类型。运行时在第一次追加前按 peer 版本
  * 预判(版本不可解析时同样 fail closed),判定未标记即停用会话日志审计并
  * 告警一次,除非 `detection.allowUnmarkedAudit: true` 重新开启。
- * 本仓库测试 peer 即已安装 devDeps 线(现为 0.1.7-alpha.2,同样无法盖章:
- * 其 `Session.append<T>` 的第三参只在 `T extends SurfaceEventType` 时存在且为
- * `SurfaceIntent`,而非表面的 `defend/detection` 根本没有第三参),
+ * 本仓库测试 peer 即已安装 devDeps 线(现为 0.2.1-alpha.1,同样无法盖章:
+ * 其 `append(type, data, ...opts)` 只从 options 取 `sourceEventSeqs`/
+ * `surfaceOp`,信封固定为 `{ type, seq, time, data }`,`{ ignorable: true }`
+ * 被丢弃 —— 复核于 2026-10-04,见 `isUnmarkedHostVersion` 的 0.2 分支),
  * 因此降级路径用真实 peer 直接复现,标记宿主路径经 `DetectionAuditSink` 的
  * `sessionVersion` 注入面模拟。
  * @module dsh-defend/test/audit-support.spec
@@ -35,11 +36,17 @@ function execOf(harness: Harness, name: string, args: unknown): ToolExecution {
   } as unknown as ToolExecution
 }
 
-/** 已知未标记的已发布版本线分类(rc8 复核 + master 0.1.2-alpha.1 fail-closed)。 */
+/** 已知未标记的已发布版本线分类(rc8 复核 + master 0.1.2-alpha.1 fail-closed + 0.2 预发布线复核 2026-10-04)。 */
 describe('isUnmarkedHostVersion', () => {
   it('flags every released pre-marker line and the fail-closed master line, letting future lines fall back to the probe', () => {
-    for (const version of ['0.1.0-rc.1', '0.1.0-rc.6', '0.1.0-rc.7', '0.1.0-rc.8', '0.1.1-rc.1', '0.1.1-rc.2', '0.1.2-alpha.1', '0.1.2', '0.1.3-beta.1', '0.1.2-rc.1', '0.1.6-alpha.2', '0.1.7-alpha.1', '0.1.7-alpha.2']) expect(isUnmarkedHostVersion(version)).toBe(true)
-    for (const version of ['0.1.0-rc.9', '0.1.1-rc.3', '0.1.0', '0.2.0', '0.1.0-rc.6-pre', 'garbage']) expect(isUnmarkedHostVersion(version)).toBe(false)
+    for (const version of ['0.1.0-rc.1', '0.1.0-rc.6', '0.1.0-rc.7', '0.1.0-rc.8', '0.1.1-rc.1', '0.1.1-rc.2', '0.1.2-alpha.1', '0.1.2', '0.1.3-beta.1', '0.1.2-rc.1', '0.1.6-alpha.2', '0.1.7-alpha.1', '0.1.7-alpha.2', '0.2.0-alpha.1', '0.2.1-alpha.1']) expect(isUnmarkedHostVersion(version)).toBe(true)
+    // A STABLE `0.2.x` stays out on purpose: it may yet ship an `append` option
+    // that stamps the marker, and that line must reach the probe instead of
+    // being written off. (Measured on the published `0.2.1-alpha.1`: the
+    // envelope is `{ type, seq, time, data }` plus `surfaceOp`/`sourceEventSeqs`
+    // only, so the PRERELEASES on that corridor cannot stamp either — classifying
+    // them here is what keeps the probe from writing one unmarked event first.)
+    for (const version of ['0.1.0-rc.9', '0.1.1-rc.3', '0.1.0', '0.2.0', '0.2.1', '0.1.0-rc.6-pre', 'garbage']) expect(isUnmarkedHostVersion(version)).toBe(false)
   })
 })
 
@@ -112,6 +119,21 @@ describe('DetectionAuditSink', () => {
     const { session, append } = fakeSession(false)
     const warn = vi.fn()
     const sink = new DetectionAuditSink({ warn }, false, () => '0.1.2-alpha.1')
+    sink.append(session, sampleEvent())
+    sink.append(session, sampleEvent())
+    expect(append).not.toHaveBeenCalled()
+    expect(warn).toHaveBeenCalledTimes(1)
+    expect(String(warn.mock.calls[0]?.[0])).toContain('allowUnmarkedAudit')
+  })
+
+  it('a 0.2 prerelease host disables session-log audit BEFORE the first append (the probe would pollute a non-stamping log)', () => {
+    // `0.2.1-alpha.1` is the installed test peer: `append` drops the options bag,
+    // so a probe would write ONE unmarked `defend/detection` event into the log
+    // and only then discover the host cannot stamp it — the version pre-check
+    // has to classify the line instead.
+    const { session, append } = fakeSession(false)
+    const warn = vi.fn()
+    const sink = new DetectionAuditSink({ warn }, false, () => '0.2.1-alpha.1')
     sink.append(session, sampleEvent())
     sink.append(session, sampleEvent())
     expect(append).not.toHaveBeenCalled()

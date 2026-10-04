@@ -92,22 +92,28 @@ describe('Loader composition (built entry)', () => {
       expect(evidence.stderr, `failed for the wrong reason:\n${evidence.stderr}`).toMatch(entry.reason)
     }
     // Why the reason assertion (not just the exit code) is the load-bearing
-    // half: on `cordis-plugin-loader` 1.0.4 a row whose config fails to parse
-    // is reported through `ctx.logger.error(...)` and the entry stops there,
-    // and cordis's `LoggerService` registers no exporter by default (buffer
-    // only — see `cordis@4.0.3` lib/index.js, `exporters = new Map()`), so in
-    // this sink-less runner that report goes nowhere. A non-zero exit alone
-    // would then still be satisfied by this suite's own "row did not mount"
-    // throws, i.e. a silently unmounted plugin would look like a loud config
-    // rejection. Asserting the LOADER's reason keeps the regression loud.
+    // half: a row whose config fails to parse is reported through
+    // `ctx.logger.error(...)` (cordis's `Fiber._reload()` catches the
+    // validation error and parks the fiber in `FiberState.FAILED`), and
+    // cordis's `LoggerService` registers no exporter by default (buffer only —
+    // see the installed `cordis` lib/index.js, `exporters = new Map()`), so in
+    // this sink-less runner that report would otherwise go nowhere. A non-zero
+    // exit alone would still be satisfied by this suite's own "row did not
+    // mount" throws, i.e. a silently unmounted plugin would look like a loud
+    // config rejection. Asserting the LOADER's reason keeps the regression
+    // loud.
     //
-    // This repo resolves `cordis-plugin-loader@1.0.3` (verified 2026-09-22),
-    // where `Entry._init()` throws instead of returning and `Tree.await()`
-    // rethrows a settled fiber failure, so the negative case is genuinely
-    // loud today: exit 1 with
-    // `failed to apply loader entry ... invalid config: - $.enabled expected
-    // boolean but got yes (at enabled)`. The devDependency range is `^1.0.3`,
-    // which admits the published 1.0.4 — re-run this suite before widening it.
+    // This repo resolves `cordis-plugin-loader@1.0.6-alpha.1` (2026-10-04,
+    // the 0.2.1-alpha.1 host line), where `Loader.await()` no longer carries
+    // the failure surface `1.0.3`/`1.0.4` had: its body only drains
+    // `_initTask || fiber.inertia` and returns, so a rejected row does not make
+    // it throw — the negation then exits 1 on the downstream
+    // `/defend command is missing from the commands registry` symptom instead
+    // of the loader's own `- $.enabled expected boolean but got yes`. That is
+    // exactly why `scripts/loader-runner.mjs` walks `ctx.loader.entries()` and
+    // re-throws the first `FiberState.FAILED` row's logged error
+    // (`rethrowFirstFailedRow`); the reason below therefore comes from the
+    // loader again, not from this suite's own registry assertion.
   })
 
   it('rejects a default export through the Loader with the missing-inject reason', () => {

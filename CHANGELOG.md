@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+### Fixed
+
+- Session-log audit is disabled BEFORE the first append on the `0.2` corridor. `isUnmarkedHostVersion` classified only the `0.1.x` lines, so the installed `@deepseek-ai/dsh-session@0.2.1-alpha.1` peer fell through to the "possibly marker-aware" probe path — and the probe's first append landed **one unmarked `defend/detection` event** in the log before the sink learned the host cannot stamp the marker, which is exactly the pollution the guard exists to prevent. Verified against the published `0.2.1-alpha.1`: `append(type, data, ...opts)` reads only `sourceEventSeqs`/`surfaceOp` out of the options bag and builds the envelope as `{ type, seq, time, data }` plus that surface metadata, so `{ ignorable: true }` is dropped. `0.2.x` **prereleases** are now classified unmarked alongside the measured `0.1.x` lines (a stable `0.2.x` still fails open into the probe, since a future line may add the append option). Net effect on the `0.2.1-alpha.1` host: `/defend` reports the fail-closed degradation and no audit event is written, instead of one unmarked event per first detection.
+- The two Loader negative regressions in `tests/composition.spec.ts` fail on the real reason again. `cordis-plugin-loader@1.0.6-alpha.1` (the loader the `0.2.1-alpha.1` host line resolves) dropped the failure surface `await()` had in 1.0.3/1.0.4: its body only drains `_initTask || fiber.inertia`, and cordis's `Fiber._reload()` reports a rejected row through `ctx.logger.error` while parking the fiber in `FiberState.FAILED` — a report this exporter-less composition swallowed. Both cases therefore exited non-zero on the runner's own downstream "/defend command is missing from the commands registry" symptom instead of the loader's reason. `scripts/loader-runner.mjs` now walks `ctx.loader.entries()` and re-throws the first failed row's logged error (`rethrowFirstFailedRow`; `DSH_LOADER_RUNNER_NO_RETHROW=1` disables it for re-measurement only), so the invalid-config negation sees the loader's own `- $.enabled expected boolean but got yes` again. No shipped behavior changes beyond the audit classification above.
+
+### Changed
+
+- Host pins move to `0.2.1-alpha.1`; re-verified against that host line. Every `@deepseek-ai/dsh-*` dev/test dependency now pins `0.2.1-alpha.1`, the `dshWorkshop.compatibility.dshVersions` timeline appends `0.2.1-alpha.1`, and the compatibility baseline in every README records the `dsh-v0.2.1-alpha.1` host. The declared host ranges (`engines.dsh` and the `peerDependencies` union) gain the `|| >=0.2.0-0 <0.3.0 || >=0.2.1-0 <0.3.0` clauses: the previous upper bound was `<0.2.0`, which under semver rejects every 0.2.x host, so the probe host itself was not installable. Nothing was narrowed — the `0.1.x` clauses are unchanged, in place and in order.
+
 ## [0.3.16] - 2026-09-25
 
 ### Changed

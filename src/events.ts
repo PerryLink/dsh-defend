@@ -10,8 +10,12 @@
  * {@link AuditAppend}): future harness builds that honor the marker stamp it
  * on the envelope and skip unknown ignorable records when loading, so the
  * audit can never refuse a session. Every released line so far —
- * `0.1.0-rc.1`–`0.1.0-rc.8`, `0.1.1-rc.1`–`0.1.1-rc.2`, and the
- * `0.1.2-rc.1`–`0.1.7-alpha.1` lines — silently DROPS the options bag: the
+ * `0.1.0-rc.1`–`0.1.0-rc.8`, `0.1.1-rc.1`–`0.1.1-rc.2`, the
+ * `0.1.2-rc.1`–`0.1.7-alpha.1` lines, and the `0.2` corridor (re-verified
+ * 2026-10-04 against the published `0.2.1-alpha.1`: `append(type, data, ...opts)`
+ * reads only `sourceEventSeqs`/`surfaceOp` from the options bag and builds the
+ * envelope as `{ type, seq, time, data }` plus that surface metadata) — silently
+ * DROPS the options bag: the
  * event then lands unmarked and makes the session unresumable on
  * required-on-read hosts. On the `0.1.6-alpha.2` and `0.1.7-alpha.1` lines
  * `Session.append<T>(type, data, ...opts)` takes a third argument only for
