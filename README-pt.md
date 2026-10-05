@@ -148,6 +148,26 @@ pnpm pack           # o tarball publicado
 
 O benchmark red-team (P/R/F1 por categoria em 105 amostras, mais o piso 27/28 do fixture) está em [`benchmark/RESULTS.md`](benchmark/RESULTS.md); regenere-o com `node --experimental-strip-types benchmark/run.mjs` (zero dependências novas, sem build).
 
+## Interoperabilidade com outros plugins do DSH
+
+Verificado contra **DSH `0.2.0-rc.2`** (o runtime para o qual este README é publicado) e o conjunto de plugins com mais estrelas pesquisado em 2026-10-05.
+
+Este plugin **não interfere** em outros plugins, incluindo os de mais estrelas:
+
+- **Sem colisão de nome de ferramenta.** Todas as ferramentas têm namespace; nenhuma ocupa um nome puro já pertencente a uma ferramenta embutida ou a outro plugin.
+- **Sem colisão de chave de serviço.** Não fornece nenhuma chave de serviço, portanto não pode colidir em uma.
+- **Sem colisão de slot.** Não registra nenhuma chave de slot de cliente, então não disputa um assento `shadows-shipped-ui`.
+- **Sem colisão de rota HTTP.** Não registra nenhum prefixo `webServer`.
+- **Sem colisão na camada de patch.** O patch do bundle apenas faz `insert` da própria linha; nunca sobrescreve o `config` de uma linha embutida.
+- **Sem mutação global.** Não altera protótipos, não reescreve `process.env` nem substitui o dispatcher global de fetch.
+
+**Listeners de eventos compartilhados não interferem por construção.** Observa os eventos sensíveis à ordem `agent/pre-step`, `tools/post-execute`, `tools/pre-execute` com `ctx.on()` — o registro de difusão do Cordis, onde cada listener executa e nenhum pode privar outro do turno. **Todos os listeners aqui delegam via `next()`**, então a cadeia nunca é curto-circuitada:
+  - `agent/pre-step` — also used by `dsh-routing-suite` (7000★, 7 listeners), `modlens` (4122★), `dsh-purge` (3317★), `dsh-agent-teams` (1923★), `dsh-context` (1849★).
+  - `tools/post-execute` — also used by `cc-safety-net` (1576★).
+  - `tools/pre-execute` — also used by `cc-safety-net` (1576★).
+
+Evidência estática: `dsh-plugin-doctor` K10–K13 retornam `pass` em todas as verificações deste repositório.
+
 ## Topics
 
 `dsh`, `dsh-plugin`, `deepseek-harness`, `deepseek`, `cordis`, `security`, `prompt-injection`, `jailbreak`, `secret-scanning`, `ai-safety`
