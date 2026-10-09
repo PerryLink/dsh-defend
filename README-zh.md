@@ -29,6 +29,14 @@
 **📖 生态实测知识库**（实测数据，不是营销）：[插件开发指南 · 选型实测数据 · 维护取舍判据](https://perrylink.github.io/dsh-plugin-guide/)。
 
 <!-- star-cta -->
+## What is dsh-defend?
+
+DeepSeek Harness 的提示注入、越狱与密钥泄露防护。
+
+规则裁决已知的，拦截裁决其余的——一切都有审计。
+
+![dsh-defend 终端演示：dsh-defend — install, then /defend and the red-team benchmark](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-demo.png)
+
 ## 维护状态：🧊 已冻结
 
 > **2026-10-05 起冻结，不再新增功能。** 本包仍可正常使用，**没有退役**——但不再投入功能开发，只有真实故障才会修复。
@@ -53,6 +61,12 @@
 这个插件是 [DSH 插件家族](https://github.com/PerryLink)的一员（40+ 个，全部 Apache-2.0）。如果你在用，**给个 star** —— 它不会解锁任何功能，但会让下一个人在搜索里更容易找到它。
 
 *English:* part of a 40+ plugin family for DeepSeek Harness. If it is useful, **a star helps the next person find it** — nothing is gated behind it.
+## Comparison
+
+![dsh-defend 的实测对比柱状图](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-evidence.png)
+
+105 samples (75 positive / 30 negative) · from benchmark/RESULTS.md in this repo
+
 ## 兼容性
 
 | 方面 | 状态 |
@@ -91,8 +105,12 @@
 ## 快速开始
 
 ```sh
+dsh plugin --profile web add github:PerryLink/dsh-defend
+```
+
+```sh
 # 1. 把 bundle 装进你的 profile
-dsh plugin --profile web add "github:PerryLink/dsh-defend#main"
+dsh plugin --profile web add github:PerryLink/dsh-defend
 
 # 或从 npm 安装（正式发布版）
 dsh plugin --profile web add dsh-defend
@@ -103,7 +121,7 @@ dsh --profile web --dump-config | grep -A3 'id: dsh-defend'
 
 ## 安装与卸载
 
-- **git 通道**（最新 `main`）：`dsh plugin --profile web add "github:PerryLink/dsh-defend#main"` —— `prepare` 脚本仅用生产依赖构建。
+- **git 通道**（最新 `main`）：`dsh plugin --profile web add github:PerryLink/dsh-defend` —— `prepare` 脚本仅用生产依赖构建。
 - **npm 通道**（正式发布版）：`dsh plugin --profile web add dsh-defend`。
 - **tarball 通道**：在本仓库执行 `pnpm pack`，然后 `dsh plugin --profile web add ./dsh-defend-<version>.tgz`。
 - **卸载**：`dsh plugin --profile web remove dsh-defend`（或从 profile patch 中删除该行）。

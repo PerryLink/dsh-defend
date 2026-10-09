@@ -29,6 +29,14 @@
 **📖 इकोसिस्टम नॉलेज बेस** — मापे गए आँकड़े, मार्केटिंग नहीं: [डेवलपमेंट गाइड · चयन डेटा · रखरखाव मानदंड](https://perrylink.github.io/dsh-plugin-guide/)।
 
 <!-- star-cta -->
+## What is dsh-defend?
+
+DeepSeek Harness के लिए प्रॉम्प्ट-इंजेक्शन, जेलब्रेक और सीक्रेट-लीक सुरक्षा।
+
+नियम ज्ञात को तय करते हैं। बाकी को इंटरसेप्शन तय करता है — और सब कुछ ऑडिटेड रहता है।
+
+![dsh-defend का टर्मिनल डेमो: dsh-defend — install, then /defend and the red-team benchmark](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-demo.png)
+
 ## रखरखाव स्थिति: 🧊 फ़्रीज़
 
 > **2026-10-05 से फ़्रीज़। कोई नई सुविधा नहीं।** यह पैकेज अभी भी काम करता है और **सेवानिवृत्त नहीं है**, पर अब इसमें नई सुविधाओं का काम नहीं होगा; केवल वास्तविक खराबी ठीक की जाएगी।
@@ -49,6 +57,12 @@
 यह प्लगइन [DSH प्लगइन परिवार](https://github.com/PerryLink) का हिस्सा है (40+ प्लगइन, सभी Apache-2.0)। अगर यह उपयोगी लगे, तो **एक स्टार दें** — इससे कोई सुविधा अनलॉक नहीं होती, पर अगला व्यक्ति इसे खोज में आसानी से पा लेता है।
 
 *English:* part of a 40+ plugin family for DeepSeek Harness. If it is useful, **a star helps the next person find it** — nothing is gated behind it.
+## Comparison
+
+![dsh-defend का मापा गया तुलना चार्ट](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-evidence.png)
+
+105 samples (75 positive / 30 negative) · from benchmark/RESULTS.md in this repo
+
 ## संगतता
 
 | सतह | स्थिति |
@@ -78,8 +92,12 @@
 ## त्वरित शुरुआत
 
 ```sh
+dsh plugin --profile web add github:PerryLink/dsh-defend
+```
+
+```sh
 # 1. बंडल को अपने प्रोफ़ाइल में इंस्टॉल करें
-dsh plugin --profile web add "github:PerryLink/dsh-defend#main"
+dsh plugin --profile web add github:PerryLink/dsh-defend
 
 # या npm से (प्रकाशित रिलीज़)
 dsh plugin --profile web add dsh-defend
@@ -90,7 +108,7 @@ dsh --profile web --dump-config | grep -A3 'id: dsh-defend'
 
 ## इंस्टॉल और अनइंस्टॉल
 
-- **git चैनल** (नवीनतम `main`): `dsh plugin --profile web add "github:PerryLink/dsh-defend#main"` — `prepare` स्क्रिप्ट केवल प्रोडक्शन निर्भरताओं से बिल्ड करती है।
+- **git चैनल** (नवीनतम `main`): `dsh plugin --profile web add github:PerryLink/dsh-defend` — `prepare` स्क्रिप्ट केवल प्रोडक्शन निर्भरताओं से बिल्ड करती है।
 - **npm चैनल** (प्रकाशित रिलीज़): `dsh plugin --profile web add dsh-defend`।
 - **tarball चैनल**: इस रेपो में `pnpm pack`, फिर `dsh plugin --profile web add ./dsh-defend-<version>.tgz`।
 - **अनइंस्टॉल**: `dsh plugin --profile web remove dsh-defend` (या प्रोफ़ाइल पैच से पंक्ति हटाएँ)।

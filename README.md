@@ -36,6 +36,14 @@
 *English:* part of a 40+ plugin family for DeepSeek Harness. If it is useful, **a star helps the next person find it** — nothing is gated behind it.
 
 
+## What is dsh-defend?
+
+Prompt-injection, jailbreak, and secret-leak defense for DeepSeek Harness.
+
+Rules decide the known. Interception decides the rest — and everything is audited.
+
+![Terminal demo of dsh-defend: dsh-defend — install, then /defend and the red-team benchmark](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-demo.png)
+
 ## Maintenance status: 🧊 FROZEN
 
 > **Frozen on 2026-10-05. No new features.** This package still works, and it is not retired — but it no longer receives feature work. Only a genuine breakage will be fixed.
@@ -56,6 +64,12 @@ Maintainers treat this capability as one where **better-adopted alternatives now
 👉 **For new work, prefer dsh-defend is still the broader detector; cc-safety-net is the far better-adopted alternative for the destructive-command gate specifically.** Existing installs keep working unchanged; nothing is being removed.
 
 *Full evidence, including the host-version compatibility matrix: `dsh-plugin-supersession-review-20261005.md`.*
+
+## Comparison
+
+![Measured comparison chart for dsh-defend](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-evidence.png)
+
+105 samples (75 positive / 30 negative) · from benchmark/RESULTS.md in this repo
 
 ## Compatibility
 
@@ -95,8 +109,12 @@ tool results   ── tools/post-execute ── scan ── block → feedback
 ## Quick start
 
 ```sh
+dsh plugin --profile web add github:PerryLink/dsh-defend
+```
+
+```sh
 # 1. install the bundle into your profile
-dsh plugin --profile web add "github:PerryLink/dsh-defend#main"
+dsh plugin --profile web add github:PerryLink/dsh-defend
 
 # or from npm (published releases)
 dsh plugin --profile web add dsh-defend
@@ -107,7 +125,7 @@ dsh --profile web --dump-config | grep -A3 'id: dsh-defend'
 
 ## Install & uninstall
 
-- **git channel** (latest `main`): `dsh plugin --profile web add "github:PerryLink/dsh-defend#main"` — the `prepare` script builds with production dependencies only.
+- **git channel** (latest `main`): `dsh plugin --profile web add github:PerryLink/dsh-defend` — the `prepare` script builds with production dependencies only.
 - **npm channel** (published releases): `dsh plugin --profile web add dsh-defend`.
 - **tarball channel**: `pnpm pack` in this repo, then `dsh plugin --profile web add ./dsh-defend-<version>.tgz`.
 - **uninstall**: `dsh plugin --profile web remove dsh-defend` (or remove the row from the profile patch).

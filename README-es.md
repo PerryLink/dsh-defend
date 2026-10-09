@@ -29,6 +29,14 @@
 **📖 Base de conocimiento del ecosistema** — datos medidos, no marketing: [guía de desarrollo · datos de selección · criterios de mantenimiento](https://perrylink.github.io/dsh-plugin-guide/).
 
 <!-- star-cta -->
+## What is dsh-defend?
+
+Defensa contra inyección de prompts, jailbreak y fugas de secretos para DeepSeek Harness.
+
+Las reglas deciden lo conocido. La intercepción decide el resto — y todo queda auditado.
+
+![Demostración de terminal de dsh-defend: dsh-defend — install, then /defend and the red-team benchmark](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-demo.png)
+
 ## Estado de mantenimiento: 🧊 CONGELADO
 
 > **Congelado el 2026-10-05. Sin nuevas funciones.** Este paquete sigue funcionando y **no está retirado**, pero ya no recibe trabajo de funciones; solo se corregirá una avería real.
@@ -49,6 +57,12 @@ Los mantenedores consideran que en esta capacidad **ya existen alternativas con 
 Este plugin forma parte de la [familia de plugins DSH](https://github.com/PerryLink) (más de 40, todos Apache-2.0). Si te resulta útil, **dale una estrella**: no desbloquea nada, pero ayuda a que la siguiente persona lo encuentre antes.
 
 *English:* part of a 40+ plugin family for DeepSeek Harness. If it is useful, **a star helps the next person find it** — nothing is gated behind it.
+## Comparison
+
+![Gráfico comparativo medido de dsh-defend](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-evidence.png)
+
+105 samples (75 positive / 30 negative) · from benchmark/RESULTS.md in this repo
+
 ## Compatibilidad
 
 | Superficie | Estado |
@@ -78,8 +92,12 @@ Por defecto: `ask` para cada familia, `block` para secretos **critical** (la sem
 ## Inicio rápido
 
 ```sh
+dsh plugin --profile web add github:PerryLink/dsh-defend
+```
+
+```sh
 # 1. instala el bundle en tu perfil
-dsh plugin --profile web add "github:PerryLink/dsh-defend#main"
+dsh plugin --profile web add github:PerryLink/dsh-defend
 
 # o desde npm (versiones publicadas)
 dsh plugin --profile web add dsh-defend
@@ -90,7 +108,7 @@ dsh --profile web --dump-config | grep -A3 'id: dsh-defend'
 
 ## Instalación y desinstalación
 
-- **Canal git** (último `main`): `dsh plugin --profile web add "github:PerryLink/dsh-defend#main"` — el script `prepare` compila solo con dependencias de producción.
+- **Canal git** (último `main`): `dsh plugin --profile web add github:PerryLink/dsh-defend` — el script `prepare` compila solo con dependencias de producción.
 - **Canal npm** (versiones publicadas): `dsh plugin --profile web add dsh-defend`.
 - **Canal tarball**: `pnpm pack` en este repositorio y luego `dsh plugin --profile web add ./dsh-defend-<version>.tgz`.
 - **Desinstalar**: `dsh plugin --profile web remove dsh-defend` (o elimina la fila del parche del perfil).
