@@ -38,6 +38,10 @@ DeepSeek Harness के लिए प्रॉम्प्ट-इंजेक्
 
 ![dsh-defend का टर्मिनल डेमो: dsh-defend — install, then /defend and the red-team benchmark](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-demo.png)
 
+![Animated terminal demo of dsh-defend](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-demo.gif)
+
+*वही रन, एनिमेटेड।*
+
 ## रखरखाव स्थिति: 🧊 फ़्रीज़
 
 > **2026-10-05 से फ़्रीज़। कोई नई सुविधा नहीं।** यह पैकेज अभी भी काम करता है और **सेवानिवृत्त नहीं है**, पर अब इसमें नई सुविधाओं का काम नहीं होगा; केवल वास्तविक खराबी ठीक की जाएगी।

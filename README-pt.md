@@ -38,6 +38,10 @@ Regras decidem o conhecido. A interceptação decide o resto — e tudo fica aud
 
 ![Demonstração de terminal do dsh-defend: dsh-defend — install, then /defend and the red-team benchmark](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-demo.png)
 
+![Animated terminal demo of dsh-defend](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-demo.gif)
+
+*A mesma execução, animada.*
+
 ## Status de manutenção: 🧊 CONGELADO
 
 > **Congelado em 2026-10-05. Sem novos recursos.** Este pacote continua funcionando e **não foi aposentado**, mas não recebe mais trabalho de recursos; apenas uma falha real será corrigida.
