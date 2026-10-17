@@ -36,7 +36,7 @@ Defensa contra inyección de prompts, jailbreak y fugas de secretos para DeepSee
 
 Las reglas deciden lo conocido. La intercepción decide el resto — y todo queda auditado.
 
-![Demostración de terminal de dsh-defend: dsh-defend — install, then /defend and the red-team benchmark](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-demo.png)
+![Demostración de terminal de dsh-defend: dsh-defend — install, then /defend and the red-team benchmark](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-hero.png)
 
 ![Animated terminal demo of dsh-defend](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-demo.gif)
 

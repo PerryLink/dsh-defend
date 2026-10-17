@@ -1,6 +1,14 @@
-{
-  "screenshots": [
-    "docs/assets/dsh-defend-demo.png",
-    "docs/assets/dsh-defend-evidence.png"
-  ]
-}
+[
+  {
+    "path": "docs/assets/dsh-defend-hero.png",
+    "kind": "hero",
+    "alt": "dsh-defend terminal output",
+    "caption": "Real dsh-defend test run; 92 tests passed."
+  },
+  {
+    "path": "docs/assets/dsh-defend-demo.gif",
+    "kind": "demo",
+    "alt": "Animated dsh-defend terminal session",
+    "caption": "The same run, assembled line by line."
+  }
+]

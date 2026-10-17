@@ -36,7 +36,7 @@ Defesa contra injeção de prompts, jailbreak e vazamento de segredos para o Dee
 
 Regras decidem o conhecido. A interceptação decide o resto — e tudo fica auditado.
 
-![Demonstração de terminal do dsh-defend: dsh-defend — install, then /defend and the red-team benchmark](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-demo.png)
+![Demonstração de terminal do dsh-defend: dsh-defend — install, then /defend and the red-team benchmark](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-hero.png)
 
 ![Animated terminal demo of dsh-defend](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-demo.gif)
 

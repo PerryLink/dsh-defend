@@ -36,7 +36,7 @@ DeepSeek Harness 的提示注入、越狱与密钥泄露防护。
 
 规则裁决已知的，拦截裁决其余的——一切都有审计。
 
-![dsh-defend 终端演示：dsh-defend — install, then /defend and the red-team benchmark](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-demo.png)
+![dsh-defend 终端演示：dsh-defend — install, then /defend and the red-team benchmark](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-hero.png)
 
 ![Animated terminal demo of dsh-defend](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-demo.gif)
 
