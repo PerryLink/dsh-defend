@@ -332,7 +332,9 @@ pnpm pack           # प्रकाशित tarball
 
 </details>
 
-</details>## License
+</details>
+
+## License
 
 [Apache License 2.0](LICENSE) © 2026 dsh-defend contributors
 

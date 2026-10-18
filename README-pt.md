@@ -332,7 +332,9 @@ Este projeto é um dos **87 plugins ativamente mantidos** do DeepSeek Harness da
 
 </details>
 
-</details>## License
+</details>
+
+## License
 
 [Apache License 2.0](LICENSE) © 2026 dsh-defend contributors
 
