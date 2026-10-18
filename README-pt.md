@@ -21,6 +21,11 @@
 
 [English](README.md) · [简体中文](README-zh.md) · [Español](README-es.md) · [Português](README-pt.md) · [हिन्दी](README-hi.md)
 
+```sh
+dsh plugin --profile <name> add dsh-defend
+```
+
+
 </div>
 
 ---
@@ -29,6 +34,13 @@
 **📖 Base de conhecimento do ecossistema** — dados medidos, não marketing: [guia de desenvolvimento · dados de seleção · critérios de manutenção](https://perrylink.github.io/dsh-plugin-guide/).
 
 <!-- star-cta -->
+
+## Instalação e desinstalação
+
+- **Canal git** (último `main`): `dsh plugin --profile web add github:PerryLink/dsh-defend` — o script `prepare` compila apenas com dependências de produção.
+- **Canal npm** (versões publicadas): `dsh plugin --profile web add dsh-defend`.
+- **Canal tarball**: `pnpm pack` neste repositório e então `dsh plugin --profile web add ./dsh-defend-<version>.tgz`.
+- **Desinstalar**: `dsh plugin --profile web remove dsh-defend` (ou remova a linha do patch do perfil).
 
 ## What is dsh-defend?
 
@@ -111,13 +123,6 @@ dsh plugin --profile web add dsh-defend
 # 2. reinicie e verifique a linha
 dsh --profile web --dump-config | grep -A3 'id: dsh-defend'
 ```
-
-## Instalação e desinstalação
-
-- **Canal git** (último `main`): `dsh plugin --profile web add github:PerryLink/dsh-defend` — o script `prepare` compila apenas com dependências de produção.
-- **Canal npm** (versões publicadas): `dsh plugin --profile web add dsh-defend`.
-- **Canal tarball**: `pnpm pack` neste repositório e então `dsh plugin --profile web add ./dsh-defend-<version>.tgz`.
-- **Desinstalar**: `dsh plugin --profile web remove dsh-defend` (ou remova a linha do patch do perfil).
 
 ## Configuração
 
