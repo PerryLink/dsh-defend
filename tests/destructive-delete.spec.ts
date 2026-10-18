@@ -87,6 +87,12 @@ describe('reviewDestructiveDelete — deny(两次事故的命令形态)', () => 
   })
 })
 
+describe('reviewDestructiveDelete — script decomposition', () => {
+  it('does not borrow -Recurse from a later command', () => {
+    expect(REVIEW(`Remove-Item ${WS}/a.py; Get-ChildItem -Recurse .`, WORKSPACE)).toBeUndefined()
+  })
+})
+
 describe('reviewDestructiveDelete — allow(可静态核实的常规形态)', () => {
   it('allows non-recursive single-file deletes', () => {
     expect(REVIEW(`del ${WS}/report.txt`, WORKSPACE)).toBeUndefined()

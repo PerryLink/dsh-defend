@@ -310,11 +310,46 @@ export interface ReviewOptions {
 }
 
 /**
+ * Split a shell script into simple-command units on `;`, newlines, `&&`, `||`
+ * (outside quotes). A pipeline stays one unit: its later stages are not separate
+ * delete commands with independent flags.
+ */
+function splitSimpleCommands(command: string): string[] {
+  const parts: string[] = []
+  let current = ''
+  let quote: '"' | "'" | undefined
+  for (let index = 0; index < command.length; index += 1) {
+    const ch = command[index]
+    if (quote !== undefined) {
+      current += ch
+      if (ch === quote) quote = undefined
+      continue
+    }
+    if (ch === '"' || ch === "'") { quote = ch; current += ch; continue }
+    const two = command.slice(index, index + 2)
+    if (two === '&&' || two === '||') { parts.push(current); current = ''; index += 1; continue }
+    if (ch === ';' || ch === '\n') { parts.push(current); current = ''; continue }
+    current += ch
+  }
+  parts.push(current)
+  return parts.map(part => part.trim()).filter(part => part !== '')
+}
+
+/**
  * 评审一条 shell 命令:危险递归删除且任一目标未通过边界校验 → 返回拒绝
  * 判词;其余返回 undefined。无副作用、无 I/O(除 os 常量)。
  */
 export function reviewDestructiveDelete(command: string, options: ReviewOptions = {}): ReviewVerdict | undefined {
   if (DRY_RUN_MARKERS.some(marker => marker.test(command))) return undefined
+  for (const segment of splitSimpleCommands(command)) {
+    const verdict = reviewSimpleCommand(segment, options)
+    if (verdict !== undefined) return verdict
+  }
+  return undefined
+}
+
+/** One simple-command unit of {@link reviewDestructiveDelete}. */
+function reviewSimpleCommand(command: string, options: ReviewOptions = {}): ReviewVerdict | undefined {
   const verbIndex = DESTRUCTIVE_VERBS.findIndex(verb => verb.test(command))
   if (verbIndex === -1) return undefined
   const isGitClean = verbIndex === DESTRUCTIVE_VERBS.length - 1

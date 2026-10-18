@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.24] - 2026-10-19
+
+### Fixed
+
+- **A later command's `-Recurse` no longer taints an earlier non-recursive delete (issue #12).** The guard now splits a script on `;`, newlines, `&&`, and `||` (quotes respected; pipelines stay one unit) and evaluates each simple command independently. Relative targets are still refused by the existing explicit-absolute-path policy.
+
 ## [0.3.23] - 2026-10-18
 
 ### Changed
