@@ -131,7 +131,25 @@ Son los puntos de entrada reales; instala y llama a uno.
 
 #### Ejemplo detallado
 
-- `defend_report`
+**Comando**
+
+~~~sh
+defend_report
+~~~
+
+**Entrada**
+
+~~~json
+{}
+~~~
+
+**Salida**
+
+~~~text
+dsh-defend: 0 recorded detection(s), 0 blocked, 0 asked.
+~~~
+
+*Observado en `tests/lifecycle.spec.ts:91-126 (canonical empty value at :110-117); src/index.ts:772-775`*
 
 #### Ejemplos breves
 

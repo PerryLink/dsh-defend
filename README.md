@@ -145,7 +145,25 @@ These are the plugin's real entry points; install once, then call one.
 
 #### Detailed example
 
-- `defend_report`
+**Command**
+
+~~~sh
+defend_report
+~~~
+
+**Input**
+
+~~~json
+{}
+~~~
+
+**Output**
+
+~~~text
+dsh-defend: 0 recorded detection(s), 0 blocked, 0 asked.
+~~~
+
+*Observed from `tests/lifecycle.spec.ts:91-126 (canonical empty value at :110-117); src/index.ts:772-775`*
 
 #### Brief examples
 

@@ -144,7 +144,25 @@ dsh --profile web --dump-config | grep -A3 'id: dsh-defend'
 
 #### 详细示例
 
-- `defend_report`
+**命令**
+
+~~~sh
+defend_report
+~~~
+
+**输入**
+
+~~~json
+{}
+~~~
+
+**输出**
+
+~~~text
+dsh-defend: 0 recorded detection(s), 0 blocked, 0 asked.
+~~~
+
+*来源 `tests/lifecycle.spec.ts:91-126 (canonical empty value at :110-117); src/index.ts:772-775`*
 
 #### 简短示例
 
