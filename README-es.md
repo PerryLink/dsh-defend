@@ -223,7 +223,7 @@ Evidencia estática: `dsh-plugin-doctor` K10–K13 dan `pass` en todas las compr
 - [@PerryLink](https://github.com/PerryLink) — creador y mantenedor: guardia de borrado destructivo, portado de detección de cuatro activos, cableado de intercepción, superficie de auditoría y la documentación en cinco idiomas.
 - [@cuohua](https://github.com/cuohua) — el informe preciso sobre eventos `defend/detection` escritos sin marcar que hacen las sesiones irrecuperables en builds más estrictos ([#2](https://github.com/PerryLink/dsh-defend/issues/2)); la detección de capacidad de host en runtime y la disciplina del marcador `ignorable` derivan directamente de ese análisis.
 
-## Familia de plugins DSH de PerryLink
+## PerryLink DSH Plugin Family
 
 Este proyecto forma parte de la familia de plugins de DeepSeek Harness de [PerryLink](https://github.com/PerryLink). El registro permanece plegado abajo para que cada README conserve una primera pantalla corta; expándelo para ver cada fila y su estado.
 

@@ -236,7 +236,7 @@ pnpm pack           # 发布用 tarball
 - [@PerryLink](https://github.com/PerryLink) —— 创建者与维护者：危险删除门禁、四资产检测移植、拦截接线、审计面与五语文档。
 - [@cuohua](https://github.com/cuohua) —— 关于 `defend/detection` 事件未标记落盘导致会话在更严格构建上无法恢复的精准报告（[#2](https://github.com/PerryLink/dsh-defend/issues/2)）；运行时的宿主能力检测与 `ignorable` 标记纪律直接源自该分析。
 
-## PerryLink DSH 插件家族
+## PerryLink DSH Plugin Family
 
 本项目是 [PerryLink](https://github.com/PerryLink) 维护的 DeepSeek Harness 插件家族成员。完整名单默认折叠，避免每个 README 的首屏被长表淹没；点击展开可查看每一行及其状态。
 
