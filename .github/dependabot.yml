@@ -1,10 +1,9 @@
 version: 2
 updates:
+  # The GitHub Actions updater for this repository repeatedly fails inside
+  # Dependabot with an opaque "unknown_error"; npm updates are healthy.
+  # Actions are bumped manually in reviewed PRs until the updater recovers.
   - package-ecosystem: npm
-    directory: /
-    schedule:
-      interval: weekly
-  - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
