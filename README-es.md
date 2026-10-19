@@ -48,9 +48,10 @@ Defensa contra inyección de prompts, jailbreak y fugas de secretos para DeepSee
 
 Las reglas deciden lo conocido. La intercepción decide el resto — y todo queda auditado.
 
-![Demostración de terminal de dsh-defend: dsh-defend — install, then /defend and the red-team benchmark](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-hero.png)
+![Diagrama de flujo de dsh-defend: solicitud → política/revisión → veredicto.](docs/assets/dsh-defend-flow.svg)
 
-![Animated terminal demo of dsh-defend](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-demo.gif)
+*Resumen del flujo: solicitud → política/revisión → veredicto. Los ejemplos siguientes usan la superficie de comandos real.*
+
 
 *La misma ejecución, animada.*
 
@@ -123,6 +124,18 @@ dsh plugin --profile web add dsh-defend
 # 2. reinicia y verifica la fila
 dsh --profile web --dump-config | grep -A3 'id: dsh-defend'
 ```
+
+### Ejemplos
+
+Son los puntos de entrada reales; instala y llama a uno.
+
+#### Ejemplo detallado
+
+- `defend_report`
+
+#### Ejemplos breves
+
+- `/defend`
 
 ## Configuración
 

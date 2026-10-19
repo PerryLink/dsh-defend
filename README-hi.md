@@ -48,9 +48,10 @@ DeepSeek Harness के लिए प्रॉम्प्ट-इंजेक्
 
 नियम ज्ञात को तय करते हैं। बाकी को इंटरसेप्शन तय करता है — और सब कुछ ऑडिटेड रहता है।
 
-![dsh-defend का टर्मिनल डेमो: dsh-defend — install, then /defend and the red-team benchmark](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-hero.png)
+![dsh-defend कार्यप्रवाह आरेख: अनुरोध → नीति/समीक्षा → निर्णय।](docs/assets/dsh-defend-flow.svg)
 
-![Animated terminal demo of dsh-defend](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-demo.gif)
+*कार्यप्रवाह: अनुरोध → नीति/समीक्षा → निर्णय। नीचे के उदाहरण वास्तविक कमांड सतह का उपयोग करते हैं।*
+
 
 *वही रन, एनिमेटेड।*
 
@@ -123,6 +124,18 @@ dsh plugin --profile web add dsh-defend
 # 2. पुनः आरंभ करें और पंक्ति सत्यापित करें
 dsh --profile web --dump-config | grep -A3 'id: dsh-defend'
 ```
+
+### उदाहरण
+
+ये वास्तविक प्रवेश बिंदु हैं; इंस्टॉल के बाद एक चलाएँ।
+
+#### विस्तृत उदाहरण
+
+- `defend_report`
+
+#### संक्षिप्त उदाहरण
+
+- `/defend`
 
 ## कॉन्फ़िगरेशन
 

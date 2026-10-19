@@ -54,11 +54,11 @@ Prompt-injection, jailbreak, and secret-leak defense for DeepSeek Harness.
 
 Rules decide the known. Interception decides the rest — and everything is audited.
 
-![Terminal demo of dsh-defend: dsh-defend — install, then /defend and the red-team benchmark](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-hero.png)
+![Workflow diagram for dsh-defend: request → policy / review → verdict.](docs/assets/dsh-defend-flow.svg)
 
-![Animated terminal demo of dsh-defend](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-demo.gif)
+*Workflow overview: request → policy / review → verdict. The examples below use the real command surface.*
 
-*The same run, animated.*
+
 
 ## Maintenance status: 🧊 FROZEN
 
@@ -138,6 +138,18 @@ dsh plugin --profile web add dsh-defend
 # 2. restart and verify the row
 dsh --profile web --dump-config | grep -A3 'id: dsh-defend'
 ```
+
+### Examples
+
+These are the plugin's real entry points; install once, then call one.
+
+#### Detailed example
+
+- `defend_report`
+
+#### Brief examples
+
+- `/defend`
 
 ## Configuration
 

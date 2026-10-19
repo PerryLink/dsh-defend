@@ -41,9 +41,10 @@ DeepSeek Harness 的提示注入、越狱与密钥泄露防护。
 
 规则裁决已知的，拦截裁决其余的——一切都有审计。
 
-![dsh-defend 终端演示：dsh-defend — install, then /defend and the red-team benchmark](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-hero.png)
+![dsh-defend 工作流图：请求 → 策略/复核 → 判定。](docs/assets/dsh-defend-flow.svg)
 
-![Animated terminal demo of dsh-defend](https://raw.githubusercontent.com/PerryLink/dsh-defend/main/docs/assets/dsh-defend-demo.gif)
+*工作流概览：请求 → 策略/复核 → 判定。下面的示例使用实际命令面。*
+
 
 *同一次运行，动图版。*
 
@@ -136,6 +137,18 @@ dsh --profile web --dump-config | grep -A3 'id: dsh-defend'
 - **npm 通道**（正式发布版）：`dsh plugin --profile web add dsh-defend`。
 - **tarball 通道**：在本仓库执行 `pnpm pack`，然后 `dsh plugin --profile web add ./dsh-defend-<version>.tgz`。
 - **卸载**：`dsh plugin --profile web remove dsh-defend`（或从 profile patch 中删除该行）。
+
+### 示例
+
+以下为插件真实入口；安装后调用一个即可。
+
+#### 详细示例
+
+- `defend_report`
+
+#### 简短示例
+
+- `/defend`
 
 ## 配置
 
