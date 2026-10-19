@@ -165,6 +165,22 @@ dsh-defend: 0 recorded detection(s), 0 blocked, 0 asked.
 
 *Observed from `tests/lifecycle.spec.ts:91-126 (canonical empty value at :110-117); src/index.ts:772-775`*
 
+#### Failure branch
+
+**Input**
+
+~~~text
+Remove-Item -Recurse
+~~~
+
+**Output**
+
+~~~text
+{"kind":"deny","reason":"blocked dangerous recursive delete command (Remove-Item -Recurse): no explicit target path was printed. Dry-run first (Remove-Item -WhatIf / git clean -n / list the directory), verify each target one by one, then retry with an explicit absolute path"}
+~~~
+
+*Observed from `plugins/dsh-defend/src/index.ts:376-379; plugins/dsh-defend/tests/destructive-delete.spec.ts:68-71; verified via plugins/dsh-defend/lib/index.js`*
+
 #### Brief examples
 
 - `/defend`
