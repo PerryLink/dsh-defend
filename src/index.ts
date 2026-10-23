@@ -550,8 +550,8 @@ export function peerVersion(): string | null {
  * (2026-10-04,发布版 `0.2.1-alpha.1`):`append(type, data, ...opts)` 只从
  * options 取 `sourceEventSeqs`/`surfaceOp`,信封固定为 `{ type, seq, time,
  * data }`,`{ ignorable: true }` 被丢弃 ⇒ 0.2 预发布线与 0.1 线同属未标记,
- * 必须走版本预判而不是探测(探测会先污染一条日志再降级);稳定的 0.2.x 仍留待
- * 探测,留出"未来线补上 append 选项"的口子。
+ * 必须走版本预判而不是探测(探测会先污染一条日志再降级);稳定的 0.2.x 同样
+ * 走预判(issue #22 实测 0.2.1 稳定线仍丢弃 ignorable),只有 0.3+ 留待探测。
  * @param version - 安装的 peer 版本字符串。
  * @returns 已知未标记的发布线返回 true。
  */
@@ -578,10 +578,12 @@ export function isUnmarkedHostVersion(version: string): boolean {
   // clause the line falls through to the "possibly marker-aware" path, whose
   // append probe writes one unmarked event into the log BEFORE discovering the
   // host cannot stamp — the exact pollution this guard exists to prevent.
-  // Only PRERELEASES are classified here: a stable `0.2.x` may yet add the
-  // append option, and that must fail open into the probe instead.
-  const prerelease02 = /^0\.2\.(\d+)-/.exec(v)
-  if (prerelease02 !== null) return Number(prerelease02[1]) >= 0
+  // The whole 0.2 corridor is non-stamping, stable lines included: the probe
+  // would persist one unmarked event before it can discover that, so a stable
+  // 0.2.x must be classified here instead of failing open into the probe
+  // (issue #22). Only 0.3+ and later stay on the probe path.
+  const line02 = /^0\.2\.(\d+)(?:[-+].*)?$/.exec(v)
+  if (line02 !== null) return true
   return false
 }
 

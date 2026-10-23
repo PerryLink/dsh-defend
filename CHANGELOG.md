@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.25] - 2026-10-23
+
+### Fixed
+
+- **Stable 0.2.x hosts no longer get one unmarked `defend/detection` event written before audit disables itself (issue #22).** `isUnmarkedHostVersion` classified only `0.2.x` prereleases; a stable `0.2.x` fell through to the append probe, which persists one unmarked event and only then discovers that `Session.append` drops `ignorable`. On 0.2.1 the next cold load refuses the log (`unknown ... not marked ignorable`), so the session is lost. The whole 0.2 corridor is now classified before the first write; `0.3+` still goes through the probe. Tests cover stable and prerelease 0.2.x, the marker-aware future line, and the no-write-before-disable path.
+
 ## [0.3.24] - 2026-10-19
 
 ### Fixed

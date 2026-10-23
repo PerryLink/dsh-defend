@@ -39,14 +39,11 @@ function execOf(harness: Harness, name: string, args: unknown): ToolExecution {
 /** 已知未标记的已发布版本线分类(rc8 复核 + master 0.1.2-alpha.1 fail-closed + 0.2 预发布线复核 2026-10-04)。 */
 describe('isUnmarkedHostVersion', () => {
   it('flags every released pre-marker line and the fail-closed master line, letting future lines fall back to the probe', () => {
-    for (const version of ['0.1.0-rc.1', '0.1.0-rc.6', '0.1.0-rc.7', '0.1.0-rc.8', '0.1.1-rc.1', '0.1.1-rc.2', '0.1.2-alpha.1', '0.1.2', '0.1.3-beta.1', '0.1.2-rc.1', '0.1.6-alpha.2', '0.1.7-alpha.1', '0.1.7-alpha.2', '0.2.0-alpha.1', '0.2.1-alpha.1']) expect(isUnmarkedHostVersion(version)).toBe(true)
-    // A STABLE `0.2.x` stays out on purpose: it may yet ship an `append` option
-    // that stamps the marker, and that line must reach the probe instead of
-    // being written off. (Measured on the published `0.2.1-alpha.1`: the
-    // envelope is `{ type, seq, time, data }` plus `surfaceOp`/`sourceEventSeqs`
-    // only, so the PRERELEASES on that corridor cannot stamp either — classifying
-    // them here is what keeps the probe from writing one unmarked event first.)
-    for (const version of ['0.1.0-rc.9', '0.1.1-rc.3', '0.1.0', '0.2.0', '0.2.1', '0.1.0-rc.6-pre', 'garbage']) expect(isUnmarkedHostVersion(version)).toBe(false)
+    for (const version of ['0.1.0-rc.1', '0.1.0-rc.6', '0.1.0-rc.7', '0.1.0-rc.8', '0.1.1-rc.1', '0.1.1-rc.2', '0.1.2-alpha.1', '0.1.2', '0.1.3-beta.1', '0.1.2-rc.1', '0.1.6-alpha.2', '0.1.7-alpha.1', '0.1.7-alpha.2', '0.2.0-alpha.1', '0.2.1-alpha.1', '0.2.0', '0.2.1', '0.2.2', '0.2.1-rc.2']) expect(isUnmarkedHostVersion(version)).toBe(true)
+    // The whole 0.2 corridor is classified, stable lines included: the 0.2.1
+    // stable host still drops the `ignorable` option (issue #22), and the probe
+    // would write one unmarked event before discovering that.
+    for (const version of ['0.1.0-rc.9', '0.1.1-rc.3', '0.1.0', '0.3.0', '0.3.0-rc.1', '0.1.0-rc.6-pre', 'garbage']) expect(isUnmarkedHostVersion(version)).toBe(false)
   })
 })
 
@@ -108,7 +105,7 @@ describe('DetectionAuditSink', () => {
   it('a marker-aware host passes the append probe and keeps auditing (no warning)', () => {
     const { session, append } = fakeSession(true)
     const warn = vi.fn()
-    const sink = new DetectionAuditSink({ warn }, false, () => '0.2.0')
+    const sink = new DetectionAuditSink({ warn }, false, () => '0.3.0')
     sink.append(session, sampleEvent())
     sink.append(session, sampleEvent())
     expect(append).toHaveBeenCalledTimes(2)
@@ -126,14 +123,14 @@ describe('DetectionAuditSink', () => {
     expect(String(warn.mock.calls[0]?.[0])).toContain('allowUnmarkedAudit')
   })
 
-  it('a 0.2 prerelease host disables session-log audit BEFORE the first append (the probe would pollute a non-stamping log)', () => {
+  it('a stable 0.2.x host disables session-log audit BEFORE the first append (the probe would pollute a non-stamping log)', () => {
     // `0.2.1-alpha.1` is the installed test peer: `append` drops the options bag,
     // so a probe would write ONE unmarked `defend/detection` event into the log
     // and only then discover the host cannot stamp it — the version pre-check
     // has to classify the line instead.
     const { session, append } = fakeSession(false)
     const warn = vi.fn()
-    const sink = new DetectionAuditSink({ warn }, false, () => '0.2.1-alpha.1')
+    const sink = new DetectionAuditSink({ warn }, false, () => '0.2.1')
     sink.append(session, sampleEvent())
     sink.append(session, sampleEvent())
     expect(append).not.toHaveBeenCalled()
