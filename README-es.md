@@ -59,14 +59,14 @@ Las reglas deciden lo conocido. La intercepción decide el resto — y todo qued
 
 > **Congelado el 2026-10-05. Sin nuevas funciones.** Este paquete sigue funcionando y **no está retirado**, pero ya no recibe trabajo de funciones; solo se corregirá una avería real.
 
-Los mantenedores consideran que en esta capacidad **ya existen alternativas con mejor adopción**, así que el esfuerzo se ha trasladado. Comparativa medida el 2026-10-05:
+Los mantenedores consideran que en esta capacidad **la comunidad ha convergido en una implementación más ampliamente adoptada**, así que el esfuerzo se ha trasladado. Comparativa medida el 2026-10-05:
 
 | | paquete | descargas semanales |
 |---|---|---|
 | **este paquete** | `dsh-defend` | 937 |
-| alternativa mejor adoptada | [`cc-safety-net`](https://github.com/kenryu42/cc-safety-net) | **13,087** |
+| implementación más ampliamente adoptada | [`cc-safety-net`](https://github.com/kenryu42/cc-safety-net) | **13,087** |
 
-👉 **Para trabajo nuevo, prefiera `cc-safety-net`.** Este paquete sigue siendo el detector más amplio, pero está congelado y no recibirá nuevas funciones. Las instalaciones existentes siguen funcionando sin cambios.
+👉 **Para trabajo nuevo, `cc-safety-net` es la opción principal para la puerta de comandos destructivos.** Este paquete sigue siendo el detector más amplio, pero está congelado y no recibirá nuevas funciones. Las instalaciones existentes siguen funcionando sin cambios.
 
 *Evidencia completa: `dsh-plugin-supersession-review-20261005.md`. Texto completo en la sección **Maintenance status: 🧊 FROZEN** de [README.md](README.md).*
 

@@ -52,18 +52,18 @@ DeepSeek Harness 的提示注入、越狱与密钥泄露防护。
 
 > **2026-10-05 起冻结，不再新增功能。** 本包仍可正常使用，**没有退役**——但不再投入功能开发，只有真实故障才会修复。
 
-维护者判定该能力面**已出现采用度更高、更值得推荐的替代方案**，因此把精力移到了别处。
+维护者判定该能力面**生态已收敛到更广泛采用的实现**，因此把精力移到了别处。
 
 | | 包 | 周下载量 |
 |---|---|---|
 | **本包** | `dsh-defend` | 937 |
-| 更值得推荐的替代品 | [`cc-safety-net`](https://github.com/kenryu42/cc-safety-net) | **13,087** |
+| 更广泛采用的实现 | [`cc-safety-net`](https://github.com/kenryu42/cc-safety-net) | **13,087** |
 
-**为什么替代品更强。** `cc-safety-net` 作为编程 Agent 的 CLI hook，拦截破坏性命令与密钥文件访问。
+**为什么它是主流选择。** `cc-safety-net` 作为编程 Agent 的 CLI hook，拦截破坏性命令与密钥文件访问。
 
 **本包仍然独有的能力。** 从 prompt-injection / jailbreak / secret-leaker 三个上游资产集移植的 **Aho-Corasick 模式引擎**；对**用户消息、工具参数、工具结果**三处做 allow/ask/block 三档拦截；以及经脱敏的 `defend/*` 会话审计事件。上面的替代品范围更窄（只管破坏性命令与密钥文件），但采用度高出一个数量级。
 
-👉 **新工作请优先使用 `cc-safety-net`**（若你只需要破坏性命令闸门）；若你要的是更宽的检测面，本包仍是更广的那个，但已冻结不再加功能。 已安装的照常可用，没有任何东西被移除。
+👉 **新工作以 `cc-safety-net` 为破坏性命令闸门的主流选择；若你要的是更宽的检测面，本包仍是更广的那个，但已冻结不再加功能。** 已安装的照常可用，没有任何东西被移除。
 
 *完整证据（含宿主版本兼容矩阵）见 `dsh-plugin-supersession-review-20261005.md`；英文版见 [README.md](README.md) 的 **Maintenance status: 🧊 FROZEN** 一节。*
 

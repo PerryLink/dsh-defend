@@ -59,14 +59,14 @@ Regras decidem o conhecido. A interceptação decide o resto — e tudo fica aud
 
 > **Congelado em 2026-10-05. Sem novos recursos.** Este pacote continua funcionando e **não foi aposentado**, mas não recebe mais trabalho de recursos; apenas uma falha real será corrigida.
 
-Os mantenedores consideram que nesta capacidade **já existem alternativas com melhor adoção**, então o esforço foi redirecionado. Comparação medida em 2026-10-05:
+Os mantenedores consideram que nesta capacidade **a comunidade convergiu em uma implementação mais amplamente adotada**, então o esforço foi redirecionado. Comparação medida em 2026-10-05:
 
 | | pacote | downloads semanais |
 |---|---|---|
 | **este pacote** | `dsh-defend` | 937 |
-| alternativa mais adotada | [`cc-safety-net`](https://github.com/kenryu42/cc-safety-net) | **13,087** |
+| implementação mais amplamente adotada | [`cc-safety-net`](https://github.com/kenryu42/cc-safety-net) | **13,087** |
 
-👉 **Para trabalho novo, prefira `cc-safety-net`.** Este pacote continua sendo o detector mais amplo, mas está congelado e não receberá novos recursos. As instalações existentes continuam funcionando sem alterações.
+👉 **Para trabalho novo, `cc-safety-net` é a escolha principal para o gate de comandos destrutivos.** Este pacote continua sendo o detector mais amplo, mas está congelado e não receberá novos recursos. As instalações existentes continuam funcionando sem alterações.
 
 *Evidência completa: `dsh-plugin-supersession-review-20261005.md`. Texto completo na seção **Maintenance status: 🧊 FROZEN** de [README.md](README.md).*
 

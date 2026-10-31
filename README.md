@@ -64,20 +64,20 @@ Rules decide the known. Interception decides the rest — and everything is audi
 
 > **Frozen on 2026-10-05. No new features.** This package still works, and it is not retired — but it no longer receives feature work. Only a genuine breakage will be fixed.
 
-Maintainers treat this capability as one where **better-adopted alternatives now exist**, so effort has moved elsewhere. The comparison below was measured on 2026-10-05 and is recorded so nobody has to redo it.
+Maintainers treat this capability as one where **the ecosystem has converged on a more widely adopted implementation**, so effort has moved elsewhere. The comparison below was measured on 2026-10-05 and is recorded so nobody has to redo it.
 
 | | package | weekly downloads |
 |---|---|---|
 | **this package** | `dsh-defend` | 937 |
-| better-adopted alternative | [`cc-safety-net`](https://github.com/kenryu42/cc-safety-net) | **13,087** |
+| more widely adopted implementation | [`cc-safety-net`](https://github.com/kenryu42/cc-safety-net) | **13,087** |
 
-**Why the alternative leads.** `cc-safety-net` provides blocks destructive commands and secret-file access as a coding-agent CLI hook.
+**Why it is the mainstream choice.** `cc-safety-net` provides blocks destructive commands and secret-file access as a coding-agent CLI hook.
 
 **Compatibility.** declares no dsh peers, so the compatibility guard never blocks it.
 
 **What this package still does that the alternatives do not.** this package's differentiators are the Aho-Corasick pattern engine ported from the prompt-injection / jailbreak / secret-leaker asset sets, three-way allow/ask/block interception on user messages, tool arguments AND tool results, and sanitized defend/* session audit events. The rival above is narrower (destructive commands and secret files) but is adopted an order of magnitude more widely.
 
-👉 **For new work, prefer dsh-defend is still the broader detector; cc-safety-net is the far better-adopted alternative for the destructive-command gate specifically.** Existing installs keep working unchanged; nothing is being removed.
+👉 **For new work, cc-safety-net is the mainstream choice for the destructive-command gate; dsh-defend is still the broader detector.** Existing installs keep working unchanged; nothing is being removed.
 
 *Full evidence, including the host-version compatibility matrix: `dsh-plugin-supersession-review-20261005.md`.*
 
