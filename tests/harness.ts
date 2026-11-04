@@ -1,7 +1,8 @@
 /**
  * Shared test harness for the detection layer: REAL Cordis `Context`,
- * REAL `SessionStore`/`Session`, REAL `ToolRuntime`, REAL `Commands`, and
- * REAL `ApprovalService` from the 0.1.1-rc.2 peers — plus a structurally
+ * REAL `SessionStore`/`Session`, REAL `SessionProjectionRegistry`,
+ * REAL `ToolRuntime` + `NativeToolExecutor`, REAL `Commands`, and
+ * REAL `ApprovalService` from the 0.2.2 peers — plus a structurally
  * complete fake agent. Interceptions run the real waterfalls; only the
  * agent object is a driver-shaped fake (like dsh-click's harness).
  *
@@ -12,6 +13,9 @@ import { Context, type Fiber } from '@deepseek-ai/cordis'
 import type { Agent } from '@deepseek-ai/dsh-agent'
 import CommandRuntime from '@deepseek-ai/dsh-commands'
 import SessionStore, { SessionId, type Session } from '@deepseek-ai/dsh-session'
+import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
+import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
+import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
 import ToolRuntime from '@deepseek-ai/dsh-tools'
 import ApprovalService from '@deepseek-ai/dsh-user-approval'
 
@@ -66,10 +70,19 @@ export interface HarnessOptions {
 export async function mountHarness(options: HarnessOptions = {}): Promise<Harness> {
   const ctx = new Context()
   await ctx.plugin(SessionStore)
+  // 0.2.2: ApprovalService statically injects `sessionProjections` and mounts
+  // only once the registry is present; without it every ask fails closed.
+  await ctx.plugin(SessionProjectionRegistry)
   const session = ctx.sessions.create(SessionId('dsh-defend-harness'))
   session.append('turn/start', { turn: 1 })
-  ctx.provide('systemPrompt', { tools: () => () => undefined, section: () => () => undefined } as never)
   await ctx.plugin(ToolRuntime)
+  // 0.2.2 moved raw batch execution behind a pluggable executor: `tools.execute`
+  // rejects with ToolExecutorUnavailableError until one is selected.
+  await ctx.plugin(NativeToolExecutor)
+  // 0.2.2's ApprovalService registers its policy section through the prompt
+  // service at init (`getContextOrder` + `context`), so the real service has to
+  // be mounted instead of the former minimal stub.
+  await ctx.plugin(SystemPrompt)
   if (options.commands !== false) await ctx.plugin(CommandRuntime)
 
   if (options.approval !== 'absent') {

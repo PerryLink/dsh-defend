@@ -10,19 +10,19 @@
 import type { Context } from '@deepseek-ai/cordis'
 import Loader from '@deepseek-ai/cordis-plugin-loader'
 import type { ContentBlock } from '@deepseek-ai/dsh-llm'
-import type { PreToolDecision, ToolExecution } from '@deepseek-ai/dsh-tools'
+import type { PreToolDecision, ToolBatchInput, ToolExecution } from '@deepseek-ai/dsh-tools'
 import { describe, expect, it } from 'vitest'
 import * as plugin from '../src/index.ts'
-import { mountHarness, type Harness } from './harness.ts'
+import { mountHarness } from './harness.ts'
 
 /**
  * Brand a synthetic tool-call id without naming the host line's brand: the
- * published `0.1.1-rc.2` line exports `CallId` while host HEAD renamed it to
- * `ToolCallId` — deriving the type from `tools.execute` keeps both typecheck
+ * 0.1.x lines exported `CallId` and host HEAD renamed it to `ToolCallId` —
+ * deriving the type from the batch input's call blocks keeps both typecheck
  * rulers green.
  */
-type ToolExecInput = Parameters<Harness['ctx']['tools']['execute']>[0]
-const makeCallId = (id: string): ToolExecInput['callId'] => id as ToolExecInput['callId']
+type ToolCallId = ToolBatchInput['calls'][number]['id']
+const makeCallId = (id: string): ToolCallId => id as ToolCallId
 
 const WORKSPACE = 'D:\\fake-workspace'
 
@@ -96,15 +96,14 @@ describe('tool three interfaces', () => {
       expect(schema).toBeDefined()
       expect(schema?.parameters).toBeDefined()
 
-      const result = await harness.ctx.tools.execute({
-        callId: makeCallId('dsh-defend-three-interfaces'),
-        name: 'defend_report',
-        arguments: {},
+      const batch = await harness.ctx.tools.execute({
+        calls: [{ type: 'tool-call', id: makeCallId('dsh-defend-three-interfaces'), name: 'defend_report', arguments: '{}' }],
         agent: harness.agent,
         signal: new AbortController().signal,
       })
-      expect(result.isError).toBe(false)
-      if (result.isError) return
+      const result = batch.results[0]?.result
+      expect(result?.isError).toBe(false)
+      if (result === undefined || result.isError) return
 
       // Canonical value (empty in-memory ring buffer before any interception).
       expect(result.value).toEqual({

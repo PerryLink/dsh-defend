@@ -8,18 +8,18 @@
  */
 
 import type { ContentBlock } from '@deepseek-ai/dsh-llm'
-import type { PostToolDecision, PreToolDecision, ToolExecution, ToolExecutionResult } from '@deepseek-ai/dsh-tools'
+import type { PostToolDecision, PreToolDecision, ToolBatchInput, ToolExecution, ToolExecutionResult } from '@deepseek-ai/dsh-tools'
 import { describe, expect, it } from 'vitest'
 import { mountHarness, type Harness } from './harness.ts'
 
 /**
  * Brand a synthetic tool-call id without naming the host line's brand: the
- * published `0.1.1-rc.2` line exports `CallId` while host HEAD renamed it to
- * `ToolCallId` — deriving the type from `tools.execute` keeps both typecheck
+ * 0.1.x lines exported `CallId` and host HEAD renamed it to `ToolCallId` —
+ * deriving the type from the batch input's call blocks keeps both typecheck
  * rulers green.
  */
-type ToolExecInput = Parameters<Harness['ctx']['tools']['execute']>[0]
-const makeCallId = (id: string): ToolExecInput['callId'] => id as ToolExecInput['callId']
+type ToolCallId = ToolBatchInput['calls'][number]['id']
+const makeCallId = (id: string): ToolCallId => id as ToolCallId
 
 function execOf(harness: Harness, name: string, args: unknown, signal = new AbortController().signal): ToolExecution {
   return {
@@ -218,15 +218,14 @@ describe('audit and report surfaces', () => {
   it('defend_report returns the in-memory totals', async () => {
     const harness = await mountHarness({ config: { detection: { injectionAction: 'block' } } })
     await harness.ctx.waterfall('tools/pre-execute', execOf(harness, 'write', { command: INJECTION }), () => Promise.resolve<PreToolDecision>({ kind: 'allow' }))
-    const result = await harness.ctx.tools.execute({
-      callId: makeCallId('report-1'),
-      name: 'defend_report',
-      arguments: {},
+    const batch = await harness.ctx.tools.execute({
+      calls: [{ type: 'tool-call', id: makeCallId('report-1'), name: 'defend_report', arguments: '{}' }],
       agent: harness.agent,
       signal: new AbortController().signal,
     })
-    expect(result.isError).toBe(false)
-    if (!result.isError) {
+    const result = batch.results[0]?.result
+    expect(result?.isError).toBe(false)
+    if (result !== undefined && !result.isError) {
       const value = result.value as { total: number; blocked: number; byFamily: { injection: number } }
       expect(value.total).toBeGreaterThanOrEqual(1)
       expect(value.blocked).toBeGreaterThanOrEqual(1)

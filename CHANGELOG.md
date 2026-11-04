@@ -1,16 +1,16 @@
 # Changelog
 
-## [0.3.26] - 2026-10-31
+## [Unreleased]
 
 ### Changed
 
-- Reframe the frozen-status copy in all five READMEs as ecosystem convergence on a more widely adopted implementation; no code change.
-
-## [0.3.25] - 2026-10-23
+- **Host 0.2.2 line support.** devDependencies move from 0.2.1-rc.2 to 0.2.2-rc.1; `@deepseek-ai/cordis` moves to 4.1.0, `cordis-plugin-include`/`cordis-plugin-loader` to 1.1.0, and `@deepseek-ai/schemastery` to ~3.19.0 so a single copy resolves against `@deepseek-ai/dsh-llm` 0.2.2. `engines.dsh` appends `>=0.2.2-0 <0.3.0` (append-only) and `engines.node` becomes `^22.19.0 || >=24.9.0`. No behaviour change in `src/`: only the pinned host family and the test harness move.
 
 ### Fixed
 
-- **Stable 0.2.x hosts no longer get one unmarked `defend/detection` event written before audit disables itself (issue #22).** `isUnmarkedHostVersion` classified only `0.2.x` prereleases; a stable `0.2.x` fell through to the append probe, which persists one unmarked event and only then discovers that `Session.append` drops `ignorable`. On 0.2.1 the next cold load refuses the log (`unknown ... not marked ignorable`), so the session is lost. The whole 0.2 corridor is now classified before the first write; `0.3+` still goes through the probe. Tests cover stable and prerelease 0.2.x, the marker-aware future line, and the no-write-before-disable path.
+- Add `@deepseek-ai/dsh-package-manifest`: `@deepseek-ai/dsh-llm` 0.2.2's published types import it but its manifest does not declare it.
+- The test harness mounts `@deepseek-ai/dsh-tool-executor-native` and `@deepseek-ai/dsh-session-projection`: 0.2.2 moved raw batch execution behind a pluggable executor (`tools.execute` rejects until one is selected) and `ApprovalService` statically injects `sessionProjections`. It also mounts the real `@deepseek-ai/dsh-system-prompt`, whose `getContextOrder`/`context` the approval service calls during init.
+- The `defend_report` assertions use the 0.2.2 batch execute shape (`calls[]` carrying a JSON string argument) and unwrap `batch.results[0]?.result`.
 
 ## [0.3.24] - 2026-10-19
 
