@@ -1,39 +1,34 @@
 <div align="center">
 
-# 🛡️ dsh-defend
-- **1024 store channel**: `npm i -g dsh1024` once, then `dsh1024 plugin --profile web add dsh-defend` (counts toward the [deepseek1024.com](https://deepseek1024.com) install ranking).
-[![Gitee](https://img.shields.io/badge/Gitee-mirror-c71d23?logo=gitee)](https://gitee.com/perrylink/dsh-defend)
-[![dshfind](https://dshfind.com/api/badge/PerryLink/dsh-defend?metric=downloads)](https://dshfind.com/plugins/PerryLink/dsh-defend?ref=badge)
-[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/PerryLink/dsh-defend/badge)](https://api.securityscorecards.dev/projects/github.com/PerryLink/dsh-defend)
+# dsh-defend
 
 **Prompt-injection, jailbreak, and secret-leak defense for DeepSeek Harness.**
 
-*Rules decide the known. Interception decides the rest — and everything is audited.*
+Rules decide the known. Interception decides the rest — and everything is audited.
 
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
-[![DSH plugin](https://img.shields.io/badge/dsh--plugin-✅-green)](https://github.com/topics/dsh-plugin)
-[![dsh-doctor](https://raw.githubusercontent.com/PerryLink/dsh-plugin-doctor/main/badges/PerryLink__dsh-defend.svg)](https://github.com/PerryLink/dsh-plugin-doctor#verified-徽章)
-[![DSH Market](https://raw.githubusercontent.com/2BingLing/dsh-market/master/assets/readme/badge-listed-en.svg)](https://dsh.market/)
-[![Node](https://img.shields.io/badge/node-%5E22.19%20%7C%7C%20%3E%3D24-brightgreen.svg)](#)
-[![CI](https://img.shields.io/github/actions/workflow/status/PerryLink/dsh-defend/ci.yml?branch=main&label=CI)](https://github.com/PerryLink/dsh-defend/actions)
-[![Version](https://img.shields.io/github/v/tag/PerryLink/dsh-defend?label=version)](https://github.com/PerryLink/dsh-defend/releases)
-[![npm version](https://img.shields.io/npm/v/dsh-defend)](https://www.npmjs.com/package/dsh-defend)
-[![npm downloads](https://img.shields.io/npm/dm/dsh-defend)](https://www.npmjs.com/package/dsh-defend)
+[简体中文](README-zh.md) · [Español](README-es.md) · [Português](README-pt.md) · [हिन्दी](README-hi.md)
 
-[English](README.md) · [简体中文](README-zh.md) · [Español](README-es.md) · [Português](README-pt.md) · [हिन्दी](README-hi.md)
+[![License](https://img.shields.io/badge/license-Apache--2.0-3366CC?style=flat-square&labelColor=2B3245)](LICENSE)
+[![DSH](https://img.shields.io/badge/DSH-%E2%89%A50.2.1%20%3C0.3.0-4B67B4?style=flat-square&labelColor=2B3245)](#compatibility)
+[![npm](https://img.shields.io/npm/v/dsh-defend?style=flat-square&labelColor=2B3245&color=CB3837)](https://www.npmjs.com/package/dsh-defend)
+[![CI](https://img.shields.io/github/actions/workflow/status/PerryLink/dsh-defend/ci.yml?branch=main&label=CI&style=flat-square&labelColor=2B3245)](https://github.com/PerryLink/dsh-defend/actions/workflows/ci.yml)
+[![Node](https://img.shields.io/badge/node-%5E22.19%20%7C%7C%20%3E=24-339933?style=flat-square&labelColor=2B3245)](#compatibility)
+
+[![Stars](https://img.shields.io/github/stars/PerryLink/dsh-defend?style=flat-square&labelColor=2B3245)](https://github.com/PerryLink/dsh-defend/stargazers)
+[![npm downloads](https://img.shields.io/npm/dm/dsh-defend?style=flat-square&labelColor=2B3245&color=CB3837)](https://www.npmjs.com/package/dsh-defend)
+[![dshfind](https://dshfind.com/api/badge/PerryLink/dsh-defend?metric=downloads)](https://dshfind.com/plugins/PerryLink/dsh-defend?ref=badge)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/PerryLink/dsh-defend/badge)](https://securityscorecards.dev/viewer/?uri=github.com/PerryLink/dsh-defend)
+[![DSH Market](https://img.shields.io/badge/DSH_Market-listed-4B67B4?style=flat-square&labelColor=2B3245)](https://dsh.market/)
+[![Gitee](https://img.shields.io/badge/Gitee-mirror-C71D23?style=flat-square&labelColor=2B3245&logo=gitee)](https://gitee.com/perrylink/dsh-defend)
 
 ```sh
 dsh plugin --profile <name> add dsh-defend
 ```
 
-
 </div>
 
----
+<sub>Community plugin, not affiliated with DeepSeek. Canonical repository: <https://github.com/PerryLink/dsh-defend> (Gitee is a mirror).</sub>
 
-**📖 Ecosystem knowledge base** — measured data, not marketing: [plugin development guide · plugin-selection data · maintenance criteria](https://perrylink.github.io/dsh-plugin-guide/).
-
-<!-- star-cta -->
 ## Install & uninstall
 
 - **git channel** (latest `main`): `dsh plugin --profile web add github:PerryLink/dsh-defend` — the `prepare` script builds with production dependencies only.
