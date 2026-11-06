@@ -1,5 +1,10 @@
 <div align="center">
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-defend-hero-en-dark.webp">
+  <img src="docs/assets/dsh-defend-hero-en-light.webp" width="100%" alt="dsh-defend स्कैन लेजर: वास्तविक नियम id, allow / ask / block निर्णय और एक redacted क्रेडेंशियल">
+</picture>
+
 # 🛡️ dsh-defend
 - **1024 स्टोर चैनल**: एक बार `npm i -g dsh1024`, फिर `dsh1024 plugin --profile web add dsh-defend` ([deepseek1024.com](https://deepseek1024.com) इंस्टॉल रैंकिंग में गिना जाता है)।
 
@@ -19,7 +24,7 @@
 [![npm downloads](https://img.shields.io/npm/dm/dsh-defend)](https://www.npmjs.com/package/dsh-defend)
 [![dshfind](https://dshfind.com/api/badge/PerryLink/dsh-defend?metric=downloads&lang=hi)](https://dshfind.com/hi/plugins/PerryLink/dsh-defend?ref=badge)
 
-[English](README.md) · [简体中文](README-zh.md) · [Español](README-es.md) · [Português](README-pt.md) · [हिन्दी](README-hi.md)
+[简体中文](README.md) · [English](README.en.md) · [Español](README.es.md) · [Português](README.pt.md) · [हिन्दी](README.hi.md)
 
 ```sh
 dsh plugin --profile <name> add dsh-defend
@@ -48,9 +53,12 @@ DeepSeek Harness के लिए प्रॉम्प्ट-इंजेक्
 
 नियम ज्ञात को तय करते हैं। बाकी को इंटरसेप्शन तय करता है — और सब कुछ ऑडिटेड रहता है।
 
-![dsh-defend कार्यप्रवाह आरेख: अनुरोध → नीति/समीक्षा → निर्णय।](docs/assets/dsh-defend-flow.svg)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-defend-flow-v5-dark.svg">
+  <img src="docs/assets/dsh-defend-flow-v5-light.svg" width="100%" alt="dsh-defend डिटेक्शन पाइपलाइन: तीन इंटरसेप्शन बिंदु एक स्कैन कोर पर मिलते हैं, allow / ask / block में बँटते हैं और नीचे सैनिटाइज़्ड ऑडिट बैंड है">
+</picture>
 
-*कार्यप्रवाह: अनुरोध → नीति/समीक्षा → निर्णय। नीचे के उदाहरण वास्तविक कमांड सतह का उपयोग करते हैं।*
+*डिटेक्शन पाइपलाइन: तीन इंटरसेप्शन बिंदु एक स्कैन कोर पर मिलते हैं; हर हिट allow / ask / block से गुज़रता है और एक सैनिटाइज़्ड इवेंट छोड़ता है।*
 
 
 *वही रन, एनिमेटेड।*

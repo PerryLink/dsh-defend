@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="660" viewBox="0 0 1100 660" role="img" aria-label="dsh-defend detection pipeline: three interception seams converge on one scan core, which fans out into allow, ask and block verdicts, with an inline destructive-delete guard and a sanitized audit band">
+<title>dsh-defend · detection pipeline</title>
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f9f6fd"/><stop offset="1" stop-color="#e4eaf8"/></linearGradient>
+<filter id="soft" x="-30%" y="-30%" width="170%" height="180%"><feDropShadow dx="0" dy="8" stdDeviation="11" flood-color="#1b1735" flood-opacity="0.14"/></filter>
+<marker id="arr" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0.5 0.5 L9.5 5 L0.5 9.5 z" fill="#4B67B4"/></marker>
+<marker id="arr-dim" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0.5 0.5 L9.5 5 L0.5 9.5 z" fill="#8f94a4"/></marker>
+<marker id="arr-allow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0.5 0.5 L9.5 5 L0.5 9.5 z" fill="#2E7D5B"/></marker>
+</defs>
+<rect width="1100" height="660" fill="url(#bg)"/>
+<circle cx="1010" cy="86" r="230" fill="#4B67B4" opacity="0.05"/>
+<text x="44" y="50" fill="#14141a" font-family="Segoe UI, Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" font-size="24" font-weight="700" text-anchor="start">dsh-defend · detection pipeline</text>
+<text x="44" y="78" fill="#4d5261" font-family="Segoe UI, Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" font-size="15" font-weight="400" text-anchor="start">three seams → one automaton pass → allow / ask / block → one audit event</text>
+<text x="1056" y="46" fill="#8f94a4" font-family="Consolas, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="400" text-anchor="end">src/index.ts · src/detect/scanner.ts</text>
+<text x="1056" y="72" fill="#4B67B4" font-family="Consolas, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="400" text-anchor="end">62 rules = 50 patterns + 12 secret grammars</text>
+<g filter="url(#soft)"><rect x="44" y="104" width="256" height="76" rx="16" fill="#ffffff" stroke="#e6e2f0" stroke-width="1.5"/></g>
+<text x="64" y="132" fill="#14141a" font-family="Segoe UI, Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" font-size="17" font-weight="600" text-anchor="start">user message</text>
+<text x="64" y="154" fill="#4B67B4" font-family="Consolas, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="400" text-anchor="start">agent/pre-step</text>
+<g filter="url(#soft)"><rect x="44" y="192" width="296" height="108" rx="16" fill="#ffffff" stroke="#e6e2f0" stroke-width="1.5"/></g>
+<text x="64" y="220" fill="#14141a" font-family="Segoe UI, Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" font-size="17" font-weight="600" text-anchor="start">tool arguments</text>
+<text x="64" y="242" fill="#4B67B4" font-family="Consolas, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="400" text-anchor="start">tools/pre-execute</text>
+<rect x="60" y="250" width="264" height="42" rx="12" fill="#f4efe8" stroke="#ded0bb" stroke-width="1.2"/>
+<text x="74" y="266" fill="#94651D" font-family="Segoe UI, Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" font-size="14" font-weight="700" text-anchor="start">destructive-delete guard</text>
+<text x="74" y="284" fill="#94651D" font-family="Consolas, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="400" text-anchor="start">prepend → deny / ask</text>
+<g filter="url(#soft)"><rect x="44" y="312" width="256" height="76" rx="16" fill="#ffffff" stroke="#e6e2f0" stroke-width="1.5"/></g>
+<text x="64" y="340" fill="#14141a" font-family="Segoe UI, Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" font-size="17" font-weight="600" text-anchor="start">tool results</text>
+<text x="64" y="362" fill="#4B67B4" font-family="Consolas, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="400" text-anchor="start">tools/post-execute</text>
+<path d="M 300 142 H 344 Q 354 142 354 152 V 246" fill="none" stroke="#4B67B4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M 300 350 H 344 Q 354 350 354 340 V 246" fill="none" stroke="#4B67B4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="340" y1="246" x2="358" y2="246" stroke="#4B67B4" stroke-width="2.2" stroke-linecap="round"/>
+<line x1="354" y1="246" x2="392" y2="246" stroke="#4B67B4" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arr)"/>
+<g filter="url(#soft)"><rect x="396" y="104" width="324" height="284" rx="18" fill="#ffffff" stroke="#4B67B4" stroke-width="1.6"/></g>
+<text x="420" y="138" fill="#14141a" font-family="Segoe UI, Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" font-size="18" font-weight="700" text-anchor="start">scan core</text>
+<text x="696" y="138" fill="#4B67B4" font-family="Consolas, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="400" text-anchor="end">buildScanner()</text>
+<line x1="420" y1="154" x2="696" y2="154" stroke="#e9e5f2" stroke-width="1.5" stroke-linecap="round"/>
+<circle cx="430" cy="175" r="10.5" fill="#e5e9f4"/>
+<text x="430" y="180" fill="#4B67B4" font-family="Consolas, SFMono-Regular, Menlo, monospace" font-size="13" font-weight="700" text-anchor="middle">01</text>
+<text x="452" y="180" fill="#14141a" font-family="Consolas, SFMono-Regular, Menlo, monospace" font-size="16" font-weight="600" text-anchor="start">NFKC normalize</text>
+<text x="452" y="197" fill="#8f94a4" font-family="Segoe UI, Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" font-size="14" font-weight="400" text-anchor="start">lookalike Unicode folds to ASCII</text>
+<circle cx="430" cy="219" r="10.5" fill="#e5e9f4"/>
+<text x="430" y="224" fill="#4B67B4" font-family="Consolas, SFMono-Regular, Menlo, monospace" font-size="13" font-weight="700" text-anchor="middle">02</text>
+<text x="452" y="224" fill="#14141a" font-family="Consolas, SFMono-Regular, Menlo, monospace" font-size="16" font-weight="600" text-anchor="start">10k-char head cap</text>
+<text x="452" y="241" fill="#8f94a4" font-family="Segoe UI, Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" font-size="14" font-weight="400" text-anchor="start">only the head is scanned</text>
+<circle cx="430" cy="263" r="10.5" fill="#e5e9f4"/>
+<text x="430" y="268" fill="#4B67B4" font-family="Consolas, SFMono-Regular, Menlo, monospace" font-size="13" font-weight="700" text-anchor="middle">03</text>
+<text x="452" y="268" fill="#14141a" font-family="Consolas, SFMono-Regular, Menlo, monospace" font-size="16" font-weight="600" text-anchor="start">needles + per-rule regex</text>
+<text x="452" y="285" fill="#8f94a4" font-family="Segoe UI, Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" font-size="14" font-weight="400" text-anchor="start">one automaton over every needle</text>
+<circle cx="430" cy="307" r="10.5" fill="#e5e9f4"/>
+<text x="430" y="312" fill="#4B67B4" font-family="Consolas, SFMono-Regular, Menlo, monospace" font-size="13" font-weight="700" text-anchor="middle">04</text>
+<text x="452" y="312" fill="#14141a" font-family="Consolas, SFMono-Regular, Menlo, monospace" font-size="16" font-weight="600" text-anchor="start">entropy ≥ 3.0</text>
+<text x="452" y="329" fill="#8f94a4" font-family="Segoe UI, Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" font-size="14" font-weight="400" text-anchor="start">one match per rule · secrets type-only</text>
+<line x1="420" y1="354" x2="696" y2="354" stroke="#e9e5f2" stroke-width="1.5" stroke-linecap="round"/>
+<text x="420" y="375" fill="#8f94a4" font-family="Consolas, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="400" text-anchor="start">50 patterns + 12 secret grammars</text>
+<g filter="url(#soft)"><rect x="752" y="104" width="304" height="88" rx="16" fill="#ffffff" stroke="#b5d1c5" stroke-width="1.5"/></g>
+<text x="772" y="134" fill="#2E7D5B" font-family="Consolas, SFMono-Regular, Menlo, monospace" font-size="18" font-weight="700" text-anchor="start">allow</text>
+<text x="772" y="158" fill="#4d5261" font-family="Consolas, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="400" text-anchor="start">→ next()</text>
+<text x="772" y="180" fill="#8f94a4" font-family="Segoe UI, Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" font-size="14" font-weight="400" text-anchor="start">downstream never short-circuited</text>
+<g filter="url(#soft)"><rect x="752" y="204" width="304" height="104" rx="16" fill="#ffffff" stroke="#e0ccae" stroke-width="1.5"/></g>
+<text x="772" y="234" fill="#A9701A" font-family="Consolas, SFMono-Regular, Menlo, monospace" font-size="18" font-weight="700" text-anchor="start">ask</text>
+<text x="772" y="258" fill="#4d5261" font-family="Consolas, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="400" text-anchor="start">approval.request → allowed-once</text>
+<text x="772" y="296" fill="#8f94a4" font-family="Segoe UI, Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" font-size="14" font-weight="400" text-anchor="start">no answerer = fail closed</text>
+<g filter="url(#soft)"><rect x="752" y="320" width="304" height="108" rx="16" fill="#ffffff" stroke="#dfbac0" stroke-width="1.5"/></g>
+<text x="772" y="350" fill="#A63A4C" font-family="Consolas, SFMono-Regular, Menlo, monospace" font-size="18" font-weight="700" text-anchor="start">block</text>
+<rect x="772" y="364" width="63.599999999999994" height="26" rx="8" fill="#f2e3e5"/>
+<text x="803.8" y="382" fill="#A63A4C" font-family="Consolas, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="600" text-anchor="middle">reject</text>
+<rect x="843.6" y="364" width="46.4" height="26" rx="8" fill="#f2e3e5"/>
+<text x="866.8000000000001" y="382" fill="#A63A4C" font-family="Consolas, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="600" text-anchor="middle">deny</text>
+<rect x="898.0" y="364" width="80.8" height="26" rx="8" fill="#f2e3e5"/>
+<text x="938.4" y="382" fill="#A63A4C" font-family="Consolas, SFMono-Regular, Menlo, monospace" font-size="14" font-weight="600" text-anchor="middle">feedback</text>
+<text x="772" y="416" fill="#8f94a4" font-family="Segoe UI, Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" font-size="14" font-weight="400" text-anchor="start">per seam: message / args / result</text>
+<line x1="720" y1="246" x2="736" y2="246" stroke="#4B67B4" stroke-width="2.2" stroke-linecap="round"/>
+<line x1="736" y1="148" x2="736" y2="374" stroke="#4B67B4" stroke-width="2.2" stroke-linecap="round"/>
+<line x1="736" y1="148" x2="748" y2="148" stroke="#4B67B4" stroke-width="2.2" stroke-linecap="round" marker-end="url(#arr)"/>
+<line x1="736" y1="256" x2="748" y2="256" stroke="#4B67B4" stroke-width="2.2" stroke-linecap="round" marker-end="url(#arr)"/>
+<line x1="736" y1="374" x2="748" y2="374" stroke="#4B67B4" stroke-width="2.2" stroke-linecap="round" marker-end="url(#arr)"/>
+<line x1="558.0" y1="388" x2="558.0" y2="404" stroke="#2E7D5B" stroke-width="2.2" stroke-linecap="round" marker-end="url(#arr-allow)"/>
+<rect x="396" y="404" width="324" height="60" rx="14" fill="#eef4f1" stroke="#c8ddd4" stroke-width="1.2"/>
+<text x="416" y="430" fill="#2E7D5B" font-family="Consolas, SFMono-Regular, Menlo, monospace" font-size="15" font-weight="600" text-anchor="start">no match → next()</text>
+<text x="416" y="452" fill="#4d5261" font-family="Segoe UI, Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" font-size="14" font-weight="400" text-anchor="start">zero decisions · one automaton pass</text>
+<g filter="url(#soft)"><rect x="44" y="492" width="1012" height="74" rx="16" fill="#ffffff" stroke="#e6e2f0" stroke-width="1.5"/></g>
+<line x1="904" y1="428" x2="904" y2="492" stroke="#8f94a4" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="5 5"/>
+<text x="912" y="458" fill="#8f94a4" font-family="Segoe UI, Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" font-size="14" font-weight="400" text-anchor="start">every verdict, one event</text>
+<text x="66" y="518" fill="#4B67B4" font-family="Consolas, SFMono-Regular, Menlo, monospace" font-size="15" font-weight="600" text-anchor="start">defend/detection</text>
+<text x="228" y="518" fill="#4d5261" font-family="Segoe UI, Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" font-size="14" font-weight="400" text-anchor="start">rule id · family · category · severity · decision · secretType</text>
+<text x="1034" y="518" fill="#A63A4C" font-family="Segoe UI, Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" font-size="14" font-weight="700" text-anchor="end">never matched text</text>
+<text x="66" y="546" fill="#8f94a4" font-family="Segoe UI, Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" font-size="14" font-weight="400" text-anchor="start">append-only session event · ring buffer 200 → /defend · defend_report</text>
+<text x="44" y="610" fill="#8f94a4" font-family="Segoe UI, Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" font-size="14" font-weight="400" text-anchor="start">Apache-2.0 · PerryLink DSH plugin family · 3 seams · 3 tiers · fail closed</text>
+</svg>
