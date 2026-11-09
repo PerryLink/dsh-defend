@@ -36,7 +36,8 @@
     "README-es.md",
     "README-pt.md",
     "README-hi.md",
-    "LICENSE"
+    "LICENSE",
+    "capability.json"
   ],
   "sideEffects": false,
   "dsh": {
@@ -152,7 +153,8 @@
     "check:readmes": "node scripts/check-readme-sync.mjs",
     "verify:self-contained": "node scripts/verify-self-contained.mjs",
     "check:lockfile": "node scripts/check-lockfile-drift.mjs",
-    "verify:artifacts": "node scripts/verify-artifacts.mjs"
+    "verify:artifacts": "node scripts/verify-artifacts.mjs",
+    "bench:mutations": "node --experimental-strip-types benchmark/run-mutations.mjs"
   },
   "license": "Apache-2.0",
   "funding": {

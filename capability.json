@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "tier": "L1-detect",
+  "input_formats": [
+    "text"
+  ],
+  "outputs": [
+    "scan-report",
+    "audit-event",
+    "block/ask"
+  ],
+  "rules": {
+    "total": 51,
+    "ported": 50,
+    "local_predicates": 1
+  },
+  "benchmark": {
+    "kind": "mutation+dataset",
+    "mutation_positives": 10,
+    "mutation_hits": 10,
+    "mutation_false_positives": 0,
+    "dataset_samples": 105,
+    "dataset_recall": 0.96,
+    "dataset_precision": 0.986,
+    "measured_at": "2026-11-09"
+  },
+  "limits": [
+    "105-sample dataset is in-distribution; the mutation set is small",
+    "not a general semantic classifier; no guarantee on unseen languages/encodings",
+    "secrets are type-only; snippets redact credential text"
+  ]
+}

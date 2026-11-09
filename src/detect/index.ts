@@ -23,6 +23,8 @@ export type { Automaton, AcPattern, AcMatch } from './ac.ts'
 export { buildAutomaton } from './ac.ts'
 export { INJECTION_JAILBREAK_RULES, INJECTION_RULES, JAILBREAK_RULES } from './rules.ts'
 export { SECRET_RULES, SECRET_TYPE_BY_RULE_ID } from './secrets.ts'
+export { detectOverride } from './override.ts'
+export type { OverrideHit } from './override.ts'
 export { DEFAULT_MIN_SECRET_ENTROPY, shannonEntropy, charClassCount } from './entropy.ts'
 export type { Scanner, ScanOptions } from './scanner.ts'
 export {

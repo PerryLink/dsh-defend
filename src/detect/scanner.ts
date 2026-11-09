@@ -10,6 +10,7 @@
 import { buildAutomaton, type Automaton } from './ac.ts'
 import { DEFAULT_MIN_SECRET_ENTROPY, shannonEntropy } from './entropy.ts'
 import { INJECTION_JAILBREAK_RULES } from './rules.ts'
+import { detectOverride } from './override.ts'
 import { SECRET_RULES, SECRET_TYPE_BY_RULE_ID } from './secrets.ts'
 import type { Family, MatchInfo, Rule, ScanReport, Severity } from './types.ts'
 import { FAMILIES, severityRank } from './types.ts'
@@ -146,6 +147,23 @@ export function buildScanner(): Scanner {
         if (matches.length >= maxMatches) break
       }
       if (matches.length >= maxMatches) break
+    }
+
+    // 3. Order-agnostic override predicate. The automaton and the regexes
+    // cover known phrasings; this catches the same instruction reordered or
+    // synonym-swapped without a literal needle. It is admitted under the
+    // existing instruction-injection rule so the audit trail stays one family,
+    // one severity and one id per scan.
+    if (families.has('injection')) {
+      const override = detectOverride(scanned, options.normalize !== false)
+      if (override !== undefined) {
+        admit({
+          ruleId: 'ii-001',
+          family: 'injection',
+          category: 'instruction-injection',
+          severity: 'high',
+        })
+      }
     }
 
     let severity: Severity | undefined
