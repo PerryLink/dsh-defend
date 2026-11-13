@@ -1,5 +1,10 @@
 <div align="center">
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-defend-hero-en-dark.webp">
+  <img src="docs/assets/dsh-defend-hero-en-light.webp" width="100%" alt="registro de varredura do dsh-defend: ids de regra reais, veredictos allow / ask / block e uma credencial redigida">
+</picture>
+
 # 🛡️ dsh-defend
 - **Canal 1024 store**: `npm i -g dsh1024` uma vez, depois `dsh1024 plugin --profile web add dsh-defend` (conta para o ranking de instalações do [deepseek1024.com](https://deepseek1024.com)).
 
@@ -19,7 +24,7 @@
 [![npm downloads](https://img.shields.io/npm/dm/dsh-defend)](https://www.npmjs.com/package/dsh-defend)
 [![dshfind](https://dshfind.com/api/badge/PerryLink/dsh-defend?metric=downloads&lang=pt)](https://dshfind.com/pt/plugins/PerryLink/dsh-defend?ref=badge)
 
-[English](README.md) · [简体中文](README-zh.md) · [Español](README-es.md) · [Português](README-pt.md) · [हिन्दी](README-hi.md)
+[简体中文](README.md) · [English](README.en.md) · [Español](README.es.md) · [Português](README.pt.md) · [हिन्दी](README.hi.md)
 
 ```sh
 dsh plugin --profile <name> add dsh-defend
@@ -48,9 +53,12 @@ Defesa contra injeção de prompts, jailbreak e vazamento de segredos para o Dee
 
 Regras decidem o conhecido. A interceptação decide o resto — e tudo fica auditado.
 
-![Diagrama de fluxo de dsh-defend: solicitação → política/revisão → veredito.](docs/assets/dsh-defend-flow.svg)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-defend-flow-v5-dark.svg">
+  <img src="docs/assets/dsh-defend-flow-v5-light.svg" width="100%" alt="pipeline de detecção do dsh-defend: três pontos de interceptação convergem em um núcleo de varredura, ramificam em allow / ask / block e fecham com a faixa de auditoria sanitizada">
+</picture>
 
-*Visão geral do fluxo: solicitação → política/revisão → veredito. Os exemplos abaixo usam a superfície real de comandos.*
+*Pipeline de detecção: três pontos de interceptação convergem em um núcleo de varredura; cada acerto passa por allow / ask / block e deixa um evento sanitizado.*
 
 
 *A mesma execução, animada.*

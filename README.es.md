@@ -1,5 +1,10 @@
 <div align="center">
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-defend-hero-en-dark.webp">
+  <img src="docs/assets/dsh-defend-hero-en-light.webp" width="100%" alt="registro de escaneo de dsh-defend: ids de regla reales, veredictos allow / ask / block y una credencial redactada">
+</picture>
+
 # 🛡️ dsh-defend
 - **Canal 1024 store**: `npm i -g dsh1024` una vez, luego `dsh1024 plugin --profile web add dsh-defend` (cuenta para el ranking de instalaciones de [deepseek1024.com](https://deepseek1024.com)).
 
@@ -19,7 +24,7 @@
 [![npm downloads](https://img.shields.io/npm/dm/dsh-defend)](https://www.npmjs.com/package/dsh-defend)
 [![dshfind](https://dshfind.com/api/badge/PerryLink/dsh-defend?metric=downloads&lang=es)](https://dshfind.com/es/plugins/PerryLink/dsh-defend?ref=badge)
 
-[English](README.md) · [简体中文](README-zh.md) · [Español](README-es.md) · [Português](README-pt.md) · [हिन्दी](README-hi.md)
+[简体中文](README.md) · [English](README.en.md) · [Español](README.es.md) · [Português](README.pt.md) · [हिन्दी](README.hi.md)
 
 ```sh
 dsh plugin --profile <name> add dsh-defend
@@ -48,9 +53,12 @@ Defensa contra inyección de prompts, jailbreak y fugas de secretos para DeepSee
 
 Las reglas deciden lo conocido. La intercepción decide el resto — y todo queda auditado.
 
-![Diagrama de flujo de dsh-defend: solicitud → política/revisión → veredicto.](docs/assets/dsh-defend-flow.svg)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-defend-flow-v5-dark.svg">
+  <img src="docs/assets/dsh-defend-flow-v5-light.svg" width="100%" alt="pipeline de detección de dsh-defend: tres puntos de intercepción convergen en un núcleo de escaneo, se ramifican en allow / ask / block y cierran con la banda de auditoría saneada">
+</picture>
 
-*Resumen del flujo: solicitud → política/revisión → veredicto. Los ejemplos siguientes usan la superficie de comandos real.*
+*Pipeline de detección: tres puntos de intercepción convergen en un núcleo de escaneo; cada acierto pasa por allow / ask / block y deja un evento saneado.*
 
 
 *La misma ejecución, animada.*
