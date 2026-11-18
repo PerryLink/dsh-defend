@@ -91,7 +91,7 @@ DeepSeek Harness 的提示注入、越狱与密钥泄露防护。
 
 | 方面 | 状态 |
 |---|---|
-| Harness | DeepSeek Harness `dsh-v0.2.1-alpha.1`（2026-09-24 核验；peer 范围 `>=0.1.2-rc.1 <0.2.0 \|\| >=0.1.5-alpha.1 <0.2.0 \|\| >=0.1.6-0 <0.2.0 \|\| >=0.1.7-0 <0.2.0`）。该线上 `Session.append` 的第三参仅对表面事件类型存在且为 `SurfaceIntent`，因此非表面的 `defend/detection` 仍无法盖章 `ignorable`：会话日志审计保持失败关闭式停用，`/defend` 显式渲染该状态。会话格式 V4 已无 `tool-result` 内容块——本插件从不生产它，两个内容 walker 只为退役的 V3 包裹块保留**只读**回退，使升级前写下的会话仍可被扫描。已于 2026-09-24 核验（双 typecheck 尺子 + 全量测试 + build + self-contained/artifacts 门 + pack；宿主类型图仅一份）。 |
+| Harness | DeepSeek Harness `dsh-v0.2.2-rc.4`（2026-11-18 核验；peer 范围 `>=0.1.2-rc.1 <0.2.0 \|\| >=0.1.5-alpha.1 <0.2.0 \|\| >=0.1.6-0 <0.2.0 \|\| >=0.1.7-0 <0.2.0 \|\| >=0.2.2-0 <0.3.0`）。该线上 `Session.append` 的第三参仅对表面事件类型存在且为 `SurfaceIntent`，因此非表面的 `defend/detection` 仍无法盖章 `ignorable`：会话日志审计保持失败关闭式停用，`/defend` 显式渲染该状态。会话格式 V4 已无 `tool-result` 内容块——本插件从不生产它，两个内容 walker 只为退役的 V3 包裹块保留**只读**回退，使升级前写下的会话仍可被扫描。已于 2026-11-18 核验（双 typecheck 尺子 + 全量测试 + build + self-contained/artifacts 门 + pack；宿主类型图仅一份）。 |
 | Node | `^22.19.0 \|\| >=24.0.0` |
 | 平台 | 全部（纯 host；无原生代码、无网络） |
 | 模型 | 任意（检测发生在内容到达模型之前） |
@@ -243,7 +243,7 @@ Remove-Item -Recurse
 - **检测缺口。** 规则库覆盖已移植词汇及其容错变体；新式措辞、形近 Unicode 编码（NFKC 归一化列为后续工作）与多步攻击可能绕过。基准把实测下限（上游数据集 27/28）钉进测试，回归可见。
 - **无模型级判定。** `dsh-defend` 是确定性的，绝不调用模型，无法判断全新意图。
 - **消息拒绝是静默的。** `agent/pre-step` 的 reject 不给模型理由（seam 没有理由字段）；审计事件记录规则事实。
-- **会话审计与 `ignorable` 标记。** 审计追加请求 envelope 的 `ignorable: true` 标记，任何 harness 构建都能加载日志。截至目前所有已发布线（`0.1.0-rc.1`–`0.1.0-rc.8`、`0.1.1-rc.1`–`0.1.1-rc.2`，以及 `0.2` 走廊——2026-10-04 对已发布 `0.2.1-alpha.1` 复核：其 `append(type, data, ...opts)` 只从 options 取 `sourceEventSeqs`/`surfaceOp`，信封固定为 `{ type, seq, time, data }`）都会静默丢弃它——事件未标记落盘，更严格构建上会话将无法恢复；宿主 `0.1.2-rc.1` 保留信封字段但仅用于存量日志读取兼容、`Session.append` 仍无法盖章，且读取路径对未标记未知事件类型 fail-closed（`defend/detection` 未注册），写入同样会让会话无法加载。因此 dsh-defend 在第一次追加前即判定（peer 版本预判；版本不可解析时同样 fail closed）并以一次性告警停用会话日志审计；`0.2.x` **预发布线**正因如此被提前归入未标记，稳定的 `0.2.x` 仍回落到追加探测。设 `detection.allowUnmarkedAudit: true` 可重新开启。见 [issue #2](https://github.com/PerryLink/dsh-defend/issues/2)。
+- **会话审计与 `ignorable` 标记。** 审计追加请求 envelope 的 `ignorable: true` 标记，任何 harness 构建都能加载日志。截至目前所有已发布线（`0.1.0-rc.1`–`0.1.0-rc.8`、`0.1.1-rc.1`–`0.1.1-rc.2`，以及 `0.2` 走廊——2026-11-18 对已发布 `0.2.1-alpha.1` 复核：其 `append(type, data, ...opts)` 只从 options 取 `sourceEventSeqs`/`surfaceOp`，信封固定为 `{ type, seq, time, data }`）都会静默丢弃它——事件未标记落盘，更严格构建上会话将无法恢复；宿主 `0.1.2-rc.1` 保留信封字段但仅用于存量日志读取兼容、`Session.append` 仍无法盖章，且读取路径对未标记未知事件类型 fail-closed（`defend/detection` 未注册），写入同样会让会话无法加载。因此 dsh-defend 在第一次追加前即判定（peer 版本预判；版本不可解析时同样 fail closed）并以一次性告警停用会话日志审计；`0.2.x` **预发布线**正因如此被提前归入未标记，稳定的 `0.2.x` 仍回落到追加探测。设 `detection.allowUnmarkedAudit: true` 可重新开启。见 [issue #2](https://github.com/PerryLink/dsh-defend/issues/2)。
 
 ## 开发
 
