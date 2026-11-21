@@ -124,6 +124,10 @@ DeepSeek Harness 的提示注入、越狱与密钥泄露防护。
 
 ## 快速开始
 
+![dsh-defend 真实终端运行](docs/assets/dsh-defend-demo.gif)
+
+*本仓库一次真实运行的动图回放。*
+
 ```sh
 dsh plugin --profile web add github:PerryLink/dsh-defend
 ```

@@ -247,6 +247,10 @@ pnpm pack           # el tarball publicado
 
 ### Benchmark
 
+![dsh-defend: ejecución real de terminal](docs/assets/dsh-defend-demo.gif)
+
+*Repetición animada de una ejecución real registrada en este repositorio.*
+
 El benchmark red-team (P/R/F1 por categoría sobre 105 muestras, más el suelo 27/28 del fixture) está en [`benchmark/RESULTS.md`](benchmark/RESULTS.md); regenéralo con `node --experimental-strip-types benchmark/run.mjs` (cero dependencias nuevas, sin build).
 
 ## Interoperabilidad con otros plugins de DSH

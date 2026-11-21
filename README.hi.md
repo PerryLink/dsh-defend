@@ -247,6 +247,10 @@ pnpm pack           # प्रकाशित tarball
 
 ### Benchmark
 
+![dsh-defend का असली टर्मिनल रन](docs/assets/dsh-defend-demo.gif)
+
+*इस रिपॉज़िटरी में दर्ज असली रन का एनिमेटेड रीप्ले।*
+
 रेड-टीम बेंचमार्क (105 नमूनों पर प्रति-श्रेणी P/R/F1 + 27/28 fixture फ़्लोर) [`benchmark/RESULTS.md`](benchmark/RESULTS.md) में है; `node --experimental-strip-types benchmark/run.mjs` से दोबारा बनाएँ (कोई नई निर्भरता नहीं, कोई build नहीं)।
 
 ## अन्य DSH प्लगइनों के साथ अंतर-संचालनीयता

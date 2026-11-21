@@ -125,6 +125,10 @@ tool results   ── tools/post-execute ── scan ── block → feedback
 
 ## Quick start
 
+![dsh-defend: real terminal run](docs/assets/dsh-defend-demo.gif)
+
+*Animated replay of a real run recorded in this repository.*
+
 ```sh
 dsh plugin --profile web add github:PerryLink/dsh-defend
 ```
