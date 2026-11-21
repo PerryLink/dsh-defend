@@ -37,6 +37,7 @@
     "README.pt.md",
     "README.hi.md",
     "LICENSE",
+    "docs/assets/*",
     "capability.json"
   ],
   "sideEffects": false,
