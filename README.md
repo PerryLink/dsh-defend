@@ -255,7 +255,7 @@ Remove-Item -Recurse
 pnpm install        # node ^22.19 || >=24
 pnpm run typecheck  # tsc：src + tests，对照本地 harness checkout
 pnpm run typecheck:ci  # tsc：对照已发布的 0.1.7-rc.2 类型（无 paths）
-pnpm test           # vitest：97 个测试、9 个套件（含检测基准）
+pnpm test           # vitest：101 个测试、9 个套件（含检测基准）
 pnpm run build      # tsdown bundle + tsc 声明（lib/）
 pnpm run verify:self-contained  # 依赖声明全部来自 registry
 pnpm run verify:artifacts       # 构建产物 ESM 面 + 发布文件齐全

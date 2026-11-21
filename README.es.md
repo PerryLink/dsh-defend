@@ -238,7 +238,7 @@ Todos los ajustes son campos `Config` de Schemastery (modificables desde cordis.
 pnpm install        # node ^22.19 || >=24
 pnpm run typecheck  # tsc: src + tests contra el checkout local del harness
 pnpm run typecheck:ci  # tsc contra los tipos publicados 0.1.7-rc.2 (sin paths)
-pnpm test           # vitest: 97 tests, 9 suites (incluye la referencia de detección)
+pnpm test           # vitest: 101 tests, 9 suites (incluye la referencia de detección)
 pnpm run build      # bundle tsdown + declaraciones tsc (lib/)
 pnpm run verify:self-contained  # las especificaciones de dependencias resuelven desde el registry
 pnpm run verify:artifacts       # cara ESM construida + archivos publicados presentes

@@ -238,7 +238,7 @@ Remove-Item -Recurse
 pnpm install        # node ^22.19 || >=24
 pnpm run typecheck  # tsc: src + tests स्थानीय हार्नेस चेकआउट के विरुद्ध
 pnpm run typecheck:ci  # tsc प्रकाशित 0.1.7-rc.2 प्रकारों के विरुद्ध (बिना paths)
-pnpm test           # vitest: 97 टेस्ट, 9 सुइट (पहचान बेंचमार्क सहित)
+pnpm test           # vitest: 101 टेस्ट, 9 सुइट (पहचान बेंचमार्क सहित)
 pnpm run build      # tsdown बंडल + tsc घोषणाएँ (lib/)
 pnpm run verify:self-contained  # निर्भरता स्पेक registry से हल होती हैं
 pnpm run verify:artifacts       # निर्मित ESM फ़ेस + प्रकाशित फ़ाइलें मौजूद
