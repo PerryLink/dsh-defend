@@ -12,6 +12,8 @@
 
 *नियम ज्ञात को तय करते हैं। बाकी को इंटरसेप्शन तय करता है — और सब कुछ ऑडिटेड रहता है।*
 
+अंतिम सत्यापन: DeepSeek Harness `dsh-v0.2.3-alpha.1` (2026-11-22).
+
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![Gitee](https://img.shields.io/badge/Gitee-mirror-c71d23?logo=gitee)](https://gitee.com/perrylink/dsh-defend)
 [![DSH plugin](https://img.shields.io/badge/dsh--plugin-✅-green)](https://github.com/topics/dsh-plugin)
@@ -30,11 +32,9 @@
 dsh plugin --profile <name> add dsh-defend
 ```
 
-
 </div>
 
 ---
-
 
 **📖 इकोसिस्टम नॉलेज बेस** — मापे गए आँकड़े, मार्केटिंग नहीं: [डेवलपमेंट गाइड · चयन डेटा · रखरखाव मानदंड](https://perrylink.github.io/dsh-plugin-guide/)।
 
@@ -59,7 +59,6 @@ DeepSeek Harness के लिए प्रॉम्प्ट-इंजेक्
 </picture>
 
 *डिटेक्शन पाइपलाइन: तीन इंटरसेप्शन बिंदु एक स्कैन कोर पर मिलते हैं; हर हिट allow / ask / block से गुज़रता है और एक सैनिटाइज़्ड इवेंट छोड़ता है।*
-
 
 *वही रन, एनिमेटेड।*
 

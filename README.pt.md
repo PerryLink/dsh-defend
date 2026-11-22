@@ -12,6 +12,8 @@
 
 *Regras decidem o conhecido. A interceptação decide o resto — e tudo fica auditado.*
 
+Última verificação: DeepSeek Harness `dsh-v0.2.3-alpha.1` (2026-11-22).
+
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![Gitee](https://img.shields.io/badge/Gitee-mirror-c71d23?logo=gitee)](https://gitee.com/perrylink/dsh-defend)
 [![DSH plugin](https://img.shields.io/badge/dsh--plugin-✅-green)](https://github.com/topics/dsh-plugin)
@@ -30,11 +32,9 @@
 dsh plugin --profile <name> add dsh-defend
 ```
 
-
 </div>
 
 ---
-
 
 **📖 Base de conhecimento do ecossistema** — dados medidos, não marketing: [guia de desenvolvimento · dados de seleção · critérios de manutenção](https://perrylink.github.io/dsh-plugin-guide/).
 
@@ -59,7 +59,6 @@ Regras decidem o conhecido. A interceptação decide o resto — e tudo fica aud
 </picture>
 
 *Pipeline de detecção: três pontos de interceptação convergem em um núcleo de varredura; cada acerto passa por allow / ask / block e deixa um evento sanitizado.*
-
 
 *A mesma execução, animada.*
 

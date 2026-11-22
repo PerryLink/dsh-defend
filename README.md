@@ -12,6 +12,8 @@
 
 *规则裁决已知的，拦截裁决其余的——一切都有审计。*
 
+最近一次核验：DeepSeek Harness `dsh-v0.2.3-alpha.1`（2026-11-22）。
+
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![Gitee](https://img.shields.io/badge/Gitee-mirror-c71d23?logo=gitee)](https://gitee.com/perrylink/dsh-defend)
 [![DSH plugin](https://img.shields.io/badge/dsh--plugin-✅-green)](https://github.com/topics/dsh-plugin)
@@ -30,11 +32,9 @@
 dsh plugin --profile <name> add dsh-defend
 ```
 
-
 </div>
 
 ---
-
 
 **📖 生态实测知识库**（实测数据，不是营销）：[插件开发指南 · 选型实测数据 · 维护取舍判据](https://perrylink.github.io/dsh-plugin-guide/)。
 
@@ -52,7 +52,6 @@ DeepSeek Harness 的提示注入、越狱与密钥泄露防护。
 </picture>
 
 *检测管线：三处拦截点汇入一个扫描核，命中后按 family 走 allow / ask / block 三档裁决，每次裁决留一条脱敏事件。*
-
 
 *同一次运行，动图版。*
 

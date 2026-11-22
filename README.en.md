@@ -11,6 +11,8 @@
 
 Rules decide the known. Interception decides the rest — and everything is audited.
 
+Last verified on DeepSeek Harness `dsh-v0.2.3-alpha.1` (2026-11-22).
+
 [简体中文](README.md) · [English](README.en.md) · [Español](README.es.md) · [Português](README.pt.md) · [हिन्दी](README.hi.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-3366CC?style=flat-square&labelColor=2B3245)](LICENSE)
@@ -45,7 +47,6 @@ dsh plugin --profile <name> add dsh-defend
 
 This plugin is one of the [95-plugin DSH family](https://github.com/PerryLink) (all Apache-2.0). If it is useful, **a star helps the next person find it** — nothing is gated behind it.
 
-
 ## What is dsh-defend?
 
 Prompt-injection, jailbreak, and secret-leak defense for DeepSeek Harness.
@@ -58,8 +59,6 @@ Rules decide the known. Interception decides the rest — and everything is audi
 </picture>
 
 *Detection pipeline: three seams converge on one scan core; every hit goes through allow / ask / block, and every verdict leaves one sanitized event.*
-
-
 
 ## Maintenance status: 🧊 FROZEN
 
